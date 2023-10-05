@@ -3,7 +3,6 @@ const { default: mongoose } = require('mongoose');
 
 // register patient
 const registerPatient = async (req, res) => {
-
     const { 
         Username,
         Name,
