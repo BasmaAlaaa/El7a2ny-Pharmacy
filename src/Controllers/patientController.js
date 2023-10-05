@@ -4,7 +4,6 @@ const { isUsernameUnique, isEmailUnique } = require('../utils');
 
 // register patient
 const registerPatient = async (req, res) => {
-
     const { 
         Username,
         Name,

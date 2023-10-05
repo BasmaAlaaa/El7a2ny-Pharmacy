@@ -1,7 +1,7 @@
 // External variables
 const express = require("express");
-const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 require("dotenv").config();
 const routes = require("./Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
@@ -10,7 +10,6 @@ const MongoURI = process.env.MONGO_URI ;
 const app = express();
 app.use(express.json()); 
 const port = process.env.PORT || "8000";
-const patient = require('./Models/patient');
 
 // configurations
 // Mongo DB
@@ -35,6 +34,7 @@ app.get("/home", (req, res) => {
 
 app.use("/Patient", routes);
 app.use("/PharmacistRegistration", routes);
+app.use("/Admin", routes);
 
 
 /*
