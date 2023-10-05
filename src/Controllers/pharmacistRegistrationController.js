@@ -1,6 +1,7 @@
 const PharmacistRegistrationRequest = require('../Models/pharmacistRegistrationRequest');
 const { default: mongoose } = require('mongoose');
 const validator = require('validator');
+const { isUsernameUnique, isEmailUnique } = require('../utils');
 
 const pharmacistRegistraion = async (req, res) => {
   const {
@@ -25,6 +26,14 @@ const pharmacistRegistraion = async (req, res) => {
         !Affiliation || 
         !EducationalBackground) {
       throw new Error('All fields must be filled.');
+    }
+
+    if (!(await isUsernameUnique(Username))) {
+      throw new Error('Username is already taken.');
+    }
+
+    if (!(await isEmailUnique(Email))) {
+      throw new Error('Email is already in use.');
     }
 
     if (!validator.isEmail(Email)) {

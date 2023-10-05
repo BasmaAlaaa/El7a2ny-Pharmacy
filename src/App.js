@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
-const routes = require("../Routes/routes"); 
+const routes = require("./Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
 
 
