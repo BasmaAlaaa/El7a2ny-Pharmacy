@@ -3,6 +3,7 @@ const { default: mongoose } = require('mongoose');
 const User = require('../Models/user');
 const Patient = require('../Models/patient');
 const Pharmacist = require('../Models/pharmacist');
+const { isUsernameUnique, isEmailUnique } = require('../utils');
 
 // Add an admin
 const addAdmin = async (req, res) => {
@@ -12,6 +13,10 @@ const addAdmin = async (req, res) => {
     } = req.body;
 
     try {
+        if (!(await isUsernameUnique(Username))) {
+            throw new Error('Username is already taken.');
+          }
+
         const admin = await administratorModel.addAdmin(
             Username,
             Password
@@ -31,7 +36,7 @@ const removePatientOrPharmacist = async (req, res) => {
         const pharmacist = await Pharmacist.findOneAndDelete({Username: Username})
 
         if(!patient && !pharmacist){
-            return res.status(400).json({error: "This user doesn't exist"})
+            return res.status(400).json({error: "This user doesn't exist."})
         }else if(patient && !pharmacist){
             res.status(200).json(patient)
         }else if(!patient && pharmacist){
