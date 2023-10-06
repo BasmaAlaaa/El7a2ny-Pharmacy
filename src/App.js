@@ -35,6 +35,8 @@ app.get("/home", (req, res) => {
 app.use("/Patient", routes);
 app.use("/PharmacistRegistration", routes);
 app.use("/Admin", routes);
+app.post("/Addmed", routes);
+app.put("/Updatemed", routes);
 
 
 /*
