@@ -1,5 +1,5 @@
 const patientModel = require('./Models/patient.js');
-const PharmacistRegistrationRequest = require('./Models/pharmacistRegistrationRequest');
+const PharmacistRegistrationRequest = require('./Models/pharmacistRequest.js');
 const administratorModel = require('./Models/administrator.js');
 
 async function isUsernameUnique(username) {

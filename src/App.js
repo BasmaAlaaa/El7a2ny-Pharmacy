@@ -22,24 +22,15 @@ mongoose.connect(MongoURI)
   })
 })
 .catch(err => console.log(err));
-/*
-                                                    Start of your code
-*/
+
 app.get("/home", (req, res) => {
     res.status(200).send("You have everything installed!");
   });
 
 
-// Registering Routes
-
-app.use("/Patient", routes);
-app.use("/PharmacistRegistration", routes);
 app.use("/Admin", routes);
-app.post("/Addmed", routes);
-app.put("/Updatemed", routes);
+app.use("/Guest",routes);
+app.use("/Patient", routes);
+app.use("/Pharmacist", routes);
 
-
-/*
-                                                    End of your code
-*/
 

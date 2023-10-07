@@ -43,5 +43,5 @@ const pharmacistRegistrationRequestSchema = new Schema({
   }
 }, { timestamps: true });
 
-const PharmacistRegistrationRequest = mongoose.model('PharmacistRegistration', pharmacistRegistrationRequestSchema);
-module.exports = PharmacistRegistrationRequest;
+const PharmacistRequest = mongoose.model('PharmacistRequest', pharmacistRegistrationRequestSchema);
+module.exports = PharmacistRequest;

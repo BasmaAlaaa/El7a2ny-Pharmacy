@@ -27,7 +27,8 @@ const patientSchema = new Schema({
   },
   Gender: {
     type: String,
-    required: true
+    required: true,
+    enum: ['female', 'male']
   },
   MobileNumber: {
     type: Number,
@@ -45,6 +46,10 @@ const patientSchema = new Schema({
     type: String,
     required: true
   },
+  Prescriptions:{
+    type: Array,
+    required: false
+  }
   }, { timestamps: true });
 
   // static register method
@@ -74,8 +79,6 @@ const patientSchema = new Schema({
       !EmergencyContactRelation) { 
     throw Error('All fields must be filled.');
 }
-
-
     if (!validator.isEmail(Email)) {
       throw Error('Email must be in the form of johndoe@example.com');
     }
