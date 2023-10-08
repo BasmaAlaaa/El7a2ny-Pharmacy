@@ -21,7 +21,7 @@ const {
 
 // Patient Controller\
 const {
-    availableMedicinesDetailsByPatient
+    availableMedicinesDetailsByPatient, getMedicineByName, getMedicineByMedicalUse
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -47,6 +47,8 @@ router.get('/PharmacistInfo/:Username', pharmacistInfo);
 router.get('/AllPharmacists', allPharmacists);
 router.get('/AllPatients', allPatients);
 router.get('/PatientInfo/:Username', patientInfo);
+router.get('/MedicineByName/:Name',getMedicineByName);
+router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
 
 // Routes of Guest
 router.post('/RegisterPatient', registerPatient);
@@ -54,6 +56,9 @@ router.post('/SubmitRequestToBePharmacist', submitRequestToBePharmacist);
 
 // Routes of Patient
 router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);
+router.get('/MedicineByName/:Name',getMedicineByName);
+router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
+
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
@@ -61,5 +66,7 @@ router.get('/AvailableMedicinesQuantity',availableMedicinesQuantity);
 router.get('/MedQuantityAndSales/:Name',medQuantityAndSales);
 router.post('/AddMedicine',addMedicine);
 router.put('/UpdateMed/:Name',updateMed);
+router.get('/MedicineByName/:Name',getMedicineByName);
+router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
 
 module.exports = router;

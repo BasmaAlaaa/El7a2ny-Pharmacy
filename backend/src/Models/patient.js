@@ -31,7 +31,7 @@ const patientSchema = new Schema({
     enum: ['female', 'male']
   },
   MobileNumber: {
-    type: Number,
+    type: String,
     required: true
   },
   EmergencyContactName: {
@@ -39,7 +39,7 @@ const patientSchema = new Schema({
     required: true
   },
   EmergencyContactMobile: {
-    type: Number,
+    type: String,
     required: true
   },
   EmergencyContactRelation: {

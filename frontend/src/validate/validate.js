@@ -29,7 +29,10 @@ const Validation = (type) => {
                 .string()
                 .oneOf([yup.ref("password"), null], "Passwords Don't Match")
                 .required("Confirm Password is required"),
-            missingRequest: yup.string().required("Description of Request Information is required")
+            activeIngredients: yup.string().required("Enter active ingreidents"),
+            price: yup.string().required("Enter price"),
+            availableQuantity: yup.string().required("Enter availableQuantity"),
+
         }
         
     const formSchema = {
@@ -68,6 +71,19 @@ const Validation = (type) => {
         },
         missingRequest: {
             missingRequest: mainSchema['missingRequest'],
+        },
+        addAdministrator: {
+            username: mainSchema['username'],
+            password: mainSchema['password']
+        },
+        addMedicine: {
+            activeIngredients: mainSchema['activeIngredients'],
+            price: mainSchema['price'],
+            availableQuantity: mainSchema['availableQuantity']
+        },
+        editMedicine: {
+            activeIngredients: mainSchema['activeIngredients'],
+            price: mainSchema['price'],
         }
     }
     const schema = yup.object().shape(formSchema[type]);

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form.jsx';
 import Validation from '../validate/validate.js';
+import NavBar from '../components/NavBar.jsx';
 
 function RegisterPatient() {
   let {errors,handleSubmit,register} = Validation('createAccount')
@@ -33,6 +34,7 @@ function RegisterPatient() {
   ];
   return (
     <div>
+      <NavBar/>
       <Form
         title="create account"
         inputArr={inputArr}

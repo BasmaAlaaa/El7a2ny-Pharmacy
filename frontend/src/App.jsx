@@ -9,8 +9,13 @@ import RegisterPharmacist from './pages/registerPharmacist';
 import AdministratorView from './pages/administratorView';
 import PatientView from './pages/patientView';
 import PharmacistView from './pages/pharmacistView';
-import MedicineList from './pages/medicineList';
+import MedicineList from './components/medicineList';
 import MedicineView from './pages/medicineView';
+import AddAdministrator from './pages/addAdministrator';
+import PatientInfo from './pages/patientInfo';
+import PharmacistInfo from './pages/pharmacistInfo';
+import AddMedicine from './pages/addMedicine';
+import EditMedicine from './pages/editMedicine';
 
 
 
@@ -18,7 +23,7 @@ import MedicineView from './pages/medicineView';
 function App() {
   return (
     <div className='main'>
-      <NavBar />
+      {/* <NavBar /> */}
       <main>
         <Routes>
           <Route exact path="/login" element={<Login />} />
@@ -27,8 +32,16 @@ function App() {
           <Route exact path="/patientView" element={<PatientView />} />
           <Route exact path="/pharmacistView" element={<PharmacistView />} />
           <Route exact path="/administratorView" element={<AdministratorView />} />
-          <Route exact path="/medicineView" element={<MedicineView />} />
+          <Route exact path="/medicineView/:name" element={<MedicineView />} />
           <Route exact path="/medicineList" element={<MedicineList />} />
+          <Route exact path="/addAdministrator" element={<AddAdministrator />} />
+          <Route exact path="/addMedicine" element={<AddMedicine />} />
+          <Route exact path="/editMedicine" element={<EditMedicine />} />
+          <Route exact path="/patientInfo" element={<PatientInfo />} />
+          <Route exact path="/pharmacistInfo" element={<PharmacistInfo />} />
+
+
+
 
 
         </Routes>

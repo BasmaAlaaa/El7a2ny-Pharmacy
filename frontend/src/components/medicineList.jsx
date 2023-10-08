@@ -1,10 +1,13 @@
-import Search from '../components/Search.jsx';
-import Table from '../components/Table.jsx';
+import Search from './Search.jsx';
+import Table from './Table.jsx';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import search from '../assets/images/svg/search.svg';
 import filter from '../assets/images/svg/filter.svg';
+import MedicineView from '../pages/medicineView.jsx';
+import NavBar from './NavBar.jsx';
+
 
 function MedicineList() {
   const[searchText, setSearchText] = useState('');
@@ -14,12 +17,14 @@ function MedicineList() {
 const response = Axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPharmacist')
 .then(res =>console.log(res.data)).catch(err => console.log(err))
   }, [])
+
 const onFilterValueChanged=(event)=>{
   setFilterText(event.target.value);
 }
 console.log(filterText)
 let navigate = useNavigate()
-  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use'];
+
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'View'];
   let data = [{
     medicineName: 'Cataflam',
     activeIngredients: 'Paracetamol',
@@ -36,9 +41,6 @@ let navigate = useNavigate()
   },
 ]
 ;
-  let actions = [
-    { title: 'view', color: 'green-txt',action:()=>navigate('/medicineView') },
-  ];
 
   return (
     <div>
@@ -70,7 +72,7 @@ let navigate = useNavigate()
         </select>
       </div>
     </div>
-      <Table tHead={tHead} data={data} actions={actions} searchText={searchText} filterText={filterText}/>
+      <Table tHead={tHead} data={data} searchText={searchText} filterText={filterText}/>
     </div>
   );
 }

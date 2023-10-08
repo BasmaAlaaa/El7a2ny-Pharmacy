@@ -11,16 +11,10 @@ function CaseTableBody({ data }) {
       {data.price&&<td>{data.price}</td>}
       {data.photo && <td> <img src = {data.photo} alt='image' width={60} height={60}/> </td>}
       {data.medicalUse&&<td>{data.medicalUse}</td>}
+      {data.quantity&&<td>{data.quantity}</td>}
+      {data.sales&&<td>{data.sales}</td>}
 
-      {data.name&&<th>{data.name}</th>}
-      {data.gender&&<td>{data.gender}</td>}
-      {data.age&&<td>{data.age}</td>}
-      {data.email&&<td>{data.email}</td>}
-      {data.mobileNumber&&<td>{data.mobileNumber}</td>}
-      {data.affiliation&&<td>{data.affiliation}</td>}
-      {data.hourlyRate&&<td>{data.hourlyRate}</td>}
-      {data.educationalBackground&&<td>{data.educationalBackground}</td>}
-      {data.medicineName &&
+
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
@@ -31,31 +25,17 @@ function CaseTableBody({ data }) {
       </button>
       </div>
       </td>
-      }
-      {data.gender &&
+      
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate('/patientInfo')}
+        onClick={()=>navigate('/editMedicine')}
       >
-        View
+        Edit
       </button>
       </div>
       </td>
-      }
-      {data.affiliation &&
-      <td className="py-3 text-align-center">
-      <div className="d-flex flex-row">
-      <button
-        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate('/pharmacistInfo')}
-      >
-        View
-      </button>
-      </div>
-      </td>
-      }
     </>
   );
 }
@@ -73,7 +53,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function Table({ tHead, data, searchText, filterText }) {
+function TablePharmacist({ tHead, data, searchText, filterText }) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -105,4 +85,4 @@ function Table({ tHead, data, searchText, filterText }) {
   );
 }
 
-export default Table;
+export default TablePharmacist;
