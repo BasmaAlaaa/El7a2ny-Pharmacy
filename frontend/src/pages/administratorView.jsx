@@ -20,42 +20,40 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHeadPatient = ['Name', 'Gender', 'Age', 'Email', 'Mobile Number'];
+  let tHeadPatient = ['Name', 'Gender', 'Age', 'Email', 'Mobile Number', 'View'];
   let dataPatient = [{
     name: 'Joy',
     gender: 'female',
     age: 20,
     email: 'joy@gmail.com',
-    mobileNumber: '013232312321'
+    mobileNumber: '013232312321',
+    username: 'joy123'
   }
 ];
-  let actionsPatient = [
-    { title: 'view', color: 'green-txt',action:()=>navigate('/patientInfo') },
-  ];
 
-  let tHeadPharmacist = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground'];
+  let tHeadPharmacist = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View'];
   let dataPharmacist = [{
     name: 'Mohamed',
     affiliation: 'X hospital',
     hourlyRate: 1000,
-    educationalBackground: 'pharmacy'
+    educationalBackground: 'pharmacy',
+    username: 'mohamed123'
+
   }
 ];
-  let actionsPharmacist = [
-    { title: 'view', color: 'green-txt',action:()=>navigate('/pharmacistInfo') },
-  ];
 
-  let tHeadRequests = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground'];
+
+  let tHeadRequests = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View'];
   let dataRequests = [{
     name: 'Ahmed',
     affiliation: 'Y Hospital',
     hourlyRate: 1000,
-    educationalBackground: 'pharmacy'
+    educationalBackground: 'pharmacy',
+    username: 'ahmed123'
+
   }
 ];
-  let actionsRequests = [
-    { title: 'view', color: 'green-txt',action:()=>navigate('/requestInfo') },
-  ];
+
 
   return (
     <div>
@@ -74,7 +72,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadPatient} data={dataPatient} actions={actionsPatient} filterText='' searchText=''/>
+      <Table tHead={tHeadPatient} data={dataPatient} filterText='' searchText=''/>
 
       <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Pharmacists</p>
@@ -82,7 +80,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadPharmacist} data={dataPharmacist} actions={actionsPharmacist} filterText='' searchText=''/>
+      <Table tHead={tHeadPharmacist} data={dataPharmacist} filterText='' searchText=''/>
 
     <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Pharmacists Requests</p>
@@ -90,7 +88,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadRequests} data={dataRequests} actions={actionsRequests} filterText='' searchText=''/>
+      <Table tHead={tHeadRequests} data={dataRequests} filterText='' searchText=''/>
 
     </div>
   );

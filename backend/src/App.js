@@ -3,16 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
-const routes = require("../../src/Routes/routes"); 
+const routes = require("../src/Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
 
 
 const app = express();
-
-
-app.use(cors({
-  origin: 'http://localhost:8000',
-}));
 
 app.use(express.json()); 
 const port = process.env.PORT || "8000";

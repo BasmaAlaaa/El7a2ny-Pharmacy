@@ -25,7 +25,7 @@ function CaseTableBody({ data }) {
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate('/medicineView/:${data.medicineName}')}
+        onClick={()=>navigate(`/medicineView/${data.medicineName}`)}
       >
         View
       </button>
@@ -37,7 +37,7 @@ function CaseTableBody({ data }) {
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate('/patientInfo')}
+        onClick={()=>navigate(`/patientInfo/${data.username}`)}
       >
         View
       </button>
@@ -49,7 +49,7 @@ function CaseTableBody({ data }) {
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate('/pharmacistInfo')}
+        onClick={()=>navigate(`/pharmacistInfo/${data.username}`)}
       >
         View
       </button>

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Form from '../components/Form.jsx';
 import { useDispatch } from 'react-redux';
 import { loggedIn } from '../features/login.js';
@@ -6,6 +6,8 @@ import Validation from '../validate/validate';
 import NavBarPharmacist from '../components/NavBarPharmacist.jsx'
 
 function EditMedicine() {
+  const {name} = useParams();
+
   let { errors, handleSubmit, register } = Validation('username')
   const navigate = useNavigate();
   const dispatch = useDispatch();

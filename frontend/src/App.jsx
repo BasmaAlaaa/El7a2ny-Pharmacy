@@ -36,9 +36,9 @@ function App() {
           <Route exact path="/medicineList" element={<MedicineList />} />
           <Route exact path="/addAdministrator" element={<AddAdministrator />} />
           <Route exact path="/addMedicine" element={<AddMedicine />} />
-          <Route exact path="/editMedicine" element={<EditMedicine />} />
-          <Route exact path="/patientInfo" element={<PatientInfo />} />
-          <Route exact path="/pharmacistInfo" element={<PharmacistInfo />} />
+          <Route exact path="/editMedicine/:name" element={<EditMedicine />} />
+          <Route exact path="/patientInfo/:username" element={<PatientInfo />} />
+          <Route exact path="/pharmacistInfo/:username" element={<PharmacistInfo />} />
 
 
 

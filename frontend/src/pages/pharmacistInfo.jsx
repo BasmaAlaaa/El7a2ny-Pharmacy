@@ -1,8 +1,10 @@
-import NavBar from "../components/NavBar";
 import NavBarAdministrator from "../components/NavBarAdministrator";
-import MedicineList from "../components/medicineList";
+import { useParams} from 'react-router-dom';
+
 
 function PharmacistView(){
+    const {username} = useParams();
+
 return (
     <div>
         <NavBarAdministrator/>

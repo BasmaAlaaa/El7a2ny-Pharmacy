@@ -1,8 +1,10 @@
-import NavBar from "../components/NavBar";
+import { useParams} from 'react-router-dom';
 import NavBarAdministrator from "../components/NavBarAdministrator";
 
 
 function PatientInfo(){
+
+    const {username} = useParams();
 
     return (
         <div>

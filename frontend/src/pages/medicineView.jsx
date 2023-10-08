@@ -1,27 +1,20 @@
 import NavBar from "../components/NavBar";
-import { useLocation } from 'react-router-dom';
+import { useLocation , useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 function MedicineView() {
-//     const location = useLocation();
-//   const params = new URLSearchParams(location.search);
-//   const name = params.get('name');
-
-//   const params = new URLSearchParams(window.location.search);
-//   const name = params.get('name');
-
-//   console.log(name)
+  const {name} = useParams();
   useEffect(() => {
-    const postRequest = {
+    const getRequest = {
         url: 'http://localhost:8000/Pharmacist/MedicineByName',
-        method: 'POST',
+        method: 'GET',
         data: {
-          name: 'Cataflam'
+          name: {name}
         },
       };
       
-      axios(postRequest)
+      axios(getRequest)
         .then(response => {
           console.log(response)
         })
@@ -29,9 +22,11 @@ function MedicineView() {
           console.log(error)
         });
       }, [])
+
 return ( 
     <div>
         <NavBar/>
+        {name}
         
     </div>
 )
