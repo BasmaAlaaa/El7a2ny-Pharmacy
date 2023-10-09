@@ -4,6 +4,9 @@ const Medicine = require("../Models/medicine");
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPharmacist = async (req, res) => {
   const medicines = await Medicine.find();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
   if(!medicines){
       res.status(400).json({error: "There are no available medicines!"})
   }
@@ -13,6 +16,8 @@ const availableMedicinesDetailsByPharmacist = async (req, res) => {
 //View all medicines'Quantities and Sales
 const availableMedicinesQuantity = async (req, res) => {
   const medicines = await Medicine.find();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   if(!medicines){
     res.status(400).json({error: "There are no available medicines!"})
 }
@@ -25,6 +30,8 @@ res.status(200).json(medicines.map(
 // Task 13: view available quantity and sales of each medicine
 const medQuantityAndSales = async (req, res) => {
   const {Name} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   const medicine = await Medicine.findOne({Name: Name},{_id:0, Price:0, ActiveIngredients:0});
   if(!medicine){
     res.status(400).json({error: "This medicine doesn't exist!"})
@@ -34,7 +41,10 @@ res.status(200).json(medicine);
 
 // Task 16: Add a medicine to DB
 const addMedicine = async (req, res) => {
-    const {Name, ActiveIngredients, Price, Quantity, Picture} = req.body;
+    const {Name, ActiveIngredients, Price, Quantity, Picture, QuantitySold, MedicalUse} = req.body;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  req.setHeader('Access-Control-Allow-Origin', '*')
 
     try {
         // Check if the medicine already exists
@@ -50,7 +60,9 @@ const addMedicine = async (req, res) => {
             ActiveIngredients,
             Price,
             Quantity,
-            Picture
+            Picture,
+            QuantitySold,
+            MedicalUse
           });       
           await newMed.save();
         res.status(200).json(newMed);
@@ -63,6 +75,8 @@ const addMedicine = async (req, res) => {
 //Task 18: Update a medicine in the database
 const updateMed = async (req, res) => {
     const {Name} = req.params;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
     const medExists = await Medicine.findOne({Name: Name});
     if(!medExists){
@@ -85,6 +99,8 @@ const updateMed = async (req, res) => {
  // Search for medicine by name
  const getMedicineByName = async (req, res) => {
   const {Name} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
   const info = await Medicine.findOne({Name: Name},{ _id: 0, ActiveIngredients: 0, Price: 0, Picture: 0, MedicalUse:0 });
   if(!info){
@@ -97,6 +113,8 @@ const updateMed = async (req, res) => {
  // Filter medicine by medical use
  const getMedicineByMedicalUse = async (req, res) => {
   const {MedicalUse} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
   const info = await Medicine.findOne({MedicalUse: MedicalUse},{ _id: 0, Name: 0, ActiveIngredients: 0, Price: 0, Picture: 0 });
   if(!info){

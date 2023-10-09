@@ -6,20 +6,21 @@ function CaseTableBody({ data }) {
 
   return (
     <>
-      {data.medicineName &&<th>{data.medicineName}</th>}
-      {data.activeIngredients&&<td>{data.activeIngredients&&data.activeIngredients}</td>}
-      {data.price&&<td>{data.price}</td>}
-      {data.photo && <td> <img src = {data.photo} alt='image' width={60} height={60}/> </td>}
-      {data.medicalUse&&<td>{data.medicalUse}</td>}
-      {data.quantity&&<td>{data.quantity}</td>}
-      {data.sales&&<td>{data.sales}</td>}
+    <th>{data.Name}</th>
+      
+    <td>{data.ActiveIngredients}</td>
+    <td>{data.Price}</td>
+    <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
+    <td>{data.MedicalUse}</td>
+    <td>{data.Quantity}</td>
+    <td>{data.Sales}</td>
 
 
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/medicineView/:${data.medicineName}`)}
+        onClick={()=>navigate(`/medicineView/:${data.Name}`)}
       >
         View
       </button>
@@ -30,7 +31,7 @@ function CaseTableBody({ data }) {
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/editMedicine/${data.medicineName}`)}
+        onClick={()=>navigate(`/editMedicine/${data.Name}`)}
       >
         Edit
       </button>
@@ -68,11 +69,11 @@ function TablePharmacist({ tHead, data, searchText, filterText }) {
           {data
           .filter((e) => {
             return filterText.toLowerCase() === '' || filterText.toLowerCase() === 'all'?
-            e : e.medicalUse.toLowerCase() === filterText.toLowerCase()
+            e : e.MedicalUse.toLowerCase() === filterText.toLowerCase()
           })
           .filter((e) => {
             return searchText.toLowerCase() === '' ? 
-            e: e.medicineName.toLowerCase().includes(searchText.toLowerCase())
+            e: e.Name.toLowerCase().includes(searchText.toLowerCase())
           })
           .map((e) => (
             <tr className="text-capitalize">

@@ -1,26 +1,55 @@
 
 import Table from '../components/Table.jsx';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBarAdministrator from '../components/NavBarAdministrator.jsx';
 import MainBtn from '../components/Button.jsx';
+import MedicineList from '../components/medicineList.jsx';
 
 function AdministratorView() {
   const[searchText, setSearchText] = useState('');
   const[filterText, setFilterText] = useState('');
+  const[resultPatient, setResultPatient] = useState([]);
+  const[resultPharmacist, setResultPharmacist] = useState([]);
+  const[resultRequest, setResultRequest] = useState([]);
+
+
 
   useEffect(() => {
-const response = Axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPharmacist')
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+const response = axios.get('http://localhost:8000/Admin/AllPatients')
+.then(res =>setResultPatient(res.data)).catch(err => console.log(err))
   }, [])
+console.log(resultPatient)
+resultPatient.map((e) => {
+  console.log(e)
+})
+
+useEffect(() => {
+  const response = axios.get('http://localhost:8000/Admin/AllPharmacists')
+  .then(res =>setResultPharmacist(res.data)).catch(err => console.log(err))
+    }, [])
+  console.log(resultPharmacist)
+  resultPharmacist.map((e) => {
+    console.log(e)
+  })
+
+  useEffect(() => {
+    const response = axios.get('http://localhost:8000/Admin/InfosOfRequestsByPharmacist')
+    .then(res =>setResultRequest(res.data)).catch(err => console.log(err))
+      }, [])
+    console.log(resultRequest)
+    resultRequest.map((e) => {
+      console.log(e)
+    })
+
 const onFilterValueChanged=(event)=>{
   setFilterText(event.target.value);
 }
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHeadPatient = ['Name', 'Gender', 'Age', 'Email', 'Mobile Number', 'View'];
+  let tHeadPatient = ['Name', 'Gender', 'Age', 'Mobile Number', 'View'];
   let dataPatient = [{
     name: 'Joy',
     gender: 'female',
@@ -43,7 +72,7 @@ let navigate = useNavigate()
 ];
 
 
-  let tHeadRequests = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View'];
+  let tHeadRequests = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View', 'Status'];
   let dataRequests = [{
     name: 'Ahmed',
     affiliation: 'Y Hospital',
@@ -66,13 +95,15 @@ let navigate = useNavigate()
               key="navBtn"
             />
           </div>
+          <MedicineList/>
+
         <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Patients</p>
       <div className="d-flex flex-row w-75 justify-content-end">
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadPatient} data={dataPatient} filterText='' searchText=''/>
+      <Table tHead={tHeadPatient} data={resultPatient} filterText='' searchText=''/>
 
       <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Pharmacists</p>
@@ -80,7 +111,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadPharmacist} data={dataPharmacist} filterText='' searchText=''/>
+      <Table tHead={tHeadPharmacist} data={resultPharmacist} filterText='' searchText=''/>
 
     <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Pharmacists Requests</p>
@@ -88,7 +119,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadRequests} data={dataRequests} filterText='' searchText=''/>
+      <Table tHead={tHeadRequests} data={resultRequest} filterText='' searchText=''/>
 
     </div>
   );

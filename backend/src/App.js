@@ -1,5 +1,6 @@
 // External variables
 const express = require("express");
+// const cors = require('cors');
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
@@ -8,6 +9,10 @@ const MongoURI = process.env.MONGO_URI ;
 
 
 const app = express();
+
+// app.use(cors({
+//   origin: '*',
+// }));
 
 app.use(express.json()); 
 const port = process.env.PORT || "8000";

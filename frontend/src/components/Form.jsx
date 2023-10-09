@@ -22,6 +22,7 @@ function Form({ title, inputArr, btnArr, type, action }) {
             type={e.type}
             showErr={e.showErr}
             register={e.register}
+            onChange={e.action}
           />
         ))}
 

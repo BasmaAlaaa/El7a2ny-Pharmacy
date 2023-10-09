@@ -1,19 +1,25 @@
 
-import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import { json, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import search from '../assets/images/svg/search.svg';
 import TablePharmacist from './TablePharmacist.jsx';
 
-
 function MedicineListPharmacist() {
   const[searchText, setSearchText] = useState('');
   const[filterText, setFilterText] = useState('');
+  const[result, setResult] = useState([]);
 
+
+  
   useEffect(() => {
-const response = Axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPharmacist')
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+const response = axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPharmacist')
+.then(res =>setResult(res.data)).catch(err => console.log(err))
   }, [])
+console.log(result)
+result.map((e) => {
+  console.log(e)
+})
 
 const onFilterValueChanged=(event)=>{
   setFilterText(event.target.value);
@@ -45,7 +51,6 @@ let navigate = useNavigate()
 
   return (
     <div>
-      {/* <Search onChange={(e) => setSearch(e.target.value)}/> */}
       <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Medicines</p>
       <div className="d-flex flex-row w-75 justify-content-end">
@@ -62,10 +67,6 @@ let navigate = useNavigate()
             onChange={(e) => setSearchText(e.target.value)}
           />
         </div>
-        {/* <button className="filter-btn ms-2 d-flex flex-row align-items-center">
-          <img src={filter} className="me-2" alt="filter" />
-          Filter
-        </button> */}
         <select name='medicalUse' onChange={onFilterValueChanged}>
         <option value='all'>All</option>
         <option value='pain Killer'>Pain killer</option>
@@ -73,7 +74,7 @@ let navigate = useNavigate()
         </select>
       </div>
     </div>
-      <TablePharmacist tHead={tHead} data={data} searchText={searchText} filterText={filterText}/>
+      <TablePharmacist tHead={tHead} data={result} searchText={searchText} filterText={filterText}/>
     </div>
   );
 }

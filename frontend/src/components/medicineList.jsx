@@ -1,7 +1,7 @@
 import Search from './Search.jsx';
 import Table from './Table.jsx';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import search from '../assets/images/svg/search.svg';
 import filter from '../assets/images/svg/filter.svg';
@@ -12,11 +12,17 @@ import NavBar from './NavBar.jsx';
 function MedicineList() {
   const[searchText, setSearchText] = useState('');
   const[filterText, setFilterText] = useState('');
+  const[result, setResult] = useState([]);
+
 
   useEffect(() => {
-const response = Axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPharmacist')
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+const response = axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPatient')
+.then(res =>setResult(res.data)).catch(err => console.log(err))
   }, [])
+console.log(result)
+result.map((e) => {
+  console.log(e)
+})
 
 const onFilterValueChanged=(event)=>{
   setFilterText(event.target.value);
@@ -25,22 +31,6 @@ console.log(filterText)
 let navigate = useNavigate()
 
   let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'View'];
-  let data = [{
-    medicineName: 'Cataflam',
-    activeIngredients: 'Paracetamol',
-    price: '100',
-    photo: 'https://mybigpharmacy.com/wp-content/uploads/2019/08/TZF0JQOIEVbtsIxSC55dRWbZ9fyZywiuK9NYLh2v.jpeg',
-    medicalUse: 'pain killer'
-  },
-  {
-    medicineName: 'Panadol',
-    activeIngredients: 'Paracetamol',
-    price: '100',
-    photo: 'https://mybigpharmacy.com/wp-content/uploads/2019/08/TZF0JQOIEVbtsIxSC55dRWbZ9fyZywiuK9NYLh2v.jpeg',
-    medicalUse: 'pain killer'
-  },
-]
-;
 
   return (
     <div>
@@ -72,7 +62,7 @@ let navigate = useNavigate()
         </select>
       </div>
     </div>
-      <Table tHead={tHead} data={data} searchText={searchText} filterText={filterText}/>
+      <Table tHead={tHead} data={result} searchText={searchText} filterText={filterText}/>
     </div>
   );
 }

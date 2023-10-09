@@ -50,7 +50,7 @@ const Validation = (type) => {
             emergencyRelation : mainSchema['emergencyRelation'],
             hourlyRate: mainSchema['hourlyRate'],
             affiliation: mainSchema['affiliation'],
-            educationalBackground: mainSchema['educationalBackground']
+            educationalBackground: mainSchema['educationalBackground'],
 
         },
         login: {
@@ -68,9 +68,6 @@ const Validation = (type) => {
             oldPassword: mainSchema['oldPassword'],
             password: mainSchema['password'],
             confirmPassword: mainSchema['confirmPassword']
-        },
-        missingRequest: {
-            missingRequest: mainSchema['missingRequest'],
         },
         addAdministrator: {
             username: mainSchema['username'],

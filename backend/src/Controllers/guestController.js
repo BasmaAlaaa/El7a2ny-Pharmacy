@@ -19,6 +19,12 @@ const registerPatient = async (req, res) => {
         EmergencyContactMobile,
         EmergencyContactRelation 
     } = req.body;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
+  req.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
+  req.setHeader('Access-Control-Allow-Origin', '*');
+  req.setHeader('Access-Control-Allow-Credentials', true);
 
     try {
 
@@ -60,6 +66,8 @@ const submitRequestToBePharmacist = async (req, res) => {
       Affiliation,
       EducationalBackground
     } = req.body;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   
     try {
       // validation checks

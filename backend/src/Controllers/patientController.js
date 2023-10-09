@@ -4,6 +4,8 @@ const Medicine = require('../Models/medicine');
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPatient = async (req, res) => {
   const medicines = await Medicine.find();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   if(!medicines){
       res.status(400).json({error: "There are no available medicines!"})
   }
@@ -13,6 +15,8 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
  // Search for medicine by name
  const getMedicineByName = async (req, res) => {
   const {Name} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
   const info = await Medicine.findOne({Name: Name},{ _id: 0, ActiveIngredients: 0, Price: 0, Picture: 0, MedicalUse:0 });
   if(!info){
@@ -25,6 +29,8 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
  // Filter medicine by medical use
  const getMedicineByMedicalUse = async (req, res) => {
   const {MedicalUse} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
   const info = await Medicine.findOne({MedicalUse: MedicalUse},{ _id: 0, Name: 0, ActiveIngredients: 0, Price: 0, Picture: 0 });
   if(!info){

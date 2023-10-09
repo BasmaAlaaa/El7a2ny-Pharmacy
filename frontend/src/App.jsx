@@ -14,6 +14,7 @@ import MedicineView from './pages/medicineView';
 import AddAdministrator from './pages/addAdministrator';
 import PatientInfo from './pages/patientInfo';
 import PharmacistInfo from './pages/pharmacistInfo';
+import RequestInfo from './pages/requestInfo';
 import AddMedicine from './pages/addMedicine';
 import EditMedicine from './pages/editMedicine';
 
@@ -39,6 +40,8 @@ function App() {
           <Route exact path="/editMedicine/:name" element={<EditMedicine />} />
           <Route exact path="/patientInfo/:username" element={<PatientInfo />} />
           <Route exact path="/pharmacistInfo/:username" element={<PharmacistInfo />} />
+          <Route exact path="/requestInfo/:username" element={<RequestInfo />} />
+
 
 
 

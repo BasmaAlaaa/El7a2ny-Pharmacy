@@ -10,7 +10,8 @@ const {
     pharmacistInfo,
     allPharmacists,
     allPatients,
-    patientInfo
+    patientInfo,
+    addPharmacist
 } = require('../Controllers/administratorController');
 
 // Guest Controller
@@ -39,6 +40,7 @@ const router = express.Router();
 
 //Routes of Administrator
 router.post('/AddAdmin', addAdmin);
+router.post('/AddPharmacist', addPharmacist);
 router.delete('/RemovePatientOrPharmacist/:Username', removePatientOrPharmacist);
 router.get('/InfosOfAPharmacistRequest/:Username', infosOfAPharmacistRequest);
 router.get('/InfosOfRequestsByPharmacist', infosOfRequestsByPharmacist);
