@@ -16,7 +16,7 @@ function MedicineList() {
 
 
   useEffect(() => {
-const response = axios.get('http://localhost:8000/Pharmacist/AvailableMedicinesDetailsByPatient')
+const response = axios.get('http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin')
 .then(res =>setResult(res.data)).catch(err => console.log(err))
   }, [])
 console.log(result)
@@ -30,7 +30,7 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'View'];
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse','View'];
 
   return (
     <div>

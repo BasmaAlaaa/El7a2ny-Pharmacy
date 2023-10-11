@@ -6,6 +6,8 @@ import axios from "axios";
 function PharmacistInfo(){
     const {username} = useParams();
     const[result, setResult] = useState([]);
+    const[resultDelete, setResultDelete] = useState([]);
+
 
 
     useEffect(() => {
@@ -14,6 +16,12 @@ function PharmacistInfo(){
     }, [])
 
   console.log(result)
+
+  const handleRemove=() => {
+    const response = axios.delete(`http://localhost:8000/Admin/RemovePatientOrPharmacist/${username}`)
+  .then(res =>setResultDelete(res.data)).catch(err => console.log(err))
+  }
+  console.log(resultDelete)
 
 return (
     <div>
@@ -29,7 +37,7 @@ return (
             <h3>Educational Background: {result.EducationalBackground}</h3>
 
         </ul>
-        <button>
+        <button onClick={handleRemove}>
             Remove Pharmacist
         </button>
         </div>

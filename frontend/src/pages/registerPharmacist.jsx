@@ -43,7 +43,7 @@ function RegisterPharmacist() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {username, name, email, password, dateOfBirth, hourlyRate, affiliation, educationalBackground}
+    const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, HourlyRate:hourlyRate, Affiliation:affiliation, EducationalBackground:educationalBackground}
     console.log(data)
     const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
 .then(res =>console.log(res.data)).catch(err => console.log(err))

@@ -10,7 +10,7 @@ const availableMedicinesDetailsByPharmacist = async (req, res) => {
   if(!medicines){
       res.status(400).json({error: "There are no available medicines!"})
   }
-  res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture}) => ({Name, ActiveIngredients, Price, Picture})));
+  res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold})));
 }
 
 //View all medicines'Quantities and Sales
@@ -44,7 +44,7 @@ const addMedicine = async (req, res) => {
     const {Name, ActiveIngredients, Price, Quantity, Picture, QuantitySold, MedicalUse} = req.body;
     res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
-  req.setHeader('Access-Control-Allow-Origin', '*')
+//   req.setHeader('Access-Control-Allow-Origin', '*')
 
     try {
         // Check if the medicine already exists
@@ -86,6 +86,7 @@ const updateMed = async (req, res) => {
     const updateMed = await Medicine.findOneAndUpdate({Name: Name},{
         ...req.body
     });
+    console.log("updatedMed",updateMed)
 
     if(!updateMed){
         return res.status(404).json({error : "No possible updates!"})

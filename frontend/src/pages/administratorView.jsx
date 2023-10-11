@@ -49,7 +49,7 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHeadPatient = ['Name', 'Gender', 'Age', 'Mobile Number', 'View'];
+  let tHeadPatient = ['Name', 'Gender', 'Mobile Number', 'View'];
   let dataPatient = [{
     name: 'Joy',
     gender: 'female',

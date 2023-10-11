@@ -37,7 +37,8 @@ function AddMedicine() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {name, activeIngredients, price, quantity, picture, quantitySold, medicalUse}
+    
+    const data = {Name:name, ActiveIngredients:activeIngredients, Price:price, Quantity:quantity, Picture:picture, QuantitySold:quantitySold, MedicalUse:medicalUse}
     console.log(data)
     const response = axios.post('http://localhost:8000/Pharmacist/AddMedicine', data)
 .then(res =>console.log(res.data)).catch(err => console.log(err))

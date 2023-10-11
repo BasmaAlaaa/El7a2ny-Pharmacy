@@ -13,7 +13,7 @@ function CaseTableBody({ data }) {
     <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
     <td>{data.MedicalUse}</td>
     <td>{data.Quantity}</td>
-    <td>{data.Sales}</td>
+    <td>{data.QuantitySold}</td>
 
 
       <td className="py-3 text-align-center">

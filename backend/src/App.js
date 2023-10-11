@@ -4,12 +4,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
+const cors = require("cors")
 const routes = require("../src/Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
 
 
 const app = express();
-
+app.use(cors());
 // app.use(cors({
 //   origin: '*',
 // }));

@@ -46,12 +46,15 @@ function RegisterPatient() {
   const [emergencyRelation, setEmergencyRelation] = useState('')
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const data = {username, name, email, password, dateOfBirth, gender, mobileNumber, emergencyName, emergencyMobile, emergencyRelation}
+    const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation}
     console.log(data)
-    const response = axios.post('http://localhost:8000/Guest/RegisterPatient', data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+ 
+      await axios.post('http://localhost:2000/Guest/RegisterPatient',
+      
+        data)
+      .then(res =>console.log(data)).catch(err => console.log(err.request))
   }
   return (
     <div>
@@ -62,46 +65,46 @@ function RegisterPatient() {
         btnArr={btnArr}
         type="register"
       /> */}
-        <form onSubmit={handleSubmit}>
+       <form onSubmit={handleSubmit}>
         <h3>
         <label>Name</label>
         <input  title= 'name' required placeholder= 'enter name' type= 'text' onChange={(e) => setName(e.target.value)} />
         </h3>
   <h3>
     <label>Username</label>
-  <input type="text" required title="Username" placeholder="Enter username" onChange={(e) => setUsername(e.target.value)}/>
+  <input type="text" value={username} required title="Username" placeholder="Enter username" onChange={(e) => setUsername(e.target.value)}/>
   </h3>
   <h3>
   <label>Email</label>
-  <input type="email" required title="Email" placeholder="Enter Email" onChange={(e) => setEmail(e.target.value)}/>
+  <input type="email" value={email} required title="Email" placeholder="Enter Email" onChange={(e) => setEmail(e.target.value)}/>
   </h3>
   <h3>
   <label>Password</label>
-  <input type="password" required title="Password" placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)}/>
+  <input type="password" value={password} required title="Password" placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)}/>
   </h3>
   <h3>
   <label>Date Of Birth</label>
-  <input type="date" required title="Date Of Birth" placeholder="Enter Date Of Birth" onChange={(e) => setDateOfBirth(e.target.value)}/>
+  <input type="date" value={dateOfBirth} required title="Date Of Birth" placeholder="Enter Date Of Birth" onChange={(e) => setDateOfBirth(e.target.value)}/>
   </h3>
   <h3>
   <label>Gender</label>
-  <input type="text" required title="Gender" placeholder="Enter Gender" onChange={(e) => setGender(e.target.value)}/>
+  <input type="text" value={gender} required title="Gender" placeholder="Enter Gender" onChange={(e) => setGender(e.target.value)}/>
   </h3>
   <h3>
   <label>Mobile Number</label>
-  <input type="text" required title="Mobile Number" placeholder="Enter Mobile Number" onChange={(e) => setMobileNumber(e.target.value)}/>
+  <input type="text" value={mobileNumber} required title="Mobile Number" placeholder="Enter Mobile Number" onChange={(e) => setMobileNumber(e.target.value)}/>
   </h3>
   <h3>
   <label>Emergency Contact Name</label>
-  <input type="text" required title="Emergency Contact Name" placeholder="Enter Emergency Contact Name" onChange={(e) => setEmergencyName(e.target.value)}/>
+  <input type="text" value={emergencyName} required title="Emergency Contact Name" placeholder="Enter Emergency Contact Name" onChange={(e) => setEmergencyName(e.target.value)}/>
   </h3>
   <h3>
   <label>Emergency Contact Mobile Number</label>
-  <input type="text" required title="Emergency Contact Mobile" placeholder="Enter Emergency Contact Mobile" onChange={(e) => setEmergencyMobile(e.target.value)}/>
+  <input type="text" value={emergencyMobile} required title="Emergency Contact Mobile" placeholder="Enter Emergency Contact Mobile" onChange={(e) => setEmergencyMobile(e.target.value)}/>
   </h3>
   <h3>
   <label>Emergency Contact Relation</label>
-  <input type="text" required title="Emergency Contact Relation" placeholder="Enter Emergency Contact Relation" onChange={(e) => setEmergencyRelation(e.target.value)}/>
+  <input type="text" value={emergencyRelation} required title="Emergency Contact Relation" placeholder="Enter Emergency Contact Relation" onChange={(e) => setEmergencyRelation(e.target.value)}/>
   </h3>
   <h3>
   <button type="submit">Submit</button>

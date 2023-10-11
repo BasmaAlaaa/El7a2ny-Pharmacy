@@ -23,7 +23,7 @@ function PatientInfo(){
     const response = axios.delete(`http://localhost:8000/Admin/RemovePatientOrPharmacist/${username}`)
   .then(res =>setResultDelete(res.data)).catch(err => console.log(err))
   }
-  console.log(resultDelete)
+  console.log("result delete: ", resultDelete)
 
 //   result.map((e) => {
 //     console.log(e)
@@ -40,12 +40,6 @@ function PatientInfo(){
             <h3>Date of Birth: {result.DateOfBirth}</h3>
             <h3>Gender: {result.Gender}</h3>
             <h3>Mobile Number: {result.MobileNumber}</h3>
-        </ul>
-        <ul>
-            <h2>Emergency Contact: </h2>
-            <h3>Name: {result.EmergencyContactName}</h3>
-            <h3>Mobile Number: {result.EmergencyContactMobile}</h3>
-            <h3>Relation: {result.EmergencyContactRelation}</h3>
         </ul>
         <button onClick={handleRemove}>
             Remove Patient

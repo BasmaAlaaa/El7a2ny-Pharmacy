@@ -28,7 +28,7 @@ function AddAdministrator() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {username, password}
+    const data = {Username:username, Password:password}
     console.log(data)
     const response = axios.post('http://localhost:8000/Admin/AddAdmin', data)
 .then(res =>console.log(res.data)).catch(err => console.log(err))

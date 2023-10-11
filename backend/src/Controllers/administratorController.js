@@ -43,6 +43,8 @@ const removePatientOrPharmacist = async (req, res) => {
 
         const patient = await Patient.findOneAndDelete({Username: Username})
         const pharmacist = await Pharmacist.findOneAndDelete({Username: Username})
+console.log("patient:", patient)
+console.log("pharmacist:", pharmacist)
 
         if(!patient && !pharmacist){
             return res.status(400).json({error: "This user doesn't exist."})
@@ -84,7 +86,8 @@ const availableMedicinesDetailsByAdmin = async (req, res) => {
     if(!medicines){
         return res.status(400).json({error: "There are no available medicines!"})
     }
-    res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture}) => ({Name, ActiveIngredients, Price, Picture})));
+    console.log("medicines",medicines)
+    res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse})));
 }
 
 // Task 22: view pharmacist's info
@@ -168,8 +171,8 @@ const patientInfo = async (req, res) => {
         res.status(200).json(info);
   }
   
-const addPharmacist = async (req, res) => {
-    const {UserName, Name, Email, Password, DateOfBirth, HourlyRate, Affiliation, EducationalBackground} = req.body;
+  const addPharmacist = async (req, res) => {
+    const {Username, Name, Email, Password, DateOfBirth, HourlyRate, Affiliation, EducationalBackground} = req.body;
 
     res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -179,12 +182,20 @@ const addPharmacist = async (req, res) => {
             throw new Error('Username is already taken.');
           }
 
-          if (!Username || !Password) { 
+          if (!Username || 
+            !Name ||
+            !Email ||
+            !Password ||
+            !DateOfBirth ||
+            !HourlyRate ||
+            !Affiliation ||
+            !EducationalBackground
+            ) { 
             throw Error('All fields must be filled.');
         }
     
-        const pharmacist = await Administrator.create({
-            UserName,
+        const pharmacist = await  Pharmacist.create({
+            Username,
             Name, 
             Email, 
             Password, 
