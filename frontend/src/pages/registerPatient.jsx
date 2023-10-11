@@ -51,7 +51,7 @@ function RegisterPatient() {
     const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation}
     console.log(data)
  
-      await axios.post('http://localhost:2000/Guest/RegisterPatient',
+      await axios.post('http://localhost:8000/Guest/RegisterPatient',
       
         data)
       .then(res =>console.log(data)).catch(err => console.log(err.request))
