@@ -33,7 +33,7 @@ const medicineSchema = new Schema({
   MedicalUse: {
     type: String,
     required: true,
-    default: 0
+    
   }
 }, { timestamps: true });
 
