@@ -18,26 +18,8 @@ function NavBarAdministrator() {
           <a className="navbar-brand">
             <img src='https://i.pinimg.com/originals/57/1a/e3/571ae39ce1b3360b0cf852322b413bdb.jpg' alt="Pharmacy" width={40} height={40} />
           </a>
-          {login && (
-            <div className="d-flex flex-column align-items-center justify-content-center m-0 ms-sm-5">
-              <Link className="nav-list green-txt">Cases</Link>
-              <hr className="m-0 mt-1" />
-            </div>
-          )}
         </div>
 
-        {login ? (
-          <div>
-            <div className="d-flex flex-row align-items-center">
-              <img src={notify} />
-              <DropDown
-                txt="ah"
-                className="bg-green text-uppercase rounded-5 p-1 ms-2 ms-sm-4 me-2 border-0"
-              />
-              <p className="text-capitalize">dr. ahmed hussam</p>
-            </div>
-          </div>
-        ) : (
           <div>
             <MainBtn
               txt="Home"
@@ -46,7 +28,16 @@ function NavBarAdministrator() {
               key="navBtn"
             />
           </div>
-        )}
+          <div>
+            <MainBtn
+              txt="Logout"
+              style="green-btn"
+              // action={() => navigate('/administratorView')}
+              key="navBtn"
+            />
+          </div>
+          
+        
       </div>
     </nav>
   );

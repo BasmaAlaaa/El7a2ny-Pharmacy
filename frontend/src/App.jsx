@@ -17,6 +17,9 @@ import PharmacistInfo from './pages/pharmacistInfo';
 import RequestInfo from './pages/requestInfo';
 import AddMedicine from './pages/addMedicine';
 import EditMedicine from './pages/editMedicine';
+import ForgotPassword from './pages/forgot_password';
+import ChangePassword from './pages/change_password';
+import ResetPassword from './pages/reset_passowrd';
 
 
 
@@ -28,6 +31,9 @@ function App() {
       <main>
         <Routes>
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/forgotPassword" element={<ForgotPassword />} />
+          <Route exact path="/changePassword" element={<ChangePassword />} />
+          <Route exact path="/resetPassword" element={<ResetPassword />} />
           <Route exact path="/registerPatient" element={<RegisterPatient />} />
           <Route exact path="/registerPharmacist" element={<RegisterPharmacist />} />
           <Route exact path="/patientView" element={<PatientView />} />
