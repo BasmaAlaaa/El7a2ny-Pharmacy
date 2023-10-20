@@ -210,6 +210,36 @@ const patientInfo = async (req, res) => {
         res.status(400).json({ error: error.message})
     }
 }
+const acceptOrRejectPharmacistRequest = async (req, res) => {
+    const { Username } = req.params;
+    const { action } = req.body; 
+
+    try {
+                const pharmacistRequest = await PharmacistRequest.findOne({ Username, Status: 'pending' });
+
+        if (!pharmacistRequest) {
+            return res.status(404).json({ error: "Pending pharmacist request with the given username not found" });
+        }
+
+        if (action === 'accept') {
+            const pharmacist = new Pharmacist(pharmacistRequest.toObject());
+            await pharmacist.save();
+            pharmacistRequest.Status = 'accepted';
+            await pharmacistRequest.save();
+            res.status(200).json({ message: 'Pharmacist request approved and added to the platform' });
+        } else if (action === 'reject') {
+            pharmacistRequest.Status = 'rejected';
+            await pharmacistRequest.save();
+            res.status(200).json({ message: 'Pharmacist request rejected' });
+        } else {
+            res.status(400).json({ error: 'Invalid action' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Server error", details: error.message });
+    }
+};
+
+
 
 module.exports = {addAdmin,
     removePatientOrPharmacist,
@@ -222,5 +252,5 @@ module.exports = {addAdmin,
     patientInfo,
     getMedicineByName,
     getMedicineByMedicalUse,
-    addPharmacist
+    addPharmacist,acceptOrRejectPharmacistRequest
 };
