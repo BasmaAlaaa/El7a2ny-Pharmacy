@@ -20,7 +20,7 @@ const {
     submitRequestToBePharmacist
 }= require('../Controllers/guestController');
 
-// Patient Controller\
+// Patient Controller
 const {
     availableMedicinesDetailsByPatient, getMedicineByName, getMedicineByMedicalUse
 } = require('../Controllers/patientController');
