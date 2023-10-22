@@ -26,6 +26,23 @@ function NavBarPatient(props) {
           </div>
           <div>
             <MainBtn
+              txt="View Cart"
+              style="green-btn"
+              action={() => navigate(`/cartInfo/${props.username}`)}
+              key="navBtn"
+            />
+          </div>
+          <div>
+            <MainBtn
+              txt="Change Password"
+              style="green-btn"
+              action={() => navigate('/changePassword')}
+              key="navBtn"
+            />
+          </div>
+
+          <div>
+            <MainBtn
               txt="Logout"
               style="green-btn"
               // action={() => navigate('/administratorView')}

@@ -20,6 +20,8 @@ import EditMedicine from './pages/editMedicine';
 import ForgotPassword from './pages/forgot_password';
 import ChangePassword from './pages/change_password';
 import ResetPassword from './pages/reset_passowrd';
+import CartInfo from './pages/cartInfo';
+import Checkout from './pages/checkout';
 
 
 
@@ -47,6 +49,10 @@ function App() {
           <Route exact path="/patientInfo/:username" element={<PatientInfo />} />
           <Route exact path="/pharmacistInfo/:username" element={<PharmacistInfo />} />
           <Route exact path="/requestInfo/:username" element={<RequestInfo />} />
+          <Route exact path="/cartInfo/:username" element={<CartInfo />} />
+          <Route exact path="/checkout" element={<Checkout />} />
+
+
 
 
 

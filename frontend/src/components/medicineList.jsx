@@ -30,7 +30,7 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse','View'];
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse','Add to cart'];
 
   return (
     <div>

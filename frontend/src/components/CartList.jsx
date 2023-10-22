@@ -1,0 +1,40 @@
+import Search from './Search.jsx';
+import Table from './Table.jsx';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import search from '../assets/images/svg/search.svg';
+import filter from '../assets/images/svg/filter.svg';
+import MedicineView from '../pages/medicineView.jsx';
+import NavBar from './NavBar.jsx';
+import TableCart from './TableCart.jsx';
+
+
+function CartList() {
+  const[searchText, setSearchText] = useState('');
+  const[filterText, setFilterText] = useState('');
+  const[result, setResult] = useState([]);
+
+
+  useEffect(() => {
+const response = axios.get('http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin')
+.then(res =>setResult(res.data)).catch(err => console.log(err))
+  }, [])
+console.log(result)
+result.map((e) => {
+  console.log(e)
+})
+
+console.log(filterText)
+let navigate = useNavigate()
+
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Amount'];
+
+  return (
+    <div>
+      
+      <TableCart tHead={tHead} data={result} searchText={searchText} filterText={filterText}/>
+    </div>
+  );
+}
+export default CartList;

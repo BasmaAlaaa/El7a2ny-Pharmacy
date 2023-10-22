@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import NavBarAdministrator from "../components/NavBarAdministrator";
-import { useParams} from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import axios from "axios";
+import MainBtn from "../components/Button";
 
 
 function RequestInfo(){
     const {username} = useParams();
     const[result, setResult] = useState([]);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -35,12 +37,26 @@ return (
             <h3>Request Status: {result.Status}</h3>
 
         </ul>
-        <button>
+        {/* <button>
             Accept Request
-        </button>
-        <button>
+        </button> */}
+        <div>
+            <MainBtn
+              txt="Accept request"
+              style="green-btn"
+              action={() => navigate('/changePassword')}
+              key="navBtn"
+            />
+             <MainBtn
+              txt="Reject Request"
+              style="white-btn"
+              action={() => navigate('/changePassword')}
+              key="navBtn"
+            />
+          </div>
+        {/* <button>
             Reject Request
-        </button>
+        </button> */}
         </div>
 )
 }
