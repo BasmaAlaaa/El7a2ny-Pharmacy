@@ -55,7 +55,7 @@ const registerPatient = async (req, res) => {
     }
 }
 
-// Task 1 : register as a pharmacist
+// Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req,res) =>{
 
   const file = await upload.fields([
@@ -67,6 +67,14 @@ const submitRequestToBePharmacist = async (req,res) =>{
     if (!req.files || !req.files['IDDocument'] || !req.files['PharmacyDegreeDocument'] || !req.files['WorkingLicenseDocument']) {
         return res.status(400).json('Missing file(s)');
       }
+
+        if (!(await isUsernameUnique(Username))) {
+            res.status(400).json('Username is already taken.');
+        }
+                    
+        if (!(await isEmailUnique(Email))) {
+            res.status(400).json('Email is already in use.');
+        }
     const {
         Username,
         Name,
@@ -89,7 +97,7 @@ const submitRequestToBePharmacist = async (req,res) =>{
         EducationalBackground,
         IDDocument: req.files['IDDocument'][0].path,
         PharmacyDegreeDocument: req.files['PharmacyDegreeDocument'][0].path,
-        WorkingLicenseDocument: req.files['WorkingLicenseDocument'][0].path,
+        WorkingLicenseDocument: req.files['WorkingLicenseDocument'][0].path
       });
     
       request.save();
