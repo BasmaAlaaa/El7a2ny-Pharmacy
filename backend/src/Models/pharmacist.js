@@ -38,12 +38,15 @@ const pharmacistSchema = new Schema({
   },
   IDDocument: {
     type: String,
+    required: true
   },
   PharmacyDegreeDocument: {
     type: String,
+    required: true
   },
   WorkingLicenseDocument: {
     type: String,
+    required: true
   },
 }, { timestamps: true });
 

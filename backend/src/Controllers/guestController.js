@@ -55,48 +55,19 @@ const registerPatient = async (req, res) => {
     }
 }
 
-//Task 2: submit a request to register as a pharmacist
-const submitRequestToBePharmacist = async (req, res) => {
+// Task 1 : register as a pharmacist
+const submitRequestToBePharmacist = async (req,res) =>{
+
+  const file = await upload.fields([
+    { name: 'IDDocument', maxCount: 1 },
+    { name: 'PharmacyDegreeDocument', maxCount: 1 },
+    { name: 'WorkingLicenseDocument', maxCount: 1 },
+  ]);
+   try {
+    if (!req.files || !req.files['IDDocument'] || !req.files['PharmacyDegreeDocument'] || !req.files['WorkingLicenseDocument']) {
+        return res.status(400).json('Missing file(s)');
+      }
     const {
-      Username,
-      Name,
-      Email,
-      Password,
-      DateOfBirth,
-      HourlyRate,
-      Affiliation,
-      EducationalBackground
-    } = req.body;
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  
-    // try {
-    //   // validation checks
-    //   if (!Username || 
-    //       !Name || 
-    //       !Email || 
-    //       !Password || 
-    //       !DateOfBirth || 
-    //       !HourlyRate || 
-    //       !Affiliation || 
-    //       !EducationalBackground) {
-    //     throw new Error('All fields must be filled.');
-    //   }
-  
-    //   if (!(await isUsernameUnique(Username))) {
-    //     throw new Error('Username is already taken.');
-    //   }
-  
-    //   if (!(await isEmailUnique(Email))) {
-    //     throw new Error('Email is already in use.');
-    //   }
-  
-    //   if (!validator.isEmail(Email)) {
-    //     throw new Error('Email must be in the form of johndoe@example.com');
-    //   }
-  
-    try{
-      const request = await PharmacistRequest.create({
         Username,
         Name,
         Email,
@@ -104,13 +75,28 @@ const submitRequestToBePharmacist = async (req, res) => {
         DateOfBirth,
         HourlyRate,
         Affiliation,
-        EducationalBackground
+        EducationalBackground,
+      } = req.body;
+    
+      const request = new PharmacistRequest({
+        Username,
+        Name,
+        Email,
+        Password,
+        DateOfBirth,
+        HourlyRate,
+        Affiliation,
+        EducationalBackground,
+        IDDocument: req.files['IDDocument'][0].path,
+        PharmacyDegreeDocument: req.files['PharmacyDegreeDocument'][0].path,
+        WorkingLicenseDocument: req.files['WorkingLicenseDocument'][0].path,
       });
-  
-      res.status(200).json({ request });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
+    
+      request.save();
+      res.status(200).json({request});
+   } catch (error) {
+        res.status(400).json({ error: error.message});
+   }
   };
 
 module.exports = {

@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
 const cors = require("cors")
-const routes = require("../src/Routes/routes"); 
+const {router, upload} = require("../src/Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
 
 
@@ -35,9 +35,9 @@ app.get("/home", (req, res) => {
   });
 
 
-app.use("/Admin", routes);
-app.use("/Guest",routes);
-app.use("/Patient", routes);
-app.use("/Pharmacist", routes);
+app.use("/Admin", router);
+app.use("/Guest",router);
+app.use("/Patient", router);
+app.use("/Pharmacist", router);
 
 
