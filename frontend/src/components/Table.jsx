@@ -30,9 +30,9 @@ function CaseTableBody({ data }) {
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/medicineView/${data.Name}`)}
+        //onClick={()=>navigate(`/medicineView/${data.Name}`)}
       >
-        View
+        Add to cart
       </button>
       </div>
       </td>

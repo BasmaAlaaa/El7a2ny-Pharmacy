@@ -6,7 +6,7 @@ mongoose.set("strictQuery", false);
 require("dotenv").config();
 const router = require("../src/Routes/routes");
 const cors = require("cors")
-const routes = require("../src/Routes/routes"); 
+const {router, upload} = require("../src/Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
 
 

@@ -13,7 +13,7 @@ const availableMedicinesDetailsByPharmacist = async (req, res) => {
   res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold})));
 }
 
-//View all medicines'Quantities and Sales
+// View all medicines'Quantities and Sales
 const availableMedicinesQuantity = async (req, res) => {
   const medicines = await Medicine.find();
   res.setHeader('Access-Control-Allow-Origin', '*');

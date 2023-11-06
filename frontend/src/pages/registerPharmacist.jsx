@@ -31,23 +31,45 @@ function RegisterPharmacist() {
   //     action: handleSubmit(c),
   //   },
   // ];
-  const [name, setName] = useState('')
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [dateOfBirth, setDateOfBirth] = useState('')
-  const [hourlyRate, setHourlyRate] = useState(0)
-  const [affiliation, setAffiliation] = useState('')
-  const [educationalBackground, setEducationalBackground] = useState('')
-
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [hourlyRate, setHourlyRate] = useState(0);
+  const [affiliation, setAffiliation] = useState('');
+  const [educationalBackground, setEducationalBackground] = useState('');
+  const [IDDocument, setIDDocument] = useState('');
+  const [PharmacyDegreeDocument, setPharmacyDegreeDocument] = useState('');
+  const [WorkingLicenseDocument, setWorkingLicenseDocument] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, HourlyRate:hourlyRate, Affiliation:affiliation, EducationalBackground:educationalBackground}
-    console.log(data)
-    const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
-  }
+    const data = new FormData();
+
+    // Append other form fields
+    data.append('Name', name);
+    data.append('Username', username);
+    data.append('Email', email);
+    data.append('Password', password);
+    data.append('DateOfBirth', dateOfBirth);
+    data.append('HourlyRate', hourlyRate);
+    data.append('Affiliation', affiliation);
+    data.append('EducationalBackground', educationalBackground);
+
+  // Append file uploads
+  data.append('IDDocument', IDDocument);
+  data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
+  data.append('WorkingLicenseDocument', WorkingLicenseDocument);
+
+  console.log(data);
+
+  axios
+    .post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
+};
+
   return (
     <div>
       <NavBar />
