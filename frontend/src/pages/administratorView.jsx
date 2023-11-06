@@ -13,9 +13,21 @@ function AdministratorView() {
   const[resultPatient, setResultPatient] = useState([]);
   const[resultPharmacist, setResultPharmacist] = useState([]);
   const[resultRequest, setResultRequest] = useState([]);
+// Inside your AdministratorView component
 
-
-
+const onAcceptOrReject = async (Username, action) => {
+  try {
+      const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${Username}`, { action });
+      if (response.status === 200) {
+          alert(`Pharmacist ${action === 'accept' ? 'accepted' : 'rejected'} successfully`);
+          // remove the request ml list
+          setResultRequest(prevRequests => prevRequests.filter(request => request.Username !== Username));
+      }
+  } catch (error) {
+      console.error(error.response?.data?.error || error.message);
+      alert(`Failed to ${action === 'accept' ? 'accept' : 'reject'} pharmacist`);
+  }
+};
   useEffect(() => {
 const response = axios.get('http://localhost:8000/Admin/AllPatients')
 .then(res =>setResultPatient(res.data)).catch(err => console.log(err))

@@ -9,8 +9,49 @@ function RequestInfo(){
     const {username} = useParams();
     const[result, setResult] = useState([]);
     const navigate = useNavigate();
+    
 
+    const handleAccept = async (Username, action) => {
+      try{
+        const response =await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${Username}`, { action: 'accept' });
+        if (response.status === 200) {
+            alert(`Pharamcist accepted successfully`);
+            console.log(response.data.message);
+            navigate('/administratorView');
+          }}
+          catch(error){
+            alert(`Failed to accept Pharamcist `);
+            console.error('Error response:', error.response);
+              console.error('Error accepting request:', error);
+          };
+  };
 
+  const handleReject = async (Username, action) => {
+    try{
+      const response =await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${Username}`, { action: 'reject' });
+      if (response.status === 200) {
+            alert(`Pharamcist rejected successfully`);
+              console.log(response.data.message);
+              navigate('/administratorView');
+          }}
+          catch(error ){
+            alert(`Failed to reject Pharamcist `);
+            console.error('Error rejecting request:', error);
+          };
+  };
+  const handleAcceptReject = async (action) => {
+    try {
+      const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${username}`, { action });
+      alert(`Pharmacist ${action === 'accept' ? 'accepted' : 'rejected'} successfully`);
+      console.log(response.data.message);
+      navigate('/administratorView');
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || error.message;
+      console.error('Error response:', error.response);
+      alert(`Failed to ${action} pharmacist: ${errorMessage}`);
+    }
+  };
+  
     useEffect(() => {
   const response = axios.get(`http://localhost:8000/Admin/InfosOfAPharmacistRequest/${username}`)
   .then(res =>setResult(res.data)).catch(err => console.log(err))
@@ -44,13 +85,15 @@ return (
             <MainBtn
               txt="Accept request"
               style="green-btn"
-              action={() => navigate('/administratorView')}
+              action={() => handleAcceptReject('accept')}
+              // action={() => navigate('/administratorView')}
               key="navBtn"
             />
              <MainBtn
               txt="Reject Request"
               style="white-btn"
-              action={() => navigate('/administratorView')}
+              action={() => handleAcceptReject('reject')}
+              // action={() => navigate('/administratorView')}
               key="navBtn"
             />
           </div>
