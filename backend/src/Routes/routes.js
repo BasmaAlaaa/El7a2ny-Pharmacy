@@ -14,7 +14,8 @@ const {
     allPharmacists,
     allPatients,
     patientInfo,
-    addPharmacist,acceptOrRejectPharmacistRequest
+    addPharmacist,
+    acceptOrRejectPharmacistRequest
 } = require('../Controllers/administratorController');
 
 // Guest Controller
@@ -25,7 +26,10 @@ const {
 
 // Patient Controller
 const {
-    availableMedicinesDetailsByPatient, getMedicineByName, getMedicineByMedicalUse
+    availableMedicinesDetailsByPatient, 
+    getMedicineByName, 
+    getMedicineByMedicalUse,
+    choosePaymentMethod
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -64,7 +68,7 @@ router.post('/SubmitRequestToBePharmacist', upload.fields([
 router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
-
+router.put('/choosePaymentMethod/:username', choosePaymentMethod);
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);

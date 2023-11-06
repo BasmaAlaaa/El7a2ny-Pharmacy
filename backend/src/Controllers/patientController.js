@@ -1,5 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const Medicine = require('../Models/medicine');
+const Patient = require('../Models/patient');
+const Order = require('../Models/Order');
 
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPatient = async (req, res) => {
@@ -39,9 +41,36 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
   
       res.status(200).json(info);
 }
+//Req 32: choose payment method
+const choosePaymentMethod = async(req, res) => {
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  const { username } = req.params;
+  try{
+    
+    const patient = await Patient.findOne({Username: username});
+
+    if(!patient){
+      return res.status(404).json({error : "This patient doesn't exist!"})
+  }
+
+  const updatedOrder = {
+    $set: {
+        PaymentMethod: req.body.PaymentMethod
+    },
+  };
+
+  const updated = await Order.updateOne({PatientUsername: username},updatedOrder);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};
 
 module.exports = {
   availableMedicinesDetailsByPatient,
   getMedicineByName,
-  getMedicineByMedicalUse
+  getMedicineByMedicalUse,
+  choosePaymentMethod
 };
