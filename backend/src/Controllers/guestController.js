@@ -100,60 +100,8 @@ const submitRequestToBePharmacist = async (req, res) => {
 
   } catch (error) {
     res.status(400).json({ error: error.message });
-// Tasks 1 and 9 : register as a pharmacist
-const submitRequestToBePharmacist = async (req,res) =>{
-
-  const file = await upload.fields([
-    { name: 'IDDocument', maxCount: 1 },
-    { name: 'PharmacyDegreeDocument', maxCount: 1 },
-    { name: 'WorkingLicenseDocument', maxCount: 1 },
-  ]);
-   try {
-    if (!req.files || !req.files['IDDocument'] || !req.files['PharmacyDegreeDocument'] || !req.files['WorkingLicenseDocument']) {
-        return res.status(400).json('Missing file(s)');
-      }
-
-        if (!(await isUsernameUnique(Username))) {
-            res.status(400).json('Username is already taken.');
-        }
-                    
-        if (!(await isEmailUnique(Email))) {
-            res.status(400).json('Email is already in use.');
-        }
-    const {
-        Username,
-        Name,
-        Email,
-        Password,
-        DateOfBirth,
-        HourlyRate,
-        Affiliation,
-        EducationalBackground,
-      } = req.body;
-    
-      const request = new PharmacistRequest({
-        Username,
-        Name,
-        Email,
-        Password,
-        DateOfBirth,
-        HourlyRate,
-        Affiliation,
-        EducationalBackground,
-        IDDocument: req.files['IDDocument'][0].path,
-        PharmacyDegreeDocument: req.files['PharmacyDegreeDocument'][0].path,
-        WorkingLicenseDocument: req.files['WorkingLicenseDocument'][0].path
-      });
-    
-      request.save();
-      res.status(200).json({request});
-   } catch (error) {
-        res.status(400).json({ error: error.message});
-   }
-  };
-};
-
-
+  }
+  
 module.exports = {
   registerPatient,
   submitRequestToBePharmacist

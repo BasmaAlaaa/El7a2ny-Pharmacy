@@ -32,10 +32,7 @@ const medicineSchema = new Schema({
   },
   MedicalUse: {
     type: String,
-    required: true
-  },
-  Image: {
-    type: String
+    required: true,
   }
 }, { timestamps: true });
 
