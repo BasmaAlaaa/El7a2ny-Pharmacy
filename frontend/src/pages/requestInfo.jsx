@@ -44,13 +44,13 @@ return (
             <MainBtn
               txt="Accept request"
               style="green-btn"
-              action={() => navigate('/changePassword')}
+              action={() => navigate('/administratorView')}
               key="navBtn"
             />
              <MainBtn
               txt="Reject Request"
               style="white-btn"
-              action={() => navigate('/changePassword')}
+              action={() => navigate('/administratorView')}
               key="navBtn"
             />
           </div>

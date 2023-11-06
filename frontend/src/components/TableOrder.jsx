@@ -14,18 +14,6 @@ function CaseTableBody({ data }) {
     <td>{data.MedicalUse}</td>
     <td>{data.Quantity}</td>
     <td>{data.QuantitySold}</td>
-
-
-      <td className="py-3 text-align-center">
-      <div className="d-flex flex-row">
-      <button
-        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/medicineView/:${data.Name}`)}
-      >
-        Remove
-      </button>
-      </div>
-      </td>
       
       
     </>
@@ -45,7 +33,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableCart({ tHead, data, searchText, filterText }) {
+function TableOrder({ tHead, data, searchText, filterText }) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -77,4 +65,4 @@ function TableCart({ tHead, data, searchText, filterText }) {
   );
 }
 
-export default TableCart;
+export default TableOrder;
