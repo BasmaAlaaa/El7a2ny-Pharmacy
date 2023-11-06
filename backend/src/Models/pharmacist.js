@@ -35,7 +35,19 @@ const pharmacistSchema = new Schema({
   EducationalBackground: {
     type: String,
     required: true
-  }
+  },
+  IDDocument: {
+    type: String,
+    required: true
+  },
+  PharmacyDegreeDocument: {
+    type: String,
+    required: true
+  },
+  WorkingLicenseDocument: {
+    type: String,
+    required: true
+  },
 }, { timestamps: true });
 
 const Pharmacist = mongoose.model('Pharmacist', pharmacistSchema);

@@ -1,4 +1,7 @@
 const express = require('express');
+const router = express.Router();
+
+const upload = require('./multer-config');
 
 // Administrator Controller
 const {
@@ -11,7 +14,7 @@ const {
     allPharmacists,
     allPatients,
     patientInfo,
-    addPharmacist
+    addPharmacist,acceptOrRejectPharmacistRequest
 } = require('../Controllers/administratorController');
 
 // Guest Controller
@@ -20,7 +23,7 @@ const {
     submitRequestToBePharmacist
 }= require('../Controllers/guestController');
 
-// Patient Controller\
+// Patient Controller
 const {
     availableMedicinesDetailsByPatient, getMedicineByName, getMedicineByMedicalUse
 } = require('../Controllers/patientController');
@@ -33,10 +36,6 @@ const {
     addMedicine, 
     updateMed
 } = require('../Controllers/pharmacistController');
-
-
-
-const router = express.Router();
 
 //Routes of Administrator
 router.post('/AddAdmin', addAdmin);
@@ -51,10 +50,15 @@ router.get('/AllPatients', allPatients);
 router.get('/PatientInfo/:Username', patientInfo);
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
+router.post('/AcceptOrRejectPharmacistRequest/:Username', acceptOrRejectPharmacistRequest);
 
 // Routes of Guest
 router.post('/RegisterPatient', registerPatient);
-router.post('/SubmitRequestToBePharmacist', submitRequestToBePharmacist);
+router.post('/SubmitRequestToBePharmacist', upload.fields([
+    { name: 'IDDocument', maxCount: 1 },
+    { name: 'PharmacyDegreeDocument', maxCount: 1 },
+    { name: 'WorkingLicenseDocument', maxCount: 1 },
+  ]), submitRequestToBePharmacist);
 
 // Routes of Patient
 router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);
@@ -66,7 +70,7 @@ router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
 router.get('/AvailableMedicinesQuantity',availableMedicinesQuantity);
 router.get('/MedQuantityAndSales/:Name',medQuantityAndSales);
-router.post('/AddMedicine',addMedicine);
+router.post('/AddMedicine', upload.single('Picture'), addMedicine);
 router.put('/UpdateMed/:Name',updateMed);
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);

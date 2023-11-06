@@ -38,8 +38,17 @@ const pharmacistRegistrationRequestSchema = new Schema({
   },
   Status: {
     type: String,
-    default: 'pending', 
+    default: 'pending',
     enum: ['pending', 'accepted', 'rejected']
+  },
+  IDDocument: {
+    type: String,
+  },
+  PharmacyDegreeDocument: {
+    type: String,
+  },
+  WorkingLicenseDocument: {
+    type: String,
   }
 }, { timestamps: true });
 
