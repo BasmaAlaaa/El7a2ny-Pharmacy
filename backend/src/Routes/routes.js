@@ -1,11 +1,6 @@
 const express = require('express');
-<<<<<<< Updated upstream
-=======
 
 const upload = require('./multer-config');
-
-const router = express.Router();
->>>>>>> Stashed changes
 
 // Administrator Controller
 const {

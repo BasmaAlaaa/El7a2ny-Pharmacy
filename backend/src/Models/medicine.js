@@ -32,12 +32,8 @@ const medicineSchema = new Schema({
   },
   MedicalUse: {
     type: String,
-<<<<<<< Updated upstream
     required: true,
     
-=======
-    required: true
->>>>>>> Stashed changes
   }
 }, { timestamps: true });
 

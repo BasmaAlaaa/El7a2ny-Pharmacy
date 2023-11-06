@@ -6,12 +6,8 @@ mongoose.set("strictQuery", false);
 require("dotenv").config();
 const router = require("../src/Routes/routes");
 const cors = require("cors")
-<<<<<<< Updated upstream
 const routes = require("../src/Routes/routes"); 
 const MongoURI = process.env.MONGO_URI ;
-=======
-const MongoURI = process.env.MONGO_URI;
->>>>>>> Stashed changes
 
 
 const app = express();
@@ -40,16 +36,9 @@ app.get("/home", (req, res) => {
 });
 
 
-<<<<<<< Updated upstream
-app.use("/Admin", routes);
-app.use("/Guest",routes);
-app.use("/Patient", routes);
-app.use("/Pharmacist", routes);
-=======
 app.use("/Admin", router);
 app.use("/Guest", router);
 app.use("/Patient", router);
 app.use("/Pharmacist", router);
->>>>>>> Stashed changes
 
 
