@@ -70,7 +70,7 @@ router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
 router.get('/AvailableMedicinesQuantity',availableMedicinesQuantity);
 router.get('/MedQuantityAndSales/:Name',medQuantityAndSales);
-router.post('/AddMedicine',addMedicine);
+router.post('/AddMedicine', upload.single('Picture'), addMedicine);
 router.put('/UpdateMed/:Name',updateMed);
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
