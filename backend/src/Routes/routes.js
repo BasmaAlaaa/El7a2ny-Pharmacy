@@ -1,4 +1,11 @@
 const express = require('express');
+<<<<<<< Updated upstream
+=======
+
+const upload = require('./multer-config');
+
+const router = express.Router();
+>>>>>>> Stashed changes
 
 // Administrator Controller
 const {
@@ -55,7 +62,11 @@ router.post('/AcceptOrRejectPharmacistRequest/:Username', acceptOrRejectPharmaci
 
 // Routes of Guest
 router.post('/RegisterPatient', registerPatient);
-router.post('/SubmitRequestToBePharmacist', submitRequestToBePharmacist);
+router.post('/SubmitRequestToBePharmacist', upload.fields([
+    { name: 'IDDocument', maxCount: 1 },
+    { name: 'PharmacyDegreeDocument', maxCount: 1 },
+    { name: 'WorkingLicenseDocument', maxCount: 1 },
+  ]), submitRequestToBePharmacist);
 
 // Routes of Patient
 router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);

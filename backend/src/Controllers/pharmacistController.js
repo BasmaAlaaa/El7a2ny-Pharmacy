@@ -71,6 +71,48 @@ const addMedicine = async (req, res) => {
     }
 };
 
+// const addMedicine = async (req, res) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+
+//   try {
+
+//     upload.single('Picture')(req, res, async (err) => {
+//       if (err) {
+//         return res.status(400).json({ error: 'File upload failed.' });
+//       }
+
+//       const { Name, ActiveIngredients, Price, Quantity, QuantitySold, MedicalUse } = req.body;
+
+//       try {
+//         // Check if the medicine already exists
+//         const medicineExists = await Medicine.findOne({ Name: Name });
+
+//         if (medicineExists) {
+//           return res.status(400).json({ error: 'This medicine already exists!' });
+//         }
+
+//         // If the medicine doesn't exist, proceed to create a new one
+//         const newMed = await Medicine.create({
+//           Name,
+//           ActiveIngredients,
+//           Price,
+//           Quantity,
+//           QuantitySold,
+//           MedicalUse,
+//           Picture: req.file.filename,
+//         });
+
+//         res.status(200).json(newMed);
+//       } catch (error) {
+//         res.status(500).json({ error: error.message });
+//       }
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 
 //Task 18: Update a medicine in the database
 const updateMed = async (req, res) => {
