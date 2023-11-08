@@ -190,7 +190,7 @@ const removeAnItemFromCart = async (req, res) => {
       return res.status(404).send({ error: 'Patient not found' });
     }
 
-    const cartId = patient.itemsInCart;
+    const cartId = patient.patient.cart._id;
     const cart = await Cart.findById(cartId);
 
     if (!cart) {

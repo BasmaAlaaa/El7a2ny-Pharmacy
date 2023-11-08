@@ -84,7 +84,7 @@ router.get('/GetPatientAddresses/:Username', getPatientAddresses);
 router.get('/GetOrderDetails/:Username', getOrderDetails);
 router.put('/CancelOrder/:orderId', cancelOrder); 
 router.get('/viewCartItems/:Username',viewCartItems);
-router.put('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
+router.delete('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
 router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
 router.put('/updateQuantity:Username:MedicineName',updateMedicineQuantityInCart);
 router.post('/login',login);
