@@ -111,10 +111,136 @@ const checkoutOrder = async (req, res) => {
     TotalAmount: cart.totalAmount
   });
 
-  cart.length = 0;
+  while(cart.items.length > 0) {
+    cart.items.pop();
+  };
+  console.log(cart);
   await cart.save();
 
   res.status(200).send(order);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+
+};
+
+const payForAppointment = async(res, req) => {
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  const { appId, paymentMethod } = req.params;
+  const { ExpMonth, ExpYear, CVV, CardNumber } = req.body;
+
+
+  try {
+    
+    const app = await Appointment.findOne({_id: appId });
+
+    if (!app) {
+      return res.status(404).send({ error: 'Appointment not found' });
+    }
+
+    const patient = await patientSchema.findOne({Username: app.PatientUsername});
+
+    if(paymentMethod === "Credit Card"){
+
+      //if(CardNumber === )
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: app.Price,
+      currency: 'egp',
+      customer: patient.StripeCustomerId,
+      description: "Paying for an appointment"
+    });
+
+    await stripe.paymentIntents.confirm(paymentIntent);
+
+    const updatedApp = {
+      $set: {
+          PaymentStatus: "paid",
+          PaymentMethod: "Credit Card"
+      },
+    };
+  
+    const updated = await Appointment.updateOne({_id: appId},updatedApp);
+
+    const payment = await Payment.create({
+      PatientUsername: app.PatientUsername,
+      Amount: app.Price,
+      PaidOnDate: new Date(),
+      ItemPaidForId: appId,
+      TypeOfPurschase: "appointment",
+      PaymentMethod: "Credit Card",
+      Status: "success"
+  });
+}
+else if(paymentMethod === "Wallet"){
+
+  if(patient.WalletAmount >= app.Price){
+
+    const updatedPat = {
+      $set: {
+        WalletAmount: (WalletAmount-app.Price),
+      },
+    };
+  
+    const update = await patientSchema.updateOne({Username: app.PatientUsername},updatedPat);
+
+    const updatedApp = {
+      $set: {
+          PaymentStatus: "paid",
+          PaymentMethod: "Wallet"
+      },
+    };
+  
+    const updated = await Appointment.updateOne({_id: appId},updatedApp);
+
+    const payment = await Payment.create({
+      PatientUsername: app.PatientUsername,
+      Amount: app.Price,
+      PaidOnDate: new Date(),
+      ItemPaidForId: appId,
+      TypeOfPurschase: "appointment",
+      PaymentMethod: "Wallet",
+      Status: "success"
+  });
+  }
+  else{
+
+    const updatedApp = {
+      $set: {
+          PaymentStatus: "unpaid",
+          PaymentMethod: "Wallet"
+      },
+    };
+  
+    const updated = await Appointment.updateOne({_id: appId},updatedApp);
+
+    const payment = await Payment.create({
+      PatientUsername: app.PatientUsername,
+      Amount: app.Price,
+      PaidOnDate: new Date(),
+      ItemPaidForId: appId,
+      TypeOfPurschase: "appointment",
+      PaymentMethod: "Wallet",
+      Status: "failed"
+  });
+
+    return res.status(400).send("Not enough money in the wallet!");
+  }
+  
+}
+  const updatedDoc = {
+    $set: {
+      WalletAmount: (WalletAmount+app.Price),
+    },
+  };
+
+  const update = await doctorSchema.updateOne({Username: app.DoctorUsername},updatedDoc);
+
+    return res.status(200).send(payment);
+
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
