@@ -2,13 +2,22 @@ import { useState } from "react";
 import MainBtn from "../components/Button";
 import Input from "../components/Input";
 import NavBarPatient from "../components/NavBarPatient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 function Checkout() { 
     const [address, setAddress] = useState("");
     const [card, setCard] = useState(false);
+    const {username} = useParams();
     let navigate = useNavigate()
+    console.log('adddd',address)
 
+    const handleSubmit = (e) => {
+      const data = {newAddress:address};
+      console.log(data)
+      const response = axios.post(`http://localhost:8000/Patient/AddAddressToPatient/${username}`, data)
+  .then(res =>console.log(res.data)).catch(err => console.log(err))
+    }
 
     return(
         <div>
@@ -30,7 +39,7 @@ function Checkout() {
             <MainBtn
               txt='Add Address'
               style='green-btn'
-              // action={handleSubmit(c)}
+              action={handleSubmit}
               
             />
         <h4>Choose Address</h4>

@@ -35,9 +35,7 @@ function AddMedicine() {
   const [quantitySold, setQuantitySold] = useState(0)
   const [medicalUse, setMedicalUse] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = () => {    
     const data = {Name:name, ActiveIngredients:activeIngredients, Price:price, Quantity:quantity, Picture:picture, QuantitySold:quantitySold, MedicalUse:medicalUse}
     console.log(data)
     const response = axios.post('http://localhost:8000/Pharmacist/AddMedicine', data)

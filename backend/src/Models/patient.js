@@ -55,17 +55,11 @@ const patientSchema = new Schema({
     type: Array,
     required: false
   },
-  addresses: {
-    type: [{
-      street: { type: String, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      Building: { type: Number, required: true },
-      country: { type: String, required: true },
-    }],
-    required: true,
-    validate: [arrayLimit, '{PATH} does not have enough information.']
-  },
+  addresses: 
+ [{
+      type:String,
+      required: true,
+ }],
   
   }, { timestamps: true });
 
