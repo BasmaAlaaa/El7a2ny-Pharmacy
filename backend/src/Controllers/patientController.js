@@ -3,7 +3,7 @@ const Medicine = require('../Models/medicine');
 const Patient = require('../Models/patient');
 const Order = require('../Models/Order');
 const patient =require('../Models/patient');
-const Cart =require('../Models/cart');
+const Cart =require('../Models/Cart');
 const Pharmacist = require('../Models/pharmacist');
 const jwt = require ('jsonwebtoken');
 const Admin=require('../Models/administrator');
@@ -61,6 +61,12 @@ const choosePaymentMethod = async(req, res) => {
       return res.status(404).json({error : "This patient doesn't exist!"})
   }
 
+  const order = await Order.findOne({PatientUsername: username});
+
+  if(!order){
+    return res.status(404).json({error : "This order doesn't exist yes!"})
+}
+
   const updatedOrder = {
     $set: {
         PaymentMethod: req.body.PaymentMethod
@@ -71,6 +77,33 @@ const choosePaymentMethod = async(req, res) => {
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
+};
+
+const checkoutOrder = async (req, res) => {
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  const { username } = req.params;
+  try{
+    
+    const patient = await Patient.findOne({Username: username});
+
+    if(!patient){
+      return res.status(404).json({error : "This patient doesn't exist!"})
+  }
+
+  const updatedOrder = {
+    $set: {
+        PaymentMethod: req.body.PaymentMethod
+    },
+  };
+
+  const updated = await Order.updateOne({PatientUsername: username},updatedOrder);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+
 };
 
 const addAddressToPatient = async (req, res) => {
@@ -117,11 +150,26 @@ const getOrderDetails = async (req, res) => {
   const { Username } = req.params;
 
   try {
-      const orderDetails = await Order.findOne({ PatientUsername: Username })
-                                      .select('Status PaymentMethod createdAt updatedAt -_id');
+      const order = await Order.findOne({ PatientUsername: Username });
 
-      if (!orderDetails) {
+      if (!order) {
           return res.status(404).json({ error: "Order not found for this patient." });
+      }
+
+      const orderItems = order.Items;
+      let Items = new array(orderItems.length);
+      for(const orderItem of orderItems){
+        const medicine = await Medicine.findById(orderItem.Medicine);
+        Items.push([{MedicineName: medicine.Name, Quantity: orderItem.Quantity}]);
+      }
+
+      const orderDetails = {
+        Items,
+        _id: order._id,
+        PaymentMethod: order.PaymentMethod,
+        Status: order.Status,
+        TotalAmount: order.TotalAmount,
+        ShippingAddress: order.ShippingAddress
       }
 
       res.status(200).json(orderDetails);
@@ -129,6 +177,7 @@ const getOrderDetails = async (req, res) => {
       res.status(500).send({ error: error.message });
   }
 };
+
 const cancelOrder = async (req, res) => {
   const { orderId } = req.params;
 

@@ -89,6 +89,7 @@ router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
 router.put('/updateQuantity:Username:MedicineName',updateMedicineQuantityInCart);
 router.post('/login',login);
 router.get('/logout',logout);
+
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
 router.get('/AvailableMedicinesQuantity',availableMedicinesQuantity);

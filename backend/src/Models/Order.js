@@ -19,24 +19,36 @@ const orderSchema = new Schema({
         enum: ["Pending", "Confirmed",  "Delivered", "Cancelled"],
         required: true
     },
-    items: [
-        {
+    Items: [{
+        Medicine: {
           type: Schema.Types.ObjectId,
           ref: 'Medicine',
         },
-      ],
+        Quantity:{
+            type: Number,
+            default: 0,
+        }
+    }],
+    TotalAmount: {
+        type: Number,
+        default: 0,
+    },
+    ShippingAddress:{
+        type: String,
+        required: true
+    }
 },
 
 { timestamps: true })
 
 orderSchema.statics.register = async function (
     PaymentMethod,
-    PatientUsername
+    PatientUsername,
+    ShippingAddress
   ) {
 
     // validation 
-    if (!PatientUsername 
-        ) { 
+    if (!PatientUsername) { 
     throw Error('All fields must be filled.');
 }
 if (!PaymentMethod) { 
@@ -45,7 +57,8 @@ if (!PaymentMethod) {
 
     const order = await this.create({
         PatientUsername,
-        PaymentMethod
+        PaymentMethod,
+        ShippingAddress
     });
   
     return order;

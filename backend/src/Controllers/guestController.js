@@ -4,7 +4,7 @@ const PharmacistRequest = require("../Models/pharmacistRequest.js")
 const { isUsernameUnique, isEmailUnique } = require('../utils');
 const validator = require('validator');
 const upload = require('../Routes/multer-config');
-const Cart = require('../Models/cart.js');
+const Cart = require('../Models/Cart.js');
 
 // Task 1 : register as a patient
 const registerPatient = async (req, res) => {

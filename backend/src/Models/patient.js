@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
-const Cart = require('./cart.js');
+const Cart = require('./Cart.js');
 function arrayLimit(val) {
   return val.length > 0;
 }
@@ -60,7 +60,7 @@ const patientSchema = new Schema({
       type:String,
       required: true,
  }],
-  cart: {
+  Cart: {
     type: Schema.Types.ObjectId,
     ref: 'Cart',
   },
