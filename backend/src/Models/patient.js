@@ -130,7 +130,7 @@ const patientSchema = new Schema({
       EmergencyContactMobile,
       EmergencyContactRelation,
       addresses,
-      cart: newCart._id  
+      cart: newCart
     });
   
     return patient;

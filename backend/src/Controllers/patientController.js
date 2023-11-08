@@ -150,7 +150,6 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-
 const viewCartItems = async (req, res) => {
   const { Username } = req.params;
 
@@ -163,16 +162,17 @@ const viewCartItems = async (req, res) => {
 
     const cartId = patient.cart;
 
-    const cart = await Cart.findById(cartId).populate({
-      path: 'items',
-      select: 'Name Price Quantity '
-    });
+    const cart = await Cart.findById(cartId);
 
     if (!cart) {
       return res.status(404).send({ error: 'Cart not found' });
     }
 
-    res.status(200).send({ cart });
+    // Extract items from the cart
+    const items = cart.items;
+
+    // Send the items list in the response
+    res.status(200).send({ items });
   } catch (error) {
     // Handle any errors, e.g., database errors
     console.error(error);
@@ -181,51 +181,96 @@ const viewCartItems = async (req, res) => {
 };
 
 
+
+// const removeAnItemFromCart = async (req, res) => {
+//   const { Username, MedicineName } = req.params;
+// const indexToRemove =-1;
+//   try {
+//     const patient = await Patient.findOne({ Username });
+
+//     if (!patient) {
+//       return res.status(404).send({ error: 'Patient not found' });
+//     }
+
+//     const cartId = patient.cart;
+
+//     const cart = await Cart.findById(cartId);
+
+//     if (!cart) {
+//       return res.status(404).send({ error: 'Cart not found' });
+//     }
+
+//     for (let i = 0; i < cart.items.length; i++) {
+//       if (cart.items[i].medicine === MedicineName) {
+//         indexToRemove = i;
+//         break; // Exit the loop when the item is found
+//       }
+//     }
+//     if (indexToRemove === -1) {
+//       return res.status(404).send({ error: `Medicine ${MedicineName} not found in the cart` });
+//     }
+//     const medicine = await Medicine.findOne({ Name: MedicineName });
+
+//     //console.log(indexToRemove);
+//     const removedMedicinePrice = medicine.Price * cart.items[indexToRemove].quantity;
+//     //console.log(removedMedicinePrice);
+//     //console.log(cart.totalAmount);
+//     cart.totalAmount = cart.totalAmount - removedMedicinePrice;
+//     cart.items.splice(indexToRemove, 1);
+
+//     //console.log('ready to cdelete');
+//     await cart.save();
+
+//     res.status(200).send({ message: `Medicine ${MedicineName} removed from the cart` });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ error: 'Internal server error' });
+//   }
+// };
 const removeAnItemFromCart = async (req, res) => {
   const { Username, MedicineName } = req.params;
+  var indexToRemove = -1;
   try {
-    const patient = await Patient.findOne({ Username });
-
-    if (!patient) {
-      return res.status(404).send({ error: 'Patient not found' });
-    }
-    const cartId = patient.cart._id;
-    const cart = await Cart.findById(cartId);
-
-    if (!cart) {
-      return res.status(404).send({ error: 'Cart not found' });
-    }
-    med=await Medicine.findOne({Name:MedicineName});
-    medicineId=med._id;
-  //  res.status(200).send({ message: `Medicine ${MedicineName} , ${medicineId}la2eto` });
-
-    const item = cart.items.find(item => item._id === medicineId);
-    res.status(200).send({ message: `Medicine ${MedicineName} , ${medicineId} ,${item} la2eto` });
-    if(!item){
-      return res.status(404).send({ error: 'item not found' });
-    }
-  // const indexToRemove = cart.items.findIndex(item => item._id === medicineId);
-    const indexToRemove=cart.items.indexOf(item);
-    if (indexToRemove === -1) {
-      return res.status(404).json({ error: 'Medicine not found walahy' });
-    }
-    if (indexToRemove !== -1) {
-     
-      const removedMedicine = cart.items[indexToRemove];
-      cart.totalAmount -= removedMedicine.Price;
-      cart.items.splice(indexToRemove, 1);
-      await cart.save();
-
-      res.status(200).send({ message: `Medicine ${MedicineName} removed from the cart` });
-    } else {
-      res.status(404).send({ error: `Medicine ${MedicineName} not found in the cart` });
-    }
+     const patient = await Patient.findOne({ Username });
+ 
+     if (!patient) {
+       return res.status(404).send({ error: 'Patient not found' });
+     }
+ 
+     const cartId = patient.cart;
+ 
+     const cart = await Cart.findById(cartId);
+ 
+     if (!cart) {
+       return res.status(404).send({ error: 'Cart not found' });
+     }
+ 
+     for (let i = 0; i < cart.items.length; i++) {
+       if (cart.items[i].medicine === MedicineName) {
+         indexToRemove = i;
+         break; // Exit the loop when the item is found
+       }
+     }
+ 
+     if (indexToRemove === -1) {
+       return res.status(404).send({ error: `Medicine ${MedicineName} not found in the cart` });
+     }
+ 
+     const medicine = await Medicine.findOne({ Name: MedicineName });
+ 
+     const removedMedicinePrice = medicine.Price * cart.items[indexToRemove].quantity;
+ 
+     cart.totalAmount = cart.totalAmount - removedMedicinePrice;
+     cart.items.splice(indexToRemove, 1);
+ 
+     await cart.save();
+ 
+     res.status(200).send({ message: `Medicine ${MedicineName} removed from the cart` });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: 'Internal server error' });
+     console.error(error);
+     res.status(500).send({ error: 'Internal server error' });
   }
-};
-
+}
 
 const addMedicineToCart = async (req, res) => {
   const { Username, MedicineName } = req.params;
@@ -236,20 +281,26 @@ const addMedicineToCart = async (req, res) => {
       return res.status(404).send({ error: 'Patient not found' });
     }
 
-    const cartId = patient.cart._id;
+    const cartId = patient.cart;
+
     const cart = await Cart.findById(cartId);
 
     if (!cart) {
       return res.status(404).send({ error: 'Cart not found' });
     }
+
     const medicine = await Medicine.findOne({ Name: MedicineName });
 
     if (!medicine) {
       return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
     }
-    Med_id=medicine._id;
 
-    cart.items.push(Med_id);
+    const newItem = {
+      medicine: MedicineName,
+      quantity: 1,
+    };
+
+    cart.items.push(newItem);
     cart.totalAmount += medicine.Price;
 
     await cart.save();
@@ -260,10 +311,9 @@ const addMedicineToCart = async (req, res) => {
     res.status(500).send({ error: 'Internal server error' });
   }
 };
-
 const updateMedicineQuantityInCart = async (req, res) => {
-  const { Username, MedicineName } = req.params;
-  const { quantity } = req.body; 
+  const { Username, MedicineName ,quantity} = req.params;
+  //const { quantity } = req.body;
 
   try {
     const patient = await Patient.findOne({ Username });
@@ -272,24 +322,26 @@ const updateMedicineQuantityInCart = async (req, res) => {
       return res.status(404).send({ error: 'Patient not found' });
     }
 
-    const cartId = patient.itemsInCart;
+    const cartId = patient.cart;
+
     const cart = await Cart.findById(cartId);
 
     if (!cart) {
       return res.status(404).send({ error: 'Cart not found' });
     }
+
     const medicine = await Medicine.findOne({ Name: MedicineName });
 
     if (!medicine) {
       return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
     }
 
-    const indexToUpdate = cart.items.findIndex(item => item.Name === MedicineName);
+    const itemToUpdate = cart.items.find(item => item.medicine === MedicineName);
 
-    if (indexToUpdate !== -1) {
-      const oldQuantity = cart.items[indexToUpdate].Quantity;
+    if (itemToUpdate) {
+      const oldQuantity = itemToUpdate.quantity;
       const quantityChange = quantity - oldQuantity;
-      cart.items[indexToUpdate].Quantity = quantity;
+      itemToUpdate.quantity = quantity;
       cart.totalAmount += quantityChange * medicine.Price;
       await cart.save();
       res.status(200).send({ message: `Quantity of Medicine ${MedicineName} in the cart updated to ${quantity}` });
@@ -301,7 +353,6 @@ const updateMedicineQuantityInCart = async (req, res) => {
     res.status(500).send({ error: 'Internal server error' });
   }
 };
-//this concerns patient and pharmacist
 
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;

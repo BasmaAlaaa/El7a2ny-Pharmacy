@@ -37,6 +37,11 @@ const registerPatient = async (req, res) => {
     if (!(await isEmailUnique(Email))) {
       throw new Error('Email is already in use.');
     }
+    //create a new cart for the patient
+    const newCart = await Cart.create({
+      items: [],
+      totalAmount: 0,
+    });
     
     const patient = await Patient.register(
       Username,
@@ -49,7 +54,8 @@ const registerPatient = async (req, res) => {
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
-      addresses
+      addresses,
+      newCart
     );
     await patient.save();
     res.status(200).json({ patient })
