@@ -189,16 +189,26 @@ const removeAnItemFromCart = async (req, res) => {
     if (!patient) {
       return res.status(404).send({ error: 'Patient not found' });
     }
-
     const cartId = patient.cart._id;
     const cart = await Cart.findById(cartId);
 
     if (!cart) {
       return res.status(404).send({ error: 'Cart not found' });
     }
+    med=await Medicine.findOne({Name:MedicineName});
+    medicineId=med._id;
+  //  res.status(200).send({ message: `Medicine ${MedicineName} , ${medicineId}la2eto` });
 
-    const indexToRemove = cart.items.findIndex(item => item.Name === MedicineName);
-
+    const item = cart.items.find(item => item._id === medicineId);
+    res.status(200).send({ message: `Medicine ${MedicineName} , ${medicineId} ,${item} la2eto` });
+    if(!item){
+      return res.status(404).send({ error: 'item not found' });
+    }
+  // const indexToRemove = cart.items.findIndex(item => item._id === medicineId);
+    const indexToRemove=cart.items.indexOf(item);
+    if (indexToRemove === -1) {
+      return res.status(404).json({ error: 'Medicine not found walahy' });
+    }
     if (indexToRemove !== -1) {
      
       const removedMedicine = cart.items[indexToRemove];
