@@ -33,7 +33,11 @@ const {
     addAddressToPatient,
     getPatientAddresses,
     getOrderDetails,
-    cancelOrder
+    cancelOrder,
+    viewCartItems,
+    removeAnItemFromCart,
+    addMedicineToCart,
+    updateMedicineQuantityInCart
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -77,6 +81,10 @@ router.post('/AddAddressToPatient/:Username', addAddressToPatient);
 router.get('/GetPatientAddresses/:Username', getPatientAddresses); 
 router.get('/GetOrderDetails/:Username', getOrderDetails);
 router.put('/CancelOrder/:orderId', cancelOrder); 
+router.get('/viewCartItems/:Username',viewCartItems);
+router.put('/removeItemFromCart/:Username:MedicineName',removeAnItemFromCart);
+router.post('/addMedicineToCart/:Username:MedicineName',addMedicineToCart);
+router.put('/updateQuantity:Username:MedicineName',updateMedicineQuantityInCart);
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);

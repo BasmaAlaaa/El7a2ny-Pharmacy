@@ -32,63 +32,40 @@ function RegisterPharmacist() {
   //   },
   // ];
 
-  
-  // const [name, setName] = useState('');
-  // const [username, setUsername] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [dateOfBirth, setDateOfBirth] = useState('');
-  // const [hourlyRate, setHourlyRate] = useState(0);
-  // const [affiliation, setAffiliation] = useState('');
-  // const [educationalBackground, setEducationalBackground] = useState('');
-  // const [IDDocument, setIDDocument] = useState('');
-  // const [PharmacyDegreeDocument, setPharmacyDegreeDocument] = useState('');
-  // const [WorkingLicenseDocument, setWorkingLicenseDocument] = useState('');
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [hourlyRate, setHourlyRate] = useState(0);
+  const [affiliation, setAffiliation] = useState('');
+  const [educationalBackground, setEducationalBackground] = useState('');
+  const [IDDocument, setIDDocument] = useState('');
+  const [PharmacyDegreeDocument, setPharmacyDegreeDocument] = useState('');
+  const [WorkingLicenseDocument, setWorkingLicenseDocument] = useState('');
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const data = new FormData();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = new FormData();
 
-//     // Append other form fields
-//     data.append('Name', name);
-//     data.append('Username', username);
-//     data.append('Email', email);
-//     data.append('Password', password);
-//     data.append('DateOfBirth', dateOfBirth);
-//     data.append('HourlyRate', hourlyRate);
-//     data.append('Affiliation', affiliation);
-//     data.append('EducationalBackground', educationalBackground);
+    // Append other form fields
+    data.append('Name', name);
+    data.append('Username', username);
+    data.append('Email', email);
+    data.append('Password', password);
+    data.append('DateOfBirth', dateOfBirth);
+    data.append('HourlyRate', hourlyRate);
+    data.append('Affiliation', affiliation);
+    data.append('EducationalBackground', educationalBackground);
 
-//   // Append file uploads
-//   data.append('IDDocument', IDDocument);
-//   data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
-//   data.append('WorkingLicenseDocument', WorkingLicenseDocument);
-
-//   console.log(data);
-
-//   axios
-//     .post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
-//     .then((res) => console.log(res.data))
-//     .catch((err) => console.log(err));
-// };
-
-const [name, setName] = useState('')
-const [username, setUsername] = useState('')
-const [email, setEmail] = useState('')
-const [password, setPassword] = useState('')
-const [dateOfBirth, setDateOfBirth] = useState('')
-const [hourlyRate, setHourlyRate] = useState(0)
-const [affiliation, setAffiliation] = useState('')
-const [educationalBackground, setEducationalBackground] = useState('')
-
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-  const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, HourlyRate:hourlyRate, Affiliation:affiliation, EducationalBackground:educationalBackground}
-  console.log(data)
-  const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
-}
+    // Append file uploads
+    data.append('IDDocument', IDDocument);
+    data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
+    data.append('WorkingLicenseDocument', WorkingLicenseDocument);
+    console.log(data)
+    const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
+      .then(res => console.log(res.data)).catch(err => console.log(err))
+  }
 
 
   return (
@@ -133,7 +110,7 @@ const handleSubmit = (e) => {
           <label>Educational Background</label>
           <input type="text" required title="Educational Background" placeholder="Enter Educational Background" onChange={(e) => setEducationalBackground(e.target.value)} />
         </h3>
-        {/* <h3>
+        <h3>
           <label>ID Document</label>
           <input type="file" required title="IDDocument" onChange={(e) => setIDDocument(e.target.files[0])} />
         </h3>
@@ -144,7 +121,7 @@ const handleSubmit = (e) => {
         <h3>
           <label>Working License Document</label>
           <input type="file" required title="WorkingLicenseDocument" onChange={(e) => setWorkingLicenseDocument(e.target.files[0])} />
-        </h3> */}
+        </h3>
         <h3>
           <button type="submit">Submit</button>
         </h3>
