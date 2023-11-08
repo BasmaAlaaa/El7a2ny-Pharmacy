@@ -6,6 +6,9 @@ function CaseTableBody({ data }) {
 
   return (
     <>
+    <th>{data.MedicineName}</th>
+    <td>{data.Quantity}</td>
+
     {/* <th>{data.Name}</th>
       
     <td>{data.ActiveIngredients}</td>

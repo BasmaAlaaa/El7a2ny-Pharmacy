@@ -27,7 +27,7 @@ function OrderDetails(){
 
   console.log('iddd', result)
 
- let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Amount'];
+ let tHead = ['Name', 'Amount'];
 //  let tHead = ['Username', 'Payment Method', 'Medication'];
 
 
@@ -38,10 +38,13 @@ function OrderDetails(){
         <h3>Payment Method: {result.PaymentMethod}</h3>
         <h3>Status: {result.Status}</h3>
         <h3>Total Amount: {result.TotalAmount}</h3>
+        <h3>Shipping Address: {result.ShippingAddress}</h3>
+
 
 
         {/* <OrderList username={username}/> */}
-        {/* <TableOrder tHead={tHead} data={result.Items} /> */}
+        {result.Items && <TableOrder tHead={tHead} data={result.Items} />
+}
 
         <MainBtn
               txt="Cancel Order"
