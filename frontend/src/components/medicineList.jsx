@@ -59,6 +59,9 @@ let navigate = useNavigate()
         <option value='all'>All</option>
         <option value='pain Killer'>Pain killer</option>
         <option value='antiinflammatory'>Antiinflammatory</option>
+        <option value='skincare'>Skincare</option>
+        <option value='acne Cream'>Acne Cream</option>
+
         </select>
       </div>
     </div>
