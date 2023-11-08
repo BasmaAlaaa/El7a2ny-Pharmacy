@@ -34,7 +34,7 @@ function CarttInfo(){
         <MainBtn
               txt="Checkout"
               style="green-btn"
-              action={() => navigate('/checkout')}
+              action={() => navigate(`/checkout/${username}`)}
               key="navBtn"
             />
         
