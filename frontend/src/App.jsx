@@ -39,9 +39,9 @@ function App() {
           <Route exact path="/resetPassword" element={<ResetPassword />} />
           <Route exact path="/registerPatient" element={<RegisterPatient />} />
           <Route exact path="/registerPharmacist" element={<RegisterPharmacist />} />
-          <Route exact path="/patientView" element={<PatientView />} />
-          <Route exact path="/pharmacistView" element={<PharmacistView />} />
-          <Route exact path="/administratorView" element={<AdministratorView />} />
+          <Route exact path="/patientView/:username" element={<PatientView />} />
+          <Route exact path="/pharmacistView/:username" element={<PharmacistView />} />
+          <Route exact path="/administratorView/:username" element={<AdministratorView />} />
           <Route exact path="/medicineView/:name" element={<MedicineView />} />
           <Route exact path="/medicineList" element={<MedicineList />} />
           <Route exact path="/addAdministrator" element={<AddAdministrator />} />
