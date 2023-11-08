@@ -37,7 +37,9 @@ const {
     viewCartItems,
     removeAnItemFromCart,
     addMedicineToCart,
-    updateMedicineQuantityInCart
+    updateMedicineQuantityInCart,
+    login,
+    logout
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -85,7 +87,8 @@ router.get('/viewCartItems/:Username',viewCartItems);
 router.put('/removeItemFromCart/:Username:MedicineName',removeAnItemFromCart);
 router.post('/addMedicineToCart/:Username:MedicineName',addMedicineToCart);
 router.put('/updateQuantity:Username:MedicineName',updateMedicineQuantityInCart);
-
+router.post('/login',login);
+router.get('/logout',logout);
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
 router.get('/AvailableMedicinesQuantity',availableMedicinesQuantity);
