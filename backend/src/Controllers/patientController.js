@@ -146,6 +146,146 @@ const cancelOrder = async (req, res) => {
 };
 
 
+const viewCartItems = async (req, res) => {
+  const { Username } = req.params;
+
+  try {
+    const patient = await Patient.findOne({ Username });
+
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient not found' });
+    }
+
+    const cartId = patient.cart;
+
+    const cart = await Cart.findById(cartId).populate({
+      path: 'items',
+      select: 'Name Price Quantity '
+    });
+
+    if (!cart) {
+      return res.status(404).send({ error: 'Cart not found' });
+    }
+
+    res.status(200).send({ cart });
+  } catch (error) {
+    // Handle any errors, e.g., database errors
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+};
+
+
+const removeAnItemFromCart = async (req, res) => {
+  const { Username, MedicineName } = req.params;
+  try {
+    const patient = await Patient.findOne({ Username });
+
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient not found' });
+    }
+
+    const cartId = patient.itemsInCart;
+    const cart = await Cart.findById(cartId);
+
+    if (!cart) {
+      return res.status(404).send({ error: 'Cart not found' });
+    }
+
+    const indexToRemove = cart.items.findIndex(item => item.Name === MedicineName);
+
+    if (indexToRemove !== -1) {
+     
+      const removedMedicine = cart.items[indexToRemove];
+      cart.totalAmount -= removedMedicine.Price;
+      cart.items.splice(indexToRemove, 1);
+      await cart.save();
+
+      res.status(200).send({ message: `Medicine ${MedicineName} removed from the cart` });
+    } else {
+      res.status(404).send({ error: `Medicine ${MedicineName} not found in the cart` });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+};
+
+
+const addMedicineToCart = async (req, res) => {
+  const { Username, MedicineName } = req.params;
+  try {
+    const patient = await Patient.findOne({ Username });
+
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient not found' });
+    }
+
+    const cartId = patient.itemsInCart;
+    const cart = await Cart.findById(cartId);
+
+    if (!cart) {
+      return res.status(404).send({ error: 'Cart not found' });
+    }
+    const medicine = await Medicine.findOne({ Name: MedicineName });
+
+    if (!medicine) {
+      return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
+    }
+
+    cart.items.push(MedicineName);
+    cart.totalAmount += medicine.Price;
+
+    await cart.save();
+
+    res.status(200).send({ message: `Medicine ${MedicineName} added to the cart` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+};
+
+const updateMedicineQuantityInCart = async (req, res) => {
+  const { Username, MedicineName } = req.params;
+  const { quantity } = req.body; 
+
+  try {
+    const patient = await Patient.findOne({ Username });
+
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient not found' });
+    }
+
+    const cartId = patient.itemsInCart;
+    const cart = await Cart.findById(cartId);
+
+    if (!cart) {
+      return res.status(404).send({ error: 'Cart not found' });
+    }
+    const medicine = await Medicine.findOne({ Name: MedicineName });
+
+    if (!medicine) {
+      return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
+    }
+
+    const indexToUpdate = cart.items.findIndex(item => item.Name === MedicineName);
+
+    if (indexToUpdate !== -1) {
+      const oldQuantity = cart.items[indexToUpdate].Quantity;
+      const quantityChange = quantity - oldQuantity;
+      cart.items[indexToUpdate].Quantity = quantity;
+      cart.totalAmount += quantityChange * medicine.Price;
+      await cart.save();
+      res.status(200).send({ message: `Quantity of Medicine ${MedicineName} in the cart updated to ${quantity}` });
+    } else {
+      res.status(404).send({ error: `Medicine ${MedicineName} not found in the cart` });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   availableMedicinesDetailsByPatient,
   getMedicineByName,
@@ -154,5 +294,9 @@ module.exports = {
   addAddressToPatient,
   getPatientAddresses ,
   getOrderDetails,
-  cancelOrder
+  cancelOrder,
+  viewCartItems,
+  removeAnItemFromCart,
+  addMedicineToCart,
+  updateMedicineQuantityInCart
 };
