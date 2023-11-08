@@ -3,6 +3,7 @@ const Medicine = require('../Models/medicine');
 const Patient = require('../Models/patient');
 const Order = require('../Models/Order');
 const patient =require('../Models/patient');
+const Cart =require('../Models/cart');
 const Pharmacist = require('../Models/pharmacist');
 const jwt = require ('jsonwebtoken');
 const Admin=require('../Models/administrator');
