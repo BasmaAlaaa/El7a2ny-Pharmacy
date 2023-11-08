@@ -226,7 +226,7 @@ const addMedicineToCart = async (req, res) => {
       return res.status(404).send({ error: 'Patient not found' });
     }
 
-    const cartId = patient.itemsInCart;
+    const cartId = patient.cart._id;
     const cart = await Cart.findById(cartId);
 
     if (!cart) {
@@ -237,8 +237,9 @@ const addMedicineToCart = async (req, res) => {
     if (!medicine) {
       return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
     }
+    Med_id=medicine._id;
 
-    cart.items.push(MedicineName);
+    cart.items.push(Med_id);
     cart.totalAmount += medicine.Price;
 
     await cart.save();

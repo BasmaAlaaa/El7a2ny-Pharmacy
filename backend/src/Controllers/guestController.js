@@ -4,7 +4,7 @@ const PharmacistRequest = require("../Models/pharmacistRequest.js")
 const { isUsernameUnique, isEmailUnique } = require('../utils');
 const validator = require('validator');
 const upload = require('../Routes/multer-config');
-
+const Cart = require('../Models/cart.js');
 
 // Task 1 : register as a patient
 const registerPatient = async (req, res) => {
@@ -18,7 +18,8 @@ const registerPatient = async (req, res) => {
     MobileNumber,
     EmergencyContactName,
     EmergencyContactMobile,
-    EmergencyContactRelation
+    EmergencyContactRelation,
+    addresses
   } = req.body;
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -36,6 +37,7 @@ const registerPatient = async (req, res) => {
     if (!(await isEmailUnique(Email))) {
       throw new Error('Email is already in use.');
     }
+    
     const patient = await Patient.register(
       Username,
       Name,
@@ -46,7 +48,8 @@ const registerPatient = async (req, res) => {
       MobileNumber,
       EmergencyContactName,
       EmergencyContactMobile,
-      EmergencyContactRelation
+      EmergencyContactRelation,
+      addresses
     );
     await patient.save();
     res.status(200).json({ patient })

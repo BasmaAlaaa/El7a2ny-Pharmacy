@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
-
+const Cart = require('./cart.js');
 function arrayLimit(val) {
   return val.length > 0;
 }
@@ -110,7 +110,10 @@ const patientSchema = new Schema({
       throw new Error('Email is already in use.');
     }
   
-   
+    const newCart = await Cart.create({
+      items: [],
+      totalAmount: 0,
+    });
     const patient = await this.create({
       Username,
       Name,
@@ -122,7 +125,8 @@ const patientSchema = new Schema({
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
-      addresses
+      addresses,
+      cart: newCart._id  
     });
   
     return patient;
