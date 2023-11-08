@@ -111,7 +111,7 @@ const checkoutOrder = async (req, res) => {
     TotalAmount: cart.totalAmount
   });
 
-  cart = [];
+  cart.length = 0;
   await cart.save();
 
   res.status(200).send(order);

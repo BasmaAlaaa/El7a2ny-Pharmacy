@@ -34,8 +34,8 @@ const orderSchema = new Schema({
         default: 0,
     },
     ShippingAddress:{
-        type: String,
-        required: true
+        type: String
+        //required: true
     }
 },
 
