@@ -29,7 +29,11 @@ const {
     availableMedicinesDetailsByPatient, 
     getMedicineByName, 
     getMedicineByMedicalUse,
-    choosePaymentMethod
+    choosePaymentMethod,
+    addAddressToPatient,
+    getPatientAddresses,
+    getOrderDetails,
+    cancelOrder
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -69,6 +73,10 @@ router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPati
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
 router.put('/choosePaymentMethod/:username', choosePaymentMethod);
+router.post('/AddAddressToPatient/:Username', addAddressToPatient); 
+router.get('/GetPatientAddresses/:Username', getPatientAddresses); 
+router.get('/GetOrderDetails/:Username', getOrderDetails);
+router.put('/CancelOrder/:orderId', cancelOrder); 
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);

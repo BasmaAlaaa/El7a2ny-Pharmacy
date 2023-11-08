@@ -68,9 +68,91 @@ const choosePaymentMethod = async(req, res) => {
   }
 };
 
+const addAddressToPatient = async (req, res) => {
+  const { Username } = req.params;
+  const { newAddress } = req.body; 
+
+  try {
+   
+    const patient = await Patient.findOneAndUpdate(
+      { Username: Username },
+      { $push: { addresses: newAddress } },
+      { new: true } 
+    );
+
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    res.status(200).json(patient);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const getPatientAddresses = async (req, res) => {
+  const { Username } = req.params; 
+
+  try {
+    
+    const patient = await Patient.findOne({ Username: Username }, 'addresses');
+
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    
+    res.status(200).json(patient.addresses);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const getOrderDetails = async (req, res) => {
+  const { Username } = req.params;
+
+  try {
+      const orderDetails = await Order.findOne({ PatientUsername: Username })
+                                      .select('Status PaymentMethod createdAt updatedAt -_id');
+
+      if (!orderDetails) {
+          return res.status(404).json({ error: "Order not found for this patient." });
+      }
+
+      res.status(200).json(orderDetails);
+  } catch (error) {
+      res.status(500).send({ error: error.message });
+  }
+};
+const cancelOrder = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+      // Update the status of the order to 'Cancelled'
+      const order = await Order.findOneAndUpdate(
+          { _id: orderId, Status: { $ne: "Cancelled" } }, // This condition ensures that orders that are already cancelled are not updated again.
+          { Status: "Cancelled" },
+          { new: true } // This option returns the updated document
+      );
+
+      if (!order) {
+          return res.status(404).json({ error: "Order not found or it has already been cancelled." });
+      }
+
+      res.status(200).json({ message: "Order cancelled successfully.", order: order });
+  } catch (error) {
+      res.status(500).send({ error: error.message });
+  }
+};
+
+
 module.exports = {
   availableMedicinesDetailsByPatient,
   getMedicineByName,
   getMedicineByMedicalUse,
-  choosePaymentMethod
+  choosePaymentMethod,
+  addAddressToPatient,
+  getPatientAddresses ,
+  getOrderDetails,
+  cancelOrder
 };

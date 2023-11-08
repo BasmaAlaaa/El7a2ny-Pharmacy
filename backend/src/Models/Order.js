@@ -12,9 +12,16 @@ const orderSchema = new Schema({
         type: String,
         default: "Wallet",
         enum: ["wallet","Wallet","Credit Card","credit card","Cash On Delivery","COD","cash on delivery"]
+    },
+    Status: {
+        type: String,
+        default: "Pending",
+        enum: ["Pending", "Confirmed",  "Delivered", "Cancelled"],
+        required: true
     }
+},
 
-},{ timestamps: true })
+{ timestamps: true })
 
 orderSchema.statics.register = async function (
     PaymentMethod,
@@ -26,6 +33,10 @@ orderSchema.statics.register = async function (
         ) { 
     throw Error('All fields must be filled.');
 }
+if (!PaymentMethod) { 
+    throw Error('Payment method must be specified.');
+}
+
     const order = await this.create({
         PatientUsername,
         PaymentMethod

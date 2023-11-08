@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
 
+function arrayLimit(val) {
+  return val.length > 0;
+}
+
+
 const patientSchema = new Schema({
   Username: {
     type: String,
@@ -49,10 +54,23 @@ const patientSchema = new Schema({
   Prescriptions:{
     type: Array,
     required: false
-  }
+  },
+  addresses: {
+    type: [{
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      Building: { type: Number, required: true },
+      country: { type: String, required: true },
+    }],
+    required: true,
+    validate: [arrayLimit, '{PATH} does not have enough information.']
+  },
+  
   }, { timestamps: true });
 
-  // static register method
+
+
   patientSchema.statics.register = async function (
     Username,
     Name,
@@ -63,11 +81,12 @@ const patientSchema = new Schema({
     MobileNumber,
     EmergencyContactName,
     EmergencyContactMobile,
-    EmergencyContactRelation
+    EmergencyContactRelation,
+    addresses
   ) {
-
-    // validation 
-    if (!Username ||
+    
+    if (
+      !Username ||
       !Name ||
       !Email ||
       !Password ||
@@ -76,13 +95,16 @@ const patientSchema = new Schema({
       !MobileNumber ||
       !EmergencyContactName ||
       !EmergencyContactMobile ||
-      !EmergencyContactRelation) { 
-    throw Error('All fields must be filled.');
-}
-    if (!validator.isEmail(Email)) {
-      throw Error('Email must be in the form of johndoe@example.com');
+      !EmergencyContactRelation ||
+      ! addresses
+    ) {
+      throw Error('All fields must be filled.');
     }
     
+    if (!validator.isEmail(Email)) {
+      throw Error('Invalid email format.');
+    }
+  
     const existsUsername = await this.findOne({ Username });
     const existsEmail = await this.findOne({ Email });
   
@@ -93,7 +115,8 @@ const patientSchema = new Schema({
     if (existsEmail) {
       throw new Error('Email is already in use.');
     }
-
+  
+   
     const patient = await this.create({
       Username,
       Name,
@@ -105,6 +128,7 @@ const patientSchema = new Schema({
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
+      addresses
     });
   
     return patient;
