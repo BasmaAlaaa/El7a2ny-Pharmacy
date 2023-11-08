@@ -52,7 +52,7 @@ function App() {
           <Route exact path="/requestInfo/:username" element={<RequestInfo />} />
           <Route exact path="/cartInfo/:username" element={<CartInfo />} />
           <Route exact path="/checkout" element={<Checkout />} />
-          <Route exact path="/orderDetails" element={<OrderDetails />} />
+          <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
 
 
 

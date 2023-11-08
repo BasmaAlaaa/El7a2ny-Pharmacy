@@ -6,14 +6,18 @@ function CaseTableBody({ data }) {
 
   return (
     <>
-    <th>{data.Name}</th>
+    {/* <th>{data.Name}</th>
       
     <td>{data.ActiveIngredients}</td>
     <td>{data.Price}</td>
     <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
     <td>{data.MedicalUse}</td>
     <td>{data.Quantity}</td>
-    <td>{data.QuantitySold}</td>
+    <td>{data.QuantitySold}</td> */}
+    <th>{data.PatientUsername}</th>
+      
+      <td>{data.PaymentMethod}</td>
+      <td>{data.Medication}</td>
       
       
     </>
@@ -33,7 +37,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableOrder({ tHead, data, searchText, filterText }) {
+function TableOrder({ tHead, data}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -46,14 +50,6 @@ function TableOrder({ tHead, data, searchText, filterText }) {
         </thead>
         <tbody>
           {data
-          .filter((e) => {
-            return filterText.toLowerCase() === '' || filterText.toLowerCase() === 'all'?
-            e : e.MedicalUse.toLowerCase() === filterText.toLowerCase()
-          })
-          .filter((e) => {
-            return searchText.toLowerCase() === '' ? 
-            e: e.Name.toLowerCase().includes(searchText.toLowerCase())
-          })
           .map((e) => (
             <tr className="text-capitalize">
                 <CaseTableBody data={e} />
