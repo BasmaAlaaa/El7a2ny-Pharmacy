@@ -18,7 +18,13 @@ const orderSchema = new Schema({
         default: "Pending",
         enum: ["Pending", "Confirmed",  "Delivered", "Cancelled"],
         required: true
-    }
+    },
+    items: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Medicine',
+        },
+      ],
 },
 
 { timestamps: true })
