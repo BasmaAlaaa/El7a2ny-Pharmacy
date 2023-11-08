@@ -64,7 +64,14 @@ const patientSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Cart',
   },
-  
+  StripeCustomerId: {
+    type: String,
+    required: false
+  },
+  WalletAmount: {
+    type: Number,
+    default: 0
+  },
   }, { timestamps: true });
 
 

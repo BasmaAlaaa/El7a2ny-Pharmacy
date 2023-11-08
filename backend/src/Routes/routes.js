@@ -40,7 +40,8 @@ const {
     updateMedicineQuantityInCart,
     login,
     logout,
-    checkoutOrder
+    checkoutOrder,
+    payForOrder
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -91,6 +92,7 @@ router.put('/updateQuantity/:Username/:MedicineName/:quantity',updateMedicineQua
 router.post('/login',login);
 router.get('/logout',logout);
 router.post('/checkoutOrder/:Username', checkoutOrder);
+router.put('/payForOrder/:orderId/:paymentMethod', payForOrder)
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
