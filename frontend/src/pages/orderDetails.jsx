@@ -27,8 +27,8 @@ function OrderDetails(){
 
   console.log(result)
 
- // let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Amount'];
- let tHead = ['Username', 'Payment Method', 'Medication'];
+ let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Amount'];
+//  let tHead = ['Username', 'Payment Method', 'Medication'];
 
 
     return (
