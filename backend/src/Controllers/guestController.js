@@ -57,6 +57,10 @@ const registerPatient = async (req, res) => {
 
 // Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req, res) => {
+	
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+	
   const {
     Username,
     Name,
