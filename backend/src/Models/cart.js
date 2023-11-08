@@ -2,23 +2,25 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
 
+const cartItemSchema = new Schema({
+  medicine: {
+    type: String, 
+    required: true, 
+  },
+  quantity: {
+    type: Number,
+    default: 1, 
+  },
+});
+
 const cartSchema = new Schema({
-  Items: [{
-    Medicine: {
-      type: Schema.Types.ObjectId,
-      ref: 'Medicine',
-    },
-    Quantity:{
-        type: Number,
-        default: 0,
-    }
-  }],
-    TotalAmount: {
-      type: Number,
-      default: 0,
-    },
-  });
-  
-  const Cart = mongoose.model('Cart', cartSchema);
-  
-  module.exports = Cart;
+  items: [cartItemSchema], 
+  totalAmount: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const Cart = mongoose.model('Cart', cartSchema);
+
+module.exports = Cart;

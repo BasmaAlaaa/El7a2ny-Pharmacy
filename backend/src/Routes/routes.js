@@ -86,7 +86,7 @@ router.put('/CancelOrder/:orderId', cancelOrder);
 router.get('/viewCartItems/:Username',viewCartItems);
 router.delete('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
 router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
-router.put('/updateQuantity:Username:MedicineName',updateMedicineQuantityInCart);
+router.put('/updateQuantity/:Username/:MedicineName/:quantity',updateMedicineQuantityInCart);
 router.post('/login',login);
 router.get('/logout',logout);
 
