@@ -6,15 +6,18 @@ function CaseTableBody({ data }) {
 
   return (
     <>
-    {/* <th>{data.Name}</th>
-      
-    <td>{data.ActiveIngredients}</td>
-    <td>{data.Price}</td>
-    <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
-    <td>{data.MedicalUse}</td>
-    <td>{data.Quantity}</td>
-    <td>{data.QuantitySold}</td> */}
-      
+    <th>{data}</th>
+    
+      <td className="py-3 text-align-center">
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+        onClick={()=>navigate(`/medicineView/:${data.Name}`)}
+      >
+        Select
+      </button>
+      </div>
+      </td>
       
     </>
   );
@@ -33,7 +36,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableOrder({ tHead, data}) {
+function TableAddresses({ tHead, data}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -57,4 +60,4 @@ function TableOrder({ tHead, data}) {
   );
 }
 
-export default TableOrder;
+export default TableAddresses;

@@ -39,7 +39,7 @@ function OrderDetails(){
         <h3>Status: {result.Status}</h3>
 
         {/* <OrderList username={username}/> */}
-        {/* <TableOrder tHead={tHead} data={result} /> */}
+        {/* <TableOrder tHead={tHead} data={result.Items} /> */}
 
         <MainBtn
               txt="Cancel Order"

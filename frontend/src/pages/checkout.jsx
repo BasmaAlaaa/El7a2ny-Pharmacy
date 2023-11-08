@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainBtn from "../components/Button";
 import Input from "../components/Input";
 import NavBarPatient from "../components/NavBarPatient";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import TableAddresses from "../components/TableAddresses";
+
 
 function Checkout() { 
     const [address, setAddress] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
+    const [allAddresses, setAllAddresses] = useState([]);
     const [card, setCard] = useState(false);
     const {username} = useParams();
     let navigate = useNavigate()
-    console.log('adddd',address)
+    console.log('del',deliveryAddress)
+    
+
+    useEffect(() => {
+      const response = axios.get(`http://localhost:8000/Patient/GetPatientAddresses/${username}`)
+      .then(res =>setAllAddresses(res.data)).catch(err => console.log(err))
+        }, [])
+        console.log('all add', allAddresses);
 
     const handleSubmit = (e) => {
       const data = {newAddress:address};
@@ -18,6 +29,8 @@ function Checkout() {
       const response = axios.post(`http://localhost:8000/Patient/AddAddressToPatient/${username}`, data)
   .then(res =>console.log(res.data)).catch(err => console.log(err))
     }
+  let tHead = ['Address', 'Select'];
+
 
     return(
         <div>
@@ -42,12 +55,45 @@ function Checkout() {
               action={handleSubmit}
               
             />
+          <h4>Delivery Address: {deliveryAddress}</h4>
         <h4>Choose Address</h4>
-        <select name='medicalUse' >
-        <option value='all'>All</option>
-        <option value='pain Killer'>Pain killer</option>
-        <option value='antiinflammatory'>Antiinflammatory</option>
-        </select>
+
+        <div className="case-table card mt-4">
+      <table className="table table-striped m-0">
+        <thead>
+          <tr className="text-capitalize">
+            {tHead.map((e) => (
+              <th scope="col">{e}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {allAddresses
+          .map((e) => (
+            <tr className="text-capitalize">
+
+    <th>{e}</th>
+    
+    <td className="py-3 text-align-center">
+    <div className="d-flex flex-row">
+    <button
+      className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+        onClick={(s) =>{
+          s.preventDefault();
+          setDeliveryAddress(e)}
+        } 
+    >
+      Select
+    </button>
+    </div>
+    </td>   
+
+    </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
         <h4>Choose Payment Method</h4>
         <div>
             <input
