@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import eye from '../assets/images/svg/eye.svg';
 
-function Input({ title, placeholder, showErr, type,register }) {
+function Input({ title, placeholder, showErr, type,register, onChange}) {
   console.log(register);
   let inputRef = useRef();
   const showPassword = () => {
@@ -14,6 +14,7 @@ function Input({ title, placeholder, showErr, type,register }) {
       <p className="mb-2 text-capitalize fw-medium">{title}</p>
       <div className="input-group">
         <input
+        onChange={onChange}
           className={`mainInput form-control ${
             type == 'password' && 'border-end-0'
           } ${showErr && 'err-active'}`}

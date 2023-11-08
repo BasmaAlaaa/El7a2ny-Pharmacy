@@ -51,7 +51,7 @@ function App() {
           <Route exact path="/pharmacistInfo/:username" element={<PharmacistInfo />} />
           <Route exact path="/requestInfo/:username" element={<RequestInfo />} />
           <Route exact path="/cartInfo/:username" element={<CartInfo />} />
-          <Route exact path="/checkout" element={<Checkout />} />
+          <Route exact path="/checkout/:username" element={<Checkout />} />
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
 
 
