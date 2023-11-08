@@ -66,6 +66,10 @@ const patientSchema = new Schema({
     required: true,
     validate: [arrayLimit, '{PATH} does not have enough information.']
   },
+  cart: {
+    type: Schema.Types.ObjectId,
+    ref: 'Cart'
+  }
   
   }, { timestamps: true });
 
