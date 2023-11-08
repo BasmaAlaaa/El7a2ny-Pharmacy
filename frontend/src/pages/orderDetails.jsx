@@ -22,7 +22,7 @@ function OrderDetails(){
 
     useEffect(() => {
   const response = axios.get(`http://localhost:8000/Patient/GetOrderDetails/${username}`)
-  .then(res =>setResult(res)).catch(err => console.log(err))
+  .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
 
   console.log('iddd', result)
@@ -37,6 +37,8 @@ function OrderDetails(){
         <h2>Order Details</h2>
         <h3>Payment Method: {result.PaymentMethod}</h3>
         <h3>Status: {result.Status}</h3>
+        <h3>Total Amount: {result.TotalAmount}</h3>
+
 
         {/* <OrderList username={username}/> */}
         {/* <TableOrder tHead={tHead} data={result.Items} /> */}
