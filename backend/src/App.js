@@ -34,6 +34,14 @@ app.get("/home", (req, res) => {
   res.status(200).send("You have everything installed!");
 });
 
+const {
+  availableMedicinesDetailsByPatient, 
+  login,
+  logout
+} = require('./Controllers/loginController');
+
+app.post("/login",login);
+app.get("/logout",logout);
 
 app.use("/Admin", router);
 app.use("/Guest", router);

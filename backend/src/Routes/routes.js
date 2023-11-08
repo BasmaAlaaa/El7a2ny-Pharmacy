@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const upload = require('./multer-config');
 
 // Administrator Controller
@@ -38,8 +37,6 @@ const {
     removeAnItemFromCart,
     addMedicineToCart,
     updateMedicineQuantityInCart,
-    login,
-    logout,
     checkoutOrder,
     payForOrder
 } = require('../Controllers/patientController');
@@ -89,8 +86,6 @@ router.get('/viewCartItems/:Username',viewCartItems);
 router.delete('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
 router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
 router.put('/updateQuantity/:Username/:MedicineName/:quantity',updateMedicineQuantityInCart);
-router.post('/login',login);
-router.get('/logout',logout);
 router.post('/checkoutOrder/:Username', checkoutOrder);
 router.put('/payForOrder/:orderId/:paymentMethod', payForOrder)
 
