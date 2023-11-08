@@ -172,10 +172,11 @@ const getOrderDetails = async (req, res) => {
       }
 
       const orderItems = order.Items;
-      let Items = new array(orderItems.length);
+      var Items = [];
+
       for(const orderItem of orderItems){
-        const medicine = await Medicine.findById(orderItem.Medicine);
-        Items.push([{MedicineName: medicine.Name, Quantity: orderItem.Quantity}]);
+        const medicine = await Medicine.findOne({Name: orderItem.medicine});
+        Items.push([{MedicineName: medicine.Name, Quantity: orderItem.quantity}]);
       }
 
       const orderDetails = {
