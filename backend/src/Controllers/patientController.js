@@ -225,30 +225,36 @@ const getOrderDetails = async (req, res) => {
   const { Username } = req.params;
 
   try {
-      const order = await Order.findOne({ PatientUsername: Username });
+      const orders = await Order.find({ PatientUsername: Username });
 
-      if (!order) {
-          return res.status(404).json({ error: "Order not found for this patient." });
+      if (orders.length === 0) {
+          return res.status(404).json({ error: "No orders for this patient." });
       }
 
-      const orderItems = order.Items;
-      var Items = [];
+      var result = [];
 
-      for(const orderItem of orderItems){
-        const medicine = await Medicine.findOne({Name: orderItem.medicine});
-        Items.push({MedicineName: medicine.Name, Quantity: orderItem.quantity});
+      for(const order of orders){
+        const orderItems = order.Items;
+        var Items = [];
+
+        for(const orderItem of orderItems){
+          const medicine = await Medicine.findOne({Name: orderItem.medicine});
+          Items.push({MedicineName: medicine.Name, Quantity: orderItem.quantity});
+        }
+
+        const orderDetails = {
+          Items,
+          _id: order._id,
+          PaymentMethod: order.PaymentMethod,
+          Status: order.Status,
+          TotalAmount: order.TotalAmount,
+          ShippingAddress: order.ShippingAddress
+        }
+
+        result.push(orderDetails);
       }
 
-      const orderDetails = {
-        Items,
-        _id: order._id,
-        PaymentMethod: order.PaymentMethod,
-        Status: order.Status,
-        TotalAmount: order.TotalAmount,
-        ShippingAddress: order.ShippingAddress
-      }
-
-      res.status(200).json(orderDetails);
+      res.status(200).json(result);
   } catch (error) {
       res.status(500).send({ error: error.message });
   }
