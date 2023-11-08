@@ -176,7 +176,7 @@ const getOrderDetails = async (req, res) => {
 
       for(const orderItem of orderItems){
         const medicine = await Medicine.findOne({Name: orderItem.medicine});
-        Items.push([{MedicineName: medicine.Name, Quantity: orderItem.quantity}]);
+        Items.push({MedicineName: medicine.Name, Quantity: orderItem.quantity});
       }
 
       const orderDetails = {
