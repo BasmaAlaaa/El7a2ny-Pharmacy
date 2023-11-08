@@ -84,22 +84,37 @@ const checkoutOrder = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-  const { username } = req.params;
+  const { Username } = req.params;
   try{
     
-    const patient = await Patient.findOne({Username: username});
+    const patient = await Patient.findOne({Username: Username});
 
     if(!patient){
       return res.status(404).json({error : "This patient doesn't exist!"})
   }
 
-  const updatedOrder = {
-    $set: {
-        PaymentMethod: req.body.PaymentMethod
-    },
-  };
+  const cart = await Cart.findById(patient.cart);
 
-  const updated = await Order.updateOne({PatientUsername: username},updatedOrder);
+  if(!cart){
+    return res.status(404).json({error : "This Cart doesn't exist!"})
+}
+
+  if(cart.items.length === 0){
+    return res.status(404).json({error : "Your cart is empty!"})
+  }
+  
+  cartItems = cart.items;
+
+  const order = await Order.create({
+    PatientUsername: Username,
+    Items: cartItems,
+    TotalAmount: cart.totalAmount
+  });
+
+  cart = [];
+  await cart.save();
+
+  res.status(200).send(order);
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
@@ -469,6 +484,8 @@ const logout = async (req, res) => {
 }
 
 
+
+
 module.exports = {
   availableMedicinesDetailsByPatient,
   getMedicineByName,
@@ -483,5 +500,6 @@ module.exports = {
   addMedicineToCart,
   updateMedicineQuantityInCart,
   login,
-  logout
+  logout,
+  checkoutOrder
 };

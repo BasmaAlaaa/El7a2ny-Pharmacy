@@ -60,7 +60,7 @@ const patientSchema = new Schema({
       type:String,
       required: true,
  }],
-  Cart: {
+  cart: {
     type: Schema.Types.ObjectId,
     ref: 'Cart',
   },

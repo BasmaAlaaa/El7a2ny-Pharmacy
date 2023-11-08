@@ -20,14 +20,14 @@ const orderSchema = new Schema({
         required: true
     },
     Items: [{
-        Medicine: {
-          type: String,
-          ref: 'Medicine',
-        },
-        Quantity:{
+        medicine: {
+            type: String, 
+            required: true, 
+          },
+          quantity: {
             type: Number,
-            default: 1,
-        }
+            default: 1, 
+          },
     }],
     TotalAmount: {
         type: Number,
