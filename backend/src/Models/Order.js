@@ -21,12 +21,12 @@ const orderSchema = new Schema({
     },
     Items: [{
         Medicine: {
-          type: Schema.Types.ObjectId,
+          type: String,
           ref: 'Medicine',
         },
         Quantity:{
             type: Number,
-            default: 0,
+            default: 1,
         }
     }],
     TotalAmount: {
