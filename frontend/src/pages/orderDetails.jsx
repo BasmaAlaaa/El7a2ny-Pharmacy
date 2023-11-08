@@ -15,17 +15,25 @@ function OrderDetails(){
     let navigate = useNavigate()
 
     const {username} = useParams();
+    const [id, setId] = useState('');
     const[result, setResult] = useState([]);
+    const[resultCancel, setResultCancel] = useState('');
     const[resultDelete, setResultDelete] = useState([]);
 
+  const handleCancel = () => {
+    const response = axios.put(`http://localhost:8000/Patient/CancelOrder/${result._id}`)
+    .then(res =>setResultCancel(res)).catch(err => console.log(err))
+    navigate(`/patientView/${username}`)
 
+  }
+  console.log('cancelll', resultCancel);
 
     useEffect(() => {
   const response = axios.get(`http://localhost:8000/Patient/GetOrderDetails/${username}`)
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
-
-  console.log('iddd', result)
+  //  setId(result._id);
+  console.log('iddd', result);
 
  let tHead = ['Name', 'Amount'];
 //  let tHead = ['Username', 'Payment Method', 'Medication'];
@@ -49,7 +57,7 @@ function OrderDetails(){
         <MainBtn
               txt="Cancel Order"
               style="white-btn"
-              action={() => navigate('/patientView')}
+              action={handleCancel}
               key="navBtn"
             />
         
