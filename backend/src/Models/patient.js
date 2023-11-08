@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
-
+const Cart = require('./cart.js');
 function arrayLimit(val) {
   return val.length > 0;
 }
@@ -56,15 +56,16 @@ const patientSchema = new Schema({
     required: false
   },
   addresses: {
-    type: [{
-      street: { type: String, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      Building: { type: Number, required: true },
-      country: { type: String, required: true },
-    }],
+    // type: [{
+    //   street: { type: String, required: true },
+    //   city: { type: String, required: true },
+    //   state: { type: String, required: true },
+    //   Building: { type: Number, required: true },
+    //   country: { type: String, required: true },
+    // }],
+    type:String,
     required: true,
-    validate: [arrayLimit, '{PATH} does not have enough information.']
+  //  validate: [arrayLimit, '{PATH} does not have enough information.']
   },
   cart: {
     type: Schema.Types.ObjectId,
@@ -120,7 +121,10 @@ const patientSchema = new Schema({
       throw new Error('Email is already in use.');
     }
   
-   
+    const newCart = await Cart.create({
+      items: [],
+      totalAmount: 0,
+    });
     const patient = await this.create({
       Username,
       Name,
@@ -132,7 +136,8 @@ const patientSchema = new Schema({
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
-      addresses
+      addresses,
+      cart: newCart._id  
     });
   
     return patient;
