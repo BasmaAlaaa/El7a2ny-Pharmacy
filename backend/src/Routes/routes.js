@@ -77,7 +77,7 @@ router.post('/SubmitRequestToBePharmacist', upload.fields([
 router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
-router.put('/choosePaymentMethod/:username', choosePaymentMethod);
+router.put('/choosePaymentMethod/:username/:orderId', choosePaymentMethod);
 router.post('/AddAddressToPatient/:Username', addAddressToPatient); 
 router.get('/GetPatientAddresses/:Username', getPatientAddresses); 
 router.get('/GetOrderDetails/:Username', getOrderDetails);
