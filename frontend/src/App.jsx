@@ -55,13 +55,6 @@ function App() {
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
 
 
-
-
-
-
-
-
-
         </Routes>
       </main>
     </div>
