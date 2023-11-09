@@ -23,14 +23,14 @@ function CarttInfo(){
     }, [])
   console.log(result.items)
 
-  let tHead = ['Name', 'Quantity', 'Remove'];
+  let tHead = ['Name', 'Quantity', 'Remove from cart', 'Add', 'Remove'];
  
 
     return (
         <div>
         <NavBarPatient username={username}/>
         {result.items&&
-        <TableCart tHead={tHead} data={result.items}/>}
+        <TableCart tHead={tHead} data={result.items} username={username}/>}
         <MainBtn
               txt="Checkout"
               style="green-btn"
