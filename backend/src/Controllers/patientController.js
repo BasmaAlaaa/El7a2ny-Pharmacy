@@ -77,12 +77,14 @@ const checkoutOrder = async (req, res) => {
   const newOrder = await Order.create({
     PatientUsername: Username,
     Items: cartItems,
-    TotalAmount: cart.totalAmount
+    TotalAmount: cart.totalAmount,
+
   });
 
   while(cart.items.length > 0) {
     cart.items.pop();
   };
+  cart.totalAmount = 0;
   await cart.save();
 
   //Choosing payment method
