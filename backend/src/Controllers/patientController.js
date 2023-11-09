@@ -110,18 +110,19 @@ const checkoutOrder = async (req, res) => {
 
   if(paymentMethod === "card"){
 
-  const paymentIntent = await stripe.paymentIntents.create({
+  /*const paymentIntent = await stripe.paymentIntents.create({
     amount: order.TotalAmount,
-    currency: 'egp',
     customer: patient.StripeCustomerId,
-    description: "Paying for my order"
-  });
+    currency: 'egp',
+    description: "Paying for my order",
 
-  await stripe.paymentIntents.confirm(paymentIntent);
+  });*/
+
+  //await stripe.paymentIntents.confirm(paymentIntent);
 }
 else if(paymentMethod === "wallet"){
 
-if(patient.WalletAmount <= order.TotalAmount)
+if(patient.WalletAmount < order.TotalAmount)
   return res.status(400).send("Your wallet amount won't cover the whole order amount!")
 
 if(patient.WalletAmount >= order.TotalAmount){
@@ -138,7 +139,6 @@ if(patient.WalletAmount >= order.TotalAmount){
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
-
 };
 
 const addAddressToPatient = async (req, res) => {
