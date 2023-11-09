@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import eye from '../assets/images/svg/eye.svg';
 
-function Input({ title, placeholder, showErr, type,register, onChange}) {
+function Input({ title, placeholder, showErr, type,register, onChange, required}) {
   console.log(register);
   let inputRef = useRef();
   const showPassword = () => {
@@ -21,6 +21,7 @@ function Input({ title, placeholder, showErr, type,register, onChange}) {
           placeholder={placeholder}
           type={type}
           {...register}
+          required={required}
         />
         {type == 'password' && (
           <span

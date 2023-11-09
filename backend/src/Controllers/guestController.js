@@ -6,6 +6,24 @@ const validator = require('validator');
 const upload = require('../Routes/multer-config');
 const Cart = require('../Models/Cart.js');
 
+//Function for Stripe
+async function createStripeCustomer({ Email, Name, Phone }) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const Customer = await stripe.customers.create({
+        name: Name,
+        email: Email,
+        phone: Phone
+      });
+
+      resolve(Customer);
+    } catch (err) {
+      console.log(err);
+      reject(err);
+    }
+  });
+}
+
 // Task 1 : register as a patient
 const registerPatient = async (req, res) => {
   const {
@@ -21,6 +39,7 @@ const registerPatient = async (req, res) => {
     EmergencyContactRelation,
     addresses
   } = req.body;
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
   // res.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
@@ -42,6 +61,8 @@ const registerPatient = async (req, res) => {
       items: [],
       totalAmount: 0,
     });
+
+    const customer = await createStripeCustomer({ Email,Name,MobileNumber });
     
     const patient = await Patient.register(
       Username,

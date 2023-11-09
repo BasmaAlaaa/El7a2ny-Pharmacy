@@ -28,7 +28,6 @@ const {
     availableMedicinesDetailsByPatient, 
     getMedicineByName, 
     getMedicineByMedicalUse,
-    choosePaymentMethod,
     addAddressToPatient,
     getPatientAddresses,
     getOrderDetails,
@@ -37,8 +36,7 @@ const {
     removeAnItemFromCart,
     addMedicineToCart,
     updateMedicineQuantityInCart,
-    checkoutOrder,
-    payForOrder
+    checkoutOrder
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -77,7 +75,6 @@ router.post('/SubmitRequestToBePharmacist', upload.fields([
 router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);
 router.get('/MedicineByName/:Name',getMedicineByName);
 router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
-router.put('/choosePaymentMethod/:username/:orderId', choosePaymentMethod);
 router.post('/AddAddressToPatient/:Username', addAddressToPatient); 
 router.get('/GetPatientAddresses/:Username', getPatientAddresses); 
 router.get('/GetOrderDetails/:Username', getOrderDetails);
@@ -86,8 +83,7 @@ router.get('/viewCartItems/:Username',viewCartItems);
 router.delete('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
 router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
 router.put('/updateQuantity/:Username/:MedicineName/:quantity',updateMedicineQuantityInCart);
-router.post('/checkoutOrder/:Username', checkoutOrder);
-router.put('/payForOrder/:orderId/:paymentMethod', payForOrder)
+router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', checkoutOrder);
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);

@@ -10,8 +10,8 @@ const orderSchema = new Schema({
     },
     PaymentMethod: {
         type: String,
-        default: "Wallet",
-        enum: ["wallet","Wallet","Credit Card","credit card","Cash On Delivery","COD","cash on delivery"]
+        default: "cash",
+        enum: ["cash","card","wallet"]
     },
     Status: {
         type: String,
