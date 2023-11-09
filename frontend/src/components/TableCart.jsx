@@ -6,14 +6,8 @@ function CaseTableBody({ data }) {
 
   return (
     <>
-    <th>{data.Name}</th>
-      
-    <td>{data.ActiveIngredients}</td>
-    <td>{data.Price}</td>
-    <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
-    <td>{data.MedicalUse}</td>
-    <td>{data.Quantity}</td>
-    <td>{data.QuantitySold}</td>
+    <th>{data.medicine}</th>
+    <td>{data.quantity}</td>
 
 
       <td className="py-3 text-align-center">
@@ -45,7 +39,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableCart({ tHead, data, searchText, filterText }) {
+function TableCart({ tHead, data }) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -58,14 +52,6 @@ function TableCart({ tHead, data, searchText, filterText }) {
         </thead>
         <tbody>
           {data
-          .filter((e) => {
-            return filterText.toLowerCase() === '' || filterText.toLowerCase() === 'all'?
-            e : e.MedicalUse.toLowerCase() === filterText.toLowerCase()
-          })
-          .filter((e) => {
-            return searchText.toLowerCase() === '' ? 
-            e: e.Name.toLowerCase().includes(searchText.toLowerCase())
-          })
           .map((e) => (
             <tr className="text-capitalize">
                 <CaseTableBody data={e} />

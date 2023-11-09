@@ -1,9 +1,25 @@
+import axios from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-function CaseTableBody({ data }) {
+function CaseTableBody({ data, username }) {
   let navigate = useNavigate()
-
+  const[result, setResult] = useState('');
+  const handleAdd = async() => {
+    try{
+    const response = await axios.post(`http://localhost:8000/Patient/AddMedicineToCart/${username}/${data.Name}`)
+   // .then(res =>setResult(res)).catch(err => console.log(err))
+      if (response.status === 200) {
+            alert(response.data.message);
+              console.log(response.data.message);
+          }}
+          catch(error ){
+            alert(`Failed to add item `);
+            console.error('Error adding item:', error);
+          };
+  }
+  //console.log('added', result);
   return (
     <>
       
@@ -30,7 +46,7 @@ function CaseTableBody({ data }) {
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        //onClick={()=>navigate(`/medicineView/${data.Name}`)}
+        onClick={handleAdd}
       >
         Add to cart
       </button>
@@ -91,7 +107,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function Table({ tHead, data, searchText, filterText }) {
+function Table({ tHead, data, searchText, filterText, username}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -114,7 +130,7 @@ function Table({ tHead, data, searchText, filterText }) {
           })
           .map((e) => (
             <tr className="text-capitalize">
-                <CaseTableBody data={e} />
+                <CaseTableBody data={e} username={username}/>
             </tr>
           ))}
         </tbody>
