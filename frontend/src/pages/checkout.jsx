@@ -12,10 +12,12 @@ function Checkout() {
   const [deliveryAddress, setDeliveryAddress] = useState("");
     const [allAddresses, setAllAddresses] = useState([]);
     const [card, setCard] = useState(false);
+    const [type, setType] = useState('');
+
     const {username} = useParams();
     let navigate = useNavigate()
     console.log('del',deliveryAddress)
-    
+    console.log('typee', type)
 
     useEffect(() => {
       const response = axios.get(`http://localhost:8000/Patient/GetPatientAddresses/${username}`)
@@ -97,17 +99,17 @@ function Checkout() {
         <h4>Choose Payment Method</h4>
         <div>
             <input
-            type='radio'  value={'wallet'} />
+            type='radio' name='payment' checked={type==='wallet'} value={'wallet'} onChange={(e) => {setType(e.target.value)}}/>
             Pay with wallet
         </div>
         <div>
             <input
-            type='radio'  value={'cash'} />
+            type='radio' name='payment' checked={type==='cash'} value={'cash'} onChange={(e) => {setType(e.target.value)}}/>
             Cash on delivery
         </div>
         <div>
             <input
-            type='radio'  value={'card'} />
+            type='radio' name='payment' checked={type==='card'} value={'card'} onChange={(e) => {setType(e.target.value)}}/>
             Pay by card
         </div>
         
