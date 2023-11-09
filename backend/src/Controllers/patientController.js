@@ -118,7 +118,7 @@ const checkoutOrder = async (req, res) => {
 
   await stripe.paymentIntents.confirm(paymentIntent);
 }
-else if(paymentMethod === "cash"){
+else if(paymentMethod === "wallet"){
 
 if(patient.WalletAmount <= order.TotalAmount)
   return res.status(400).send("Your wallet amount won't cover the whole order amount!")
