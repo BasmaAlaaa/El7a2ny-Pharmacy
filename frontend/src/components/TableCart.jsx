@@ -1,28 +1,102 @@
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-function CaseTableBody({ data }) {
-  let navigate = useNavigate()
-
+function CaseTableBody({ data, username }) {
+  let navigate = useNavigate();
+  const handleRemove = async() => {
+    try{
+    const response = await axios.delete(`http://localhost:8000/Patient/removeItemFromCart/${username}/${data.medicine}`)
+   // .then(res =>setResult(res)).catch(err => console.log(err))
+      if (response.status === 200) {
+            alert(response.data.message);
+              console.log(response.data.message);
+          }}
+          catch(error ){
+            alert(`Failed to remove item `);
+            console.error('Error removing item:', error);
+          };
+          window.location.reload(true);        
+      }
+      const handleQuantityAdd = async() => {
+        try{
+          const newQuantity = data.quantity+1;
+        const response = await axios.put(`http://localhost:8000/Patient/updateQuantity/${username}/${data.medicine}/${newQuantity}`)
+       // .then(res =>setResult(res)).catch(err => console.log(err))
+          if (response.status === 200) {
+                alert(response.data.message);
+                  console.log(response.data.message);
+              }}
+              catch(error ){
+                alert(`Failed to remove item `);
+                console.error('Error removing item:', error);
+              };
+              window.location.reload(true);        
+          }
+          const handleQuantityRemove = async() => {
+            if(data.quantity>1){
+            try{
+            const response = await axios.put(`http://localhost:8000/Patient/updateQuantity/${username}/${data.medicine}/${data.quantity-1}`) 
+            if (response.status === 200) {
+              alert(response.data.message);
+                console.log(response.data.message);
+            }}
+            catch(error ){
+              alert(`Failed to remove item `);
+              console.error('Error removing item:', error);
+            };
+            window.location.reload(true);    
+          }
+          else{
+            try{
+              const response = await axios.delete(`http://localhost:8000/Patient/removeItemFromCart/${username}/${data.medicine}`)
+              if (response.status === 200) {
+                alert(response.data.message);
+                  console.log(response.data.message);
+              }}
+              catch(error ){
+                alert(`Failed to remove item `);
+                console.error('Error removing item:', error);
+              };
+              window.location.reload(true);
+          }           
+              }
+            
   return (
     <>
-    <th>{data.Name}</th>
-      
-    <td>{data.ActiveIngredients}</td>
-    <td>{data.Price}</td>
-    <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
-    <td>{data.MedicalUse}</td>
-    <td>{data.Quantity}</td>
-    <td>{data.QuantitySold}</td>
+    <th>{data.medicine}</th>
+    <td>{data.quantity}</td>
 
 
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/medicineView/:${data.Name}`)}
+        onClick={handleRemove}
       >
         Remove
+      </button>
+      </div>
+      </td>
+
+      <td className="py-3 text-align-center">
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+        onClick={handleQuantityAdd}
+      >
+        +
+      </button>
+      </div>
+      </td>
+
+      <td className="py-3 text-align-center">
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+        onClick={handleQuantityRemove}
+      >
+        -
       </button>
       </div>
       </td>
@@ -45,7 +119,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableCart({ tHead, data, searchText, filterText }) {
+function TableCart({ tHead, data, username }) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -58,17 +132,9 @@ function TableCart({ tHead, data, searchText, filterText }) {
         </thead>
         <tbody>
           {data
-          .filter((e) => {
-            return filterText.toLowerCase() === '' || filterText.toLowerCase() === 'all'?
-            e : e.MedicalUse.toLowerCase() === filterText.toLowerCase()
-          })
-          .filter((e) => {
-            return searchText.toLowerCase() === '' ? 
-            e: e.Name.toLowerCase().includes(searchText.toLowerCase())
-          })
           .map((e) => (
             <tr className="text-capitalize">
-                <CaseTableBody data={e} />
+                <CaseTableBody data={e} username={username}/>
             </tr>
           ))}
         </tbody>
