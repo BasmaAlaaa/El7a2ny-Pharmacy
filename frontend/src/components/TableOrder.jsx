@@ -1,22 +1,41 @@
 import { useNavigate } from 'react-router-dom';
+import TableItems from './TableItems';
+import { useState } from 'react';
+import axios from 'axios';
+import MainBtn from './Button';
 
 
-function CaseTableBody({ data }) {
+function CaseTableBody({ data, username }) {
   let navigate = useNavigate()
+  const[resultCancel, setResultCancel] = useState('');
 
+  const handleCancel = async(id) => {
+
+      const response = axios.put(`http://localhost:8000/Patient/CancelOrder/${id}`)
+       .then(res =>setResultCancel(res)).catch(err => console.log(err))
+     
+          window.location.reload(true);        
+      }
   return (
     <>
-    <th>{data.MedicineName}</th>
-    <td>{data.Quantity}</td>
-
-    {/* <th>{data.Name}</th>
-      
-    <td>{data.ActiveIngredients}</td>
-    <td>{data.Price}</td>
-    <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
-    <td>{data.MedicalUse}</td>
-    <td>{data.Quantity}</td>
-    <td>{data.QuantitySold}</td> */}
+    <th>{data._id}</th>
+    <td>{data.PaymentMethod}</td>
+    <td>{data.Status}</td>
+    <td>{data.TotalAmount}</td>
+    <td>{data.ShippingAddress}</td>
+    <td><TableItems tHead={['Medicine Name', 'Quantity']} data={data.Items}/></td>
+    <td className="py-3 text-align-center">
+      {data.Status != 'Cancelled' &&
+      <div className="d-flex flex-row">
+      <MainBtn
+              txt="Cancel Order"
+              style="white-btn"
+              action={()=>handleCancel(data._id)}
+              key="navBtn"
+            />
+      </div>
+}
+      </td>
       
       
     </>
@@ -36,7 +55,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableOrder({ tHead, data}) {
+function TableOrder({ tHead, data, username}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
