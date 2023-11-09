@@ -11,11 +11,16 @@ function Checkout() {
     const [address, setAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
     const [allAddresses, setAllAddresses] = useState([]);
-    const [card, setCard] = useState(false);
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardDate, setCardDate] = useState('');
+    const [cardCVV, setCardCVV] = useState('');
+
+    const [type, setType] = useState('');
+
     const {username} = useParams();
     let navigate = useNavigate()
     console.log('del',deliveryAddress)
-    
+    console.log('typee', type)
 
     useEffect(() => {
       const response = axios.get(`http://localhost:8000/Patient/GetPatientAddresses/${username}`)
@@ -23,18 +28,45 @@ function Checkout() {
         }, [])
         console.log('all add', allAddresses);
 
+        const handleAdd = (e) => {
+          if(cardCVV && cardDate && cardNumber){
+          alert('Card added successfully')
+          }
+          else{
+            alert('Missing fields')
+          }
+          e.preventDefault();
+        }
+
     const handleSubmit = (e) => {
       const data = {newAddress:address};
       console.log(data)
       const response = axios.post(`http://localhost:8000/Patient/AddAddressToPatient/${username}`, data)
   .then(res =>console.log(res.data)).catch(err => console.log(err))
     }
+
+    const handleSubmitOrder = async(e) => {
+     // try{
+        const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}`)
+        .then(res =>console.log(res.data)).catch(err => console.log(err))
+
+        // if (response.status === 200) {
+        //       alert('submitted');
+        //         console.log(response.data.message);
+        //     }}
+        //     catch(error ){
+        //       alert(`Failed to remove item `);
+        //       console.error('Error removing item:', error);
+        //     };
+            e.preventDefault();        
+        }
+
   let tHead = ['Address', 'Select'];
 
 
     return(
         <div>
-            <NavBarPatient/>
+            <NavBarPatient username={username}/>
  <form
       className="d-flex justify-content-center"
     >
@@ -97,52 +129,61 @@ function Checkout() {
         <h4>Choose Payment Method</h4>
         <div>
             <input
-            type='radio'  value={'wallet'} />
+            type='radio' name='payment' checked={type==='wallet'} value={'wallet'} onChange={(e) => {setType(e.target.value)}}/>
             Pay with wallet
         </div>
         <div>
             <input
-            type='radio'  value={'cash'} />
+            type='radio' name='payment' checked={type==='cash'} value={'cash'} onChange={(e) => {setType(e.target.value)}}/>
             Cash on delivery
         </div>
         <div>
             <input
-            type='radio'  value={'card'} />
+            type='radio' name='payment' checked={type==='card'} value={'card'} onChange={(e) => {setType(e.target.value)}}/>
             Pay by card
         </div>
-        
+        {type==='card' &&
+        <div>
         <Input
             title='Card Number'
             placeholder='Enter card number'
             type='text'
-           // onChange={(e) => setAddress(e.target.value)}
+            required={true}
+
+           onChange={(e) => setCardNumber(e.target.value)}
           />
           <Input
             title='Expiry Date'
             type='date'
-           // onChange={(e) => setAddress(e.target.value)}
+            required={true}
+
+           onChange={(e) => setCardDate(e.target.value)}
           />
           <Input
             title='CVV'
             placeholder='Enter CVV'
             type='text'
-           // onChange={(e) => setAddress(e.target.value)}
+            required={true}
+           onChange={(e) => setCardCVV(e.target.value)}
           />
 
           <div className="mt-3">
             <MainBtn
               txt='Add Card'
               style='green-btn'
-              //action={handleSubmit(c)}
+              action={handleAdd}
               
             />
             </div>
+
+            </div>
+}
         </div>
         <h3>Submit Order</h3>
         <MainBtn
               txt='Submit Order'
               style='green-btn'
-             action={() => navigate('/orderDetails')}
+             action={handleSubmitOrder}
               
             />
       </div>
