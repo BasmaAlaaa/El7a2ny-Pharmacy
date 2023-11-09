@@ -58,7 +58,7 @@ const patientSchema = new Schema({
   addresses: 
  [{
       type:String,
-      required: true,
+      required: false,
  }],
   cart: {
     type: Schema.Types.ObjectId,
@@ -100,8 +100,7 @@ const patientSchema = new Schema({
       !MobileNumber ||
       !EmergencyContactName ||
       !EmergencyContactMobile ||
-      !EmergencyContactRelation ||
-      ! addresses
+      !EmergencyContactRelation
     ) {
       throw Error('All fields must be filled.');
     }
