@@ -45,48 +45,17 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
   
       res.status(200).json(info);
 }
-//Req 32: choose payment method
-const choosePaymentMethod = async(req, res) => {
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-  const { username, orderId } = req.params;
-  try{
-    
-    const patient = await Patient.findOne({Username: username});
-
-    if(!patient){
-      return res.status(404).json({error : "This patient doesn't exist!"})
-  }
-
-  const order = await Order.findOne({PatientUsername: username, _id: orderId});
-
-  if(!order){
-    return res.status(404).json({error : "This order doesn't exist yes!"})
-}
-
-  const updatedOrder = {
-    $set: {
-        PaymentMethod: req.body.PaymentMethod
-    },
-  };
-
-  const updated = await Order.findOneAndUpdate({PatientUsername: username},updatedOrder);
-  res.status(200).send(updated)
-  } catch (error) {
-    res.status(400).send({ error: error.message });
-  }
-};
-
+//Req 29 + 32 : checkhout + payment method + pay
 const checkoutOrder = async (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-  const { Username } = req.params;
+  const { Username , paymentMethod} = req.params;
   try{
     
+    //CheckhoutOrder
     const patient = await Patient.findOne({Username: Username});
 
     if(!patient){
@@ -105,7 +74,7 @@ const checkoutOrder = async (req, res) => {
   
   cartItems = cart.items;
 
-  const order = await Order.create({
+  const newOrder = await Order.create({
     PatientUsername: Username,
     Items: cartItems,
     TotalAmount: cart.totalAmount
@@ -116,66 +85,56 @@ const checkoutOrder = async (req, res) => {
   };
   await cart.save();
 
-  res.status(200).send(order);
-  } catch (error) {
-    res.status(400).send({ error: error.message });
+  //Choosing payment method
+
+  const orderId = newOrder._id;
+
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    return res.status(404).send({ error: 'Order not found' });
   }
 
-};
+  const updatedOrder = {
+    $set: {
+        PaymentMethod: req.body.PaymentMethod
+    },
+  };
 
-const payForOrder = async(res, req) => {
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-  const { orderId, paymentMethod } = req.params;
-  const { ExpMonth, ExpYear, CVV, CardNumber } = req.body;
+  const updated = await Order.findOneAndUpdate({PatientUsername: Username},updatedOrder);
 
 
-  try {
-    
-    const order = await Order.findOne({_id: orderId });
+  //Paying The Order
 
-    if (!order) {
-      return res.status(404).send({ error: 'Order not found' });
-    }
+  if(paymentMethod === "Credit Card"){
 
-    const patient = await Patient.findOne({Username: order.PatientUsername});
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: order.TotalAmount,
+    currency: 'egp',
+    customer: patient.StripeCustomerId,
+    description: "Paying for my order"
+  });
 
-    if(paymentMethod === "Credit Card"){
-
-      //if(CardNumber === )
-
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: order.TotalAmount,
-      currency: 'egp',
-      customer: patient.StripeCustomerId,
-      description: "Paying for my order"
-    });
-
-    await stripe.paymentIntents.confirm(paymentIntent);
+  await stripe.paymentIntents.confirm(paymentIntent);
 }
 else if(paymentMethod === "Wallet"){
 
-  if(patient.WalletAmount <= order.TotalAmount)
-    return res.status(400).send("Your wallet amount won't cover the whole order amount!")
+if(patient.WalletAmount <= order.TotalAmount)
+  return res.status(400).send("Your wallet amount won't cover the whole order amount!")
 
-  if(patient.WalletAmount >= order.TotalAmount){
-    const updatedPat = {
-      $set: {
-        WalletAmount: (WalletAmount-order.TotalAmount),
-      },
-    };
-  
-    const update = await patientSchema.updateOne({Username: order.PatientUsername},updatedPat);
-  }
-  else {
-  }
-  
+if(patient.WalletAmount >= order.TotalAmount){
+  const updatedPat = {
+    $set: {
+      WalletAmount: (WalletAmount-order.TotalAmount),
+    },
+  };
+
+  const update = await patientSchema.updateOne({Username: order.PatientUsername},updatedPat);
 }
-
-    return res.status(200).send("you paid successfully!");
-
+else {
+}
+}
+  res.status(200).send(order);
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
@@ -509,7 +468,6 @@ module.exports = {
   availableMedicinesDetailsByPatient,
   getMedicineByName,
   getMedicineByMedicalUse,
-  choosePaymentMethod,
   addAddressToPatient,
   getPatientAddresses ,
   getOrderDetails,
@@ -518,6 +476,5 @@ module.exports = {
   removeAnItemFromCart,
   addMedicineToCart,
   updateMedicineQuantityInCart,
-  checkoutOrder,
-  payForOrder
+  checkoutOrder
 };
