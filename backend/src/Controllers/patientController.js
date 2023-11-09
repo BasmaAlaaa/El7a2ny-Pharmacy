@@ -99,8 +99,8 @@ const checkoutOrder = async (req, res) => {
 
   const updatedOrder = {
     $set: {
-        PaymentMethod: req.body.PaymentMethod,
-        ShippingAddress: req.body.ShippingAddress
+        PaymentMethod: paymentMethod,
+        ShippingAddress: ShippingAddress
     },
   };
 

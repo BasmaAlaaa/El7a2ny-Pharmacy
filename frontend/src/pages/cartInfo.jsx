@@ -29,14 +29,18 @@ function CarttInfo(){
     return (
         <div>
         <NavBarPatient username={username}/>
-        {result.items&&
-        <TableCart tHead={tHead} data={result.items} username={username}/>}
+        {result.items && result.items.length>0 &&
+        <div>
+        <TableCart tHead={tHead} data={result.items} username={username}/>
+        
         <MainBtn
               txt="Checkout"
               style="green-btn"
               action={() => navigate(`/checkout/${username}`)}
               key="navBtn"
             />
+            </div>
+        }
         
         </div>
     )
