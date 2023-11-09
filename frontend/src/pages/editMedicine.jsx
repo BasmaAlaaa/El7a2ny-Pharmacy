@@ -8,9 +8,10 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function EditMedicine() {
-  const {name} = useParams();
+  const { name } = useParams();
   const [activeIngredients, setActiveIngredients] = useState('');
   const [price, setPrice] = useState(0);
+  const [picture, setPicture] = useState('');
 
   // let { errors, handleSubmit, register } = Validation('username')
   const navigate = useNavigate();
@@ -31,37 +32,58 @@ function EditMedicine() {
   // ];
   const updateIngredients = (e) => {
     e.preventDefault();
-    const data = {ActiveIngredients:activeIngredients}
+    const data = { ActiveIngredients: activeIngredients }
     console.log(data)
     const response = axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${name}`, data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+      .then(res => console.log(res.data)).catch(err => console.log(err))
   }
   const updatePrice = (e) => {
     e.preventDefault();
-    const data = {Price:price}
+    const data = { Price: price }
     console.log(data)
     const response = axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${name}`, data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+      .then(res => console.log(res.data)).catch(err => console.log(err))
+  }
+  const updatePicture = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append('Picture', picture);
+    console.log(data);
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // };
+
+    axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${name}`, data)
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
   }
 
   return (
     <div>
-        <NavBarPharmacist />
-        <h1>Edit Medicine</h1>
+      <NavBarPharmacist />
+      <h1>Edit Medicine</h1>
       {/* <Form title="Edit Medicine" inputArr={inputArr} type="editMedicine" btnArr={btnArr} /> */}
       <form>
         <h3>
-          <input  placeholder= 'enter active ingredients' type= 'text' onChange={(e) => setActiveIngredients(e.target.value)} />
+          <input placeholder='active ingredients' type='text' onChange={(e) => setActiveIngredients(e.target.value)} />
           <button onClick={updateIngredients}>
-          Update Active Ingredients</button>
+            Update Active Ingredients</button>
         </h3>
-       
+
         <h3>
-          <input placeholder= 'enter price' type= 'text' onChange={(e) => setPrice(e.target.value)} />
+          <input placeholder='price' type='text' onChange={(e) => setPrice(e.target.value)} />
           <button onClick={updatePrice}>
-          Update Price</button>
+            Update Price</button>
         </h3>
-       
+
+        <h3>
+          <input placeholder='medicine image' type="file" accept="image/*" onChange={(e) => setPicture(e.target.files[0])} />
+          <button onClick={updatePicture}>
+            Update Medicine Image</button>
+        </h3>
+
       </form>
 
     </div>

@@ -44,19 +44,19 @@ function Checkout() {
       const response = axios.post(`http://localhost:8000/Patient/AddAddressToPatient/${username}`, data)
   .then(res =>console.log(res.data)).catch(err => console.log(err))
     }
-
+console.log('typeee', type)
     const handleSubmitOrder = async(e) => {
      // try{
-        const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}`)
-        .then(res =>console.log(res.data)).catch(err => console.log(err))
-
+        const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`)
+        .then(res =>navigate(`/orderDetails/${username}`)).catch(err => alert(err))
         // if (response.status === 200) {
-        //       alert('submitted');
+        //       navigate(`/orderDetails/${username}`);
         //         console.log(response.data.message);
-        //     }}
-        //     catch(error ){
-        //       alert(`Failed to remove item `);
-        //       console.error('Error removing item:', error);
+        // }
+        //     }
+        //     else{
+        //       alert(`Failed to submit order `);
+        //       //console.error('Error removing item:', error);
         //     };
             e.preventDefault();        
         }
@@ -125,7 +125,8 @@ function Checkout() {
         </tbody>
       </table>
     </div>
-
+{deliveryAddress &&
+<div>
         <h4>Choose Payment Method</h4>
         <div>
             <input
@@ -142,6 +143,9 @@ function Checkout() {
             type='radio' name='payment' checked={type==='card'} value={'card'} onChange={(e) => {setType(e.target.value)}}/>
             Pay by card
         </div>
+
+        </div>
+        }
         {type==='card' &&
         <div>
         <Input
@@ -178,7 +182,9 @@ function Checkout() {
 
             </div>
 }
+
         </div>
+
         <h3>Submit Order</h3>
         <MainBtn
               txt='Submit Order'
