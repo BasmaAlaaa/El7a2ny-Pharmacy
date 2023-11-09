@@ -83,7 +83,7 @@ router.get('/viewCartItems/:Username',viewCartItems);
 router.delete('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
 router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
 router.put('/updateQuantity/:Username/:MedicineName/:quantity',updateMedicineQuantityInCart);
-router.post('/checkoutOrder/:Username/:paymentMethod', checkoutOrder);
+router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', checkoutOrder);
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);

@@ -52,7 +52,7 @@ const checkoutOrder = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-  const { Username , paymentMethod} = req.params;
+  const { Username , paymentMethod, ShippingAddress} = req.params;
   try{
     
     //CheckhoutOrder
@@ -87,7 +87,7 @@ const checkoutOrder = async (req, res) => {
   cart.totalAmount = 0;
   await cart.save();
 
-  //Choosing payment method
+  //Choosing payment method and shipping address
 
   const orderId = newOrder._id;
 
@@ -99,7 +99,8 @@ const checkoutOrder = async (req, res) => {
 
   const updatedOrder = {
     $set: {
-        PaymentMethod: req.body.PaymentMethod
+        PaymentMethod: req.body.PaymentMethod,
+        ShippingAddress: req.body.ShippingAddress
     },
   };
 
