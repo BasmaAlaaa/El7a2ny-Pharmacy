@@ -56,7 +56,7 @@ const choosePaymentMethod = async(req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-  const { username } = req.params;
+  const { username, orderId } = req.params;
   try{
     
     const patient = await Patient.findOne({Username: username});
@@ -65,7 +65,7 @@ const choosePaymentMethod = async(req, res) => {
       return res.status(404).json({error : "This patient doesn't exist!"})
   }
 
-  const order = await Order.findOne({PatientUsername: username});
+  const order = await Order.findOne({PatientUsername: username, _id: orderId});
 
   if(!order){
     return res.status(404).json({error : "This order doesn't exist yes!"})
@@ -77,7 +77,8 @@ const choosePaymentMethod = async(req, res) => {
     },
   };
 
-  const updated = await Order.updateOne({PatientUsername: username},updatedOrder);
+  const updated = await Order.findOneAndUpdate({PatientUsername: username},updatedOrder);
+  res.status(200).send(updated)
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
