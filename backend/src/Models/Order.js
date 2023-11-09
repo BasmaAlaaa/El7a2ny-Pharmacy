@@ -11,7 +11,7 @@ const orderSchema = new Schema({
     PaymentMethod: {
         type: String,
         default: "cash",
-        enum: ["cash","card"]
+        enum: ["cash","card","wallet"]
     },
     Status: {
         type: String,

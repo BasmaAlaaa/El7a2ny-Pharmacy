@@ -27,6 +27,7 @@ function AddMedicine() {
   //     action: handleSubmit(c),
   //   },
   // ];
+  
   const [name, setName] = useState('')
   const [activeIngredients, setActiveIngredients] = useState('')
   const [price, setPrice] = useState(0)
@@ -35,52 +36,61 @@ function AddMedicine() {
   const [quantitySold, setQuantitySold] = useState(0)
   const [medicalUse, setMedicalUse] = useState('')
 
-  const handleSubmit = () => {    
-    const data = {Name:name, ActiveIngredients:activeIngredients, Price:price, Quantity:quantity, Picture:picture, QuantitySold:quantitySold, MedicalUse:medicalUse}
-    console.log(data)
-    const response = axios.post('http://localhost:8000/Pharmacist/AddMedicine', data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+
+    // Append other form fields
+    data.append('Name', name);
+    data.append('ActiveIngredients', activeIngredients);
+    data.append('Price', price);
+    data.append('Quantity', quantity);
+    data.append('Picture', picture);
+    data.append('QuantitySold', quantitySold);
+    data.append('MedicalUse', medicalUse);
+    
+    console.log("fontend",data)
+    const addmeds = axios.post('http://localhost:8000/Pharmacist/AddMedicine', data)
+      .then(res => console.log(res.data)).catch(err => console.log(err))
   }
-
-
 
   return (
     <div>
-      <NavBarPharmacist />
       {/* <Form title="Add Medicine" inputArr={inputArr} type="addMedicine" btnArr={btnArr} /> */}
       <form onSubmit={handleSubmit}>
         <h3>
-        <label>Name</label>
-        <input  title= 'name' required placeholder= 'enter medicine name' type= 'text' onChange={(e) => setName(e.target.value)} />
+          <label>Name</label>
+          <input title='name' required placeholder='enter medicine name' type='text' onChange={(e) => setName(e.target.value)} />
         </h3>
-  <h3>
-    <label>Active Ingredient</label>
-  <input type="text" required title="Active Ingredients" placeholder="Enter Active Ingredients" onChange={(e) => setActiveIngredients(e.target.value)}/>
-  </h3>
-  <h3>
-  <label>Price</label>
-  <input type="number" required title="Price" placeholder="Enter Price" onChange={(e) => setPrice(e.target.value)}/>
-  </h3>
-  <h3>
-  <label>Quantity</label>
-  <input type="number" required title="Quantity" placeholder="Enter Quantity" onChange={(e) => setQuantity(e.target.value)}/>
-  </h3>
-  <h3>
-  <label>Picture URL</label>
-  <input type="text" required title="Picture URL" placeholder="Enter Picture URL" onChange={(e) => setPicture(e.target.value)}/>
-  </h3>
-  <h3>
-  <label>Quantity Sold</label>
-  <input type="number" required title="Quantity Sold" placeholder="Enter Quantity Sold" onChange={(e) => setQuantitySold(e.target.value)}/>
-  </h3>
-  <h3>
-  <label>Medical Use</label>
-  <input type="text" required title="Medical Use" placeholder="Enter Medical Use" onChange={(e) => setMedicalUse(e.target.value)}/>
-  </h3>
-  <h3>
-  <button type="submit">Submit</button>
-  </h3>
-</form>
+        <h3>
+          <label>Active Ingredient</label>
+          <input type="text" required title="Active Ingredients" placeholder="Enter Active Ingredients" onChange={(e) => setActiveIngredients(e.target.value)} />
+        </h3>
+        <h3>
+          <label>Price</label>
+          <input type="number" required title="Price" placeholder="Enter Price" onChange={(e) => setPrice(e.target.value)} />
+        </h3>
+        <h3>
+          <label>Quantity</label>
+          <input type="number" required title="Quantity" placeholder="Enter Quantity" onChange={(e) => setQuantity(e.target.value)} />
+        </h3>
+        <h3>
+          <label>Quantity Sold</label>
+          <input type="number" required title="Quantity Sold" placeholder="Enter Quantity Sold" onChange={(e) => setQuantitySold(e.target.value)} />
+        </h3>
+        <h3>
+          <label>Medical Use</label>
+          <input type="text" required title="Medical Use" placeholder="Enter Medical Use" onChange={(e) => setMedicalUse(e.target.value)} />
+        </h3>
+        <h3>
+          <label>Medicine Image</label>
+          <input type="file" accept="image/*" onChange={(e) => setPicture(e.target.files[0])} />
+        </h3>
+        <h3>
+          <button type="submit">Submit</button>
+        </h3>
+      </form>
     </div>
   );
 }
