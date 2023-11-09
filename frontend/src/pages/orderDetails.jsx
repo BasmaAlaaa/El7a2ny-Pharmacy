@@ -17,16 +17,6 @@ function OrderDetails(){
     const {username} = useParams();
     const [id, setId] = useState('');
     const[result, setResult] = useState([]);
-    const[resultCancel, setResultCancel] = useState('');
-    const[resultDelete, setResultDelete] = useState([]);
-
-  const handleCancel = () => {
-    const response = axios.put(`http://localhost:8000/Patient/CancelOrder/${result._id}`)
-    .then(res =>setResultCancel(res)).catch(err => console.log(err))
-    navigate(`/patientView/${username}`)
-
-  }
-  console.log('cancelll', resultCancel);
 
     useEffect(() => {
   const response = axios.get(`http://localhost:8000/Patient/GetOrderDetails/${username}`)
@@ -34,32 +24,21 @@ function OrderDetails(){
     }, [])
   //  setId(result._id);
   console.log('iddd', result);
-
- let tHead = ['Name', 'Amount'];
-//  let tHead = ['Username', 'Payment Method', 'Medication'];
+    result.map((e) => {console.log(e)})
+//  let tHead = ['Name', 'Amount'];
+ let tHead = ['Order ID', 'Payment Method', 'Status', 'Total Amount', 'Shipping Address', 'View Items', 'Cancel Order'];
 
 
     return (
         <div>
         <NavBarPatient username={username}/>
         <h2>Order Details</h2>
-        <h3>Payment Method: {result.PaymentMethod}</h3>
-        <h3>Status: {result.Status}</h3>
-        <h3>Total Amount: {result.TotalAmount}</h3>
-        <h3>Shipping Address: {result.ShippingAddress}</h3>
-
-
-
-        {/* <OrderList username={username}/> */}
-        {result.Items && <TableOrder tHead={tHead} data={result.Items} />
-}
-
-        <MainBtn
-              txt="Cancel Order"
-              style="white-btn"
-              action={handleCancel}
-              key="navBtn"
-            />
+ 
+        {/* <h3>Payment Method: {e.PaymentMethod}</h3>
+        <h3>Status: {e.Status}</h3>
+        <h3>Total Amount: {e.TotalAmount}</h3>
+        <h3>Shipping Address: {e.ShippingAddress}</h3> */}
+        <TableOrder tHead={tHead} data={result} username={username}/>
         
         </div>
     )
