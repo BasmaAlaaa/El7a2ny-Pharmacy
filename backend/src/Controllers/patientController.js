@@ -101,12 +101,11 @@ const checkoutOrder = async (req, res) => {
     },
   };
 
-  const updated = await Order.findOneAndUpdate({PatientUsername: Username},updatedOrder);
-
+  const updated = await Order.findOneAndUpdate({_id: orderId},updatedOrder);
 
   //Paying The Order
 
-  if(paymentMethod === "Credit Card"){
+  if(paymentMethod === "card"){
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: order.TotalAmount,
@@ -117,7 +116,7 @@ const checkoutOrder = async (req, res) => {
 
   await stripe.paymentIntents.confirm(paymentIntent);
 }
-else if(paymentMethod === "Wallet"){
+else if(paymentMethod === "cash"){
 
 if(patient.WalletAmount <= order.TotalAmount)
   return res.status(400).send("Your wallet amount won't cover the whole order amount!")
@@ -130,8 +129,6 @@ if(patient.WalletAmount >= order.TotalAmount){
   };
 
   const update = await patientSchema.updateOne({Username: order.PatientUsername},updatedPat);
-}
-else {
 }
 }
   res.status(200).send(order);
