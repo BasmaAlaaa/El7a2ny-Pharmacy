@@ -50,11 +50,10 @@ app.use("/Pharmacist", router);
 
 const{
   sendOTP,
-  updatePassword
+  updatePassword,
+  changePassword
 } = require ('../src/Controllers/OtpController')
 
+app.get('/ChangePassword',changePassword);
 app.post('/OtpResetPassword',sendOTP);
 app.get('/UpdatePassword',updatePassword);
-
-
-
