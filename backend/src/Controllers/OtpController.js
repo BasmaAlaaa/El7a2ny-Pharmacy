@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const patient = require('../Models/patient');
 const pharmacist = require('../Models/pharmacist');
 const OTP = require('../Models/OTP');
+const Admin = require('../Models/administrator');
 
 // Function to generate a random OTP
 function generateOTP() {
@@ -21,9 +22,13 @@ const sendOTP = async ({ body }, res) => {
   const { Email } = body;
   const isPatient = await patient.findOne({ Email : Email});
   const isPharmacist = await pharmacist.findOne({ Email : Email });
+  const isAdmin = await Admin.findOne({ Email : Email });
+
   console.log('isPatient:', isPatient);
   console.log('isPharmacist:', isPharmacist);
-  if (!isPatient && !isPharmacist ) {
+  console.log('isAdmin:', isAdmin);
+
+  if (!isPatient && !isPharmacist && !isAdmin) {
     console.log('Invalid Email');
     res.status(400).json({ error: 'Invalid Email' });
     return;
@@ -34,7 +39,7 @@ const sendOTP = async ({ body }, res) => {
     const otp = generateOTP();
 
     // Store the OTP in MongoDB
-    const otpDocument = new OTP({ Email, otp });
+    const otpDocument = await new OTP({ Email, otp });
     await otpDocument.save();
 
     // Define the email options
@@ -92,8 +97,9 @@ const updatePassword = async ({ body }, res) => {
 
     const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
     const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
-    if (updatedPatient || updatedPharmacist) {
+    if (updatedPatient || updatedPharmacist || updatedAdmin) {
       console.log(`Password updated for user with email: ${Email}`);
       res.status(200).json({ message: 'Password updated successfully' });
     } else {
@@ -115,8 +121,9 @@ const changePassword = async ({ body }, res) => {
 
     const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
     const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
-    if (updatedPatient || updatedPharmacist) {
+    if (updatedPatient || updatedPharmacist || updatedAdmin) {
       console.log(`Password updated for user with email: ${email}`);
       res.status(200).json({ message: 'Password updated successfully' });
     } else {
