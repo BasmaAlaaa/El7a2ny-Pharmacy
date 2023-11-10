@@ -386,17 +386,6 @@ const addMedicineToCart = async (req, res) => {
       return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
     }
 
-    /*const items = cart.items;
-    const found = -1;
-    for( const item of items){
-      if(found != -1){
-        if(item.medicine === MedicineName){
-          item.quantity++;
-          found = true;
-        }
-      }
-    }*/
-
     const index = cart.items.findIndex(x => x.medicine === MedicineName);
 
     if(index === -1){
@@ -410,7 +399,6 @@ const addMedicineToCart = async (req, res) => {
     else{
       (cart.items[index].quantity)++;
     }
-
     
     cart.totalAmount += medicine.Price;
 
