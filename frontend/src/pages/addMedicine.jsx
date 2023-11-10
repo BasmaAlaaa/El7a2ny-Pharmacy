@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Form from '../components/Form.jsx';
 import { useDispatch } from 'react-redux';
 import { loggedIn } from '../features/login.js';
@@ -35,6 +35,7 @@ function AddMedicine() {
   const [picture, setPicture] = useState('')
   const [quantitySold, setQuantitySold] = useState(0)
   const [medicalUse, setMedicalUse] = useState('')
+  const {username} = useParams();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,6 +58,7 @@ function AddMedicine() {
 
   return (
     <div>
+      <NavBarPharmacist username={username} />
       {/* <Form title="Add Medicine" inputArr={inputArr} type="addMedicine" btnArr={btnArr} /> */}
       <form onSubmit={handleSubmit}>
         <h3>

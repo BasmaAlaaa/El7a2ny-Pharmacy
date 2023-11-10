@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 
-function CaseTableBody({ data }) {
+function CaseTableBody({ data, username }) {
   let navigate = useNavigate()
 
   return (
@@ -14,24 +14,12 @@ function CaseTableBody({ data }) {
     <td>{data.MedicalUse}</td>
     <td>{data.Quantity}</td>
     <td>{data.QuantitySold}</td>
-
-
-      <td className="py-3 text-align-center">
-      <div className="d-flex flex-row">
-      <button
-        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/medicineView/:${data.Name}`)}
-      >
-        View
-      </button>
-      </div>
-      </td>
       
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/editMedicine/${data.Name}`)}
+        onClick={()=>navigate(`/editMedicine/${data.Name}/${username}`)}
       >
         Edit
       </button>
@@ -54,7 +42,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TablePharmacist({ tHead, data, searchText, filterText }) {
+function TablePharmacist({ tHead, data, searchText, filterText, username}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -77,7 +65,7 @@ function TablePharmacist({ tHead, data, searchText, filterText }) {
           })
           .map((e) => (
             <tr className="text-capitalize">
-                <CaseTableBody data={e} />
+                <CaseTableBody data={e} username={username}/>
             </tr>
           ))}
         </tbody>

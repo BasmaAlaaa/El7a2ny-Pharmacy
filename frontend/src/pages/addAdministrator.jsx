@@ -38,7 +38,7 @@ function AddAdministrator() {
 
   return (
     <div>
-      <NavBarAdministrator/>
+      <NavBarAdministrator />
       {/* <Form title="Add Administrator" inputArr={inputArr} type="addAdministrator" btnArr={btnArr} /> */}
       <form onSubmit={handleSubmit}>
   <input  title= 'username' required placeholder= 'enter username' type= 'text' onChange={(e) => setUsername(e.target.value)} />

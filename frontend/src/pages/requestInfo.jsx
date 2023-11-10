@@ -6,7 +6,7 @@ import MainBtn from "../components/Button";
 
 
 function RequestInfo(){
-    const {username} = useParams();
+    const {username, usernameAdmin} = useParams();
     const[result, setResult] = useState([]);
     const navigate = useNavigate();
     
@@ -65,7 +65,7 @@ function RequestInfo(){
 
 return (
     <div>
-        <NavBarAdministrator/>
+        <NavBarAdministrator username={usernameAdmin}/>
         <h1>Pharmacist Request Info</h1>
         <ul>
             <h3>Name: {result.Name}</h3>

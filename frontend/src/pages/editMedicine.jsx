@@ -8,7 +8,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function EditMedicine() {
-  const { name } = useParams();
+  const { name, username } = useParams();
   const [activeIngredients, setActiveIngredients] = useState('');
   const [price, setPrice] = useState(0);
   const [picture, setPicture] = useState('');
@@ -62,7 +62,7 @@ function EditMedicine() {
 
   return (
     <div>
-      <NavBarPharmacist />
+      <NavBarPharmacist username={username}/>
       <h1>Edit Medicine</h1>
       {/* <Form title="Edit Medicine" inputArr={inputArr} type="editMedicine" btnArr={btnArr} /> */}
       <form>

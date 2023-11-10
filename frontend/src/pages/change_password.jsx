@@ -16,7 +16,7 @@ function ChangePassword() {
     const data = {oldPassword:oldPassword, newPassword:password, confirmPassword:confirmPassword}
     console.log(data)
     const response = axios.post(`http://localhost:4000/ChangePassword/${username}`, data)
-    .then(res =>console.log(res.data)).catch(err => console.log(err.request))
+    .then(res =>alert(res.data.message)).catch(err => alert(err))
   }
 
 
@@ -45,7 +45,7 @@ function ChangePassword() {
           <Input
             title='confirm Password'
             placeholder='confirm password'
-            type='confirmPassword'
+            type='password'
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
       

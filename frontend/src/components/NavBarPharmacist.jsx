@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showUserDrop } from '../features/userDropDown.js';
 import DropDown from './Dropdown.jsx';
 
-function NavBarAdministrator() {
+function NavBarPharmacist(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login.loggedIn);
@@ -24,7 +24,7 @@ function NavBarAdministrator() {
             <MainBtn
               txt="Home"
               style="green-btn"
-              action={() => navigate('/pharmacistView')}
+              action={() => navigate(`/pharmacistView/${props.username}`)}
               key="navBtn"
             />
           </div>
@@ -32,7 +32,7 @@ function NavBarAdministrator() {
             <MainBtn
               txt="Change Password"
               style="green-btn"
-              action={() => navigate('/changePassword')}
+              action={() => navigate(`/changePassword/${props.username}`)}
               key="navBtn"
             />
           </div>
@@ -51,4 +51,4 @@ function NavBarAdministrator() {
   );
 }
 
-export default NavBarAdministrator;
+export default NavBarPharmacist;

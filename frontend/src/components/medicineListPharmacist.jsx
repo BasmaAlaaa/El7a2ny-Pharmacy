@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import search from '../assets/images/svg/search.svg';
 import TablePharmacist from './TablePharmacist.jsx';
 
-function MedicineListPharmacist() {
+function MedicineListPharmacist(props) {
   const[searchText, setSearchText] = useState('');
   const[filterText, setFilterText] = useState('');
   const[result, setResult] = useState([]);
@@ -27,7 +27,7 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'Quantity', 'Sales', 'View', 'Edit'];
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'Quantity', 'Sales', 'Edit'];
   let data = [{
     medicineName: 'Cataflam',
     activeIngredients: 'Paracetamol',
@@ -74,7 +74,7 @@ let navigate = useNavigate()
         </select>
       </div>
     </div>
-      <TablePharmacist tHead={tHead} data={result} searchText={searchText} filterText={filterText}/>
+      <TablePharmacist tHead={tHead} data={result} searchText={searchText} filterText={filterText} username={props.username}/>
     </div>
   );
 }
