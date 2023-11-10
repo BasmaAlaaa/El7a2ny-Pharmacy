@@ -42,14 +42,29 @@ const pharmacistRegistrationRequestSchema = new Schema({
     enum: ['pending', 'accepted', 'rejected']
   },
   IDDocument: {
-    type: String,
+    data: {
+      type: Buffer,
+    },
+    contentType: {
+      type: String,
+    },
   },
   PharmacyDegreeDocument: {
-    type: String,
+    data: {
+      type: Buffer,
+    },
+    contentType: {
+      type: String,
+    },
   },
   WorkingLicenseDocument: {
-    type: String,
-  }
+    data: {
+      type: Buffer,
+    },
+    contentType: {
+      type: String,
+    },
+  },
 }, { timestamps: true });
 
 const PharmacistRequest = mongoose.model('PharmacistRequest', pharmacistRegistrationRequestSchema);

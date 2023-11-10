@@ -62,8 +62,8 @@ const registerPatient = async (req, res) => {
       totalAmount: 0,
     });
 
-    const customer = await createStripeCustomer({ Email,Name,MobileNumber });
-    
+    const customer = await createStripeCustomer({ Email, Name, MobileNumber });
+
     const patient = await Patient.register(
       Username,
       Name,
@@ -87,10 +87,10 @@ const registerPatient = async (req, res) => {
 
 // Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req, res) => {
-	
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-	
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
   const {
     Username,
     Name,
@@ -124,9 +124,18 @@ const submitRequestToBePharmacist = async (req, res) => {
       HourlyRate,
       Affiliation,
       EducationalBackground,
-      IDDocument: req.files['IDDocument'][0].path,
-      PharmacyDegreeDocument: req.files['PharmacyDegreeDocument'][0].path,
-      WorkingLicenseDocument: req.files['WorkingLicenseDocument'][0].path
+      IDDocument: {
+        data: Buffer.from(req.files['IDDocument'][0].buffer),
+        contentType: req.files['IDDocument'][0].mimetype,
+      },
+      PharmacyDegreeDocument: {
+        data: Buffer.from(req.files['PharmacyDegreeDocument'][0].buffer),
+        contentType: req.files['PharmacyDegreeDocument'][0].mimetype,
+      },
+      WorkingLicenseDocument: {
+        data: Buffer.from(req.files['WorkingLicenseDocument'][0].buffer),
+        contentType: req.files['WorkingLicenseDocument'][0].mimetype,
+      },
     });
 
     request.save();
