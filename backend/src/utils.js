@@ -12,7 +12,9 @@ async function isUsernameUnique(username) {
 async function isEmailUnique(email) {
   const patientExists = await patientModel.findOne({ Email: email });
   const pharmacistExists = await PharmacistRegistrationRequest.findOne({ Email: email });
-  return !patientExists && !pharmacistExists;
+  const adminExists = await administratorModel.findOne({ Email: email });
+
+  return !patientExists && !pharmacistExists && !adminExists;
 }
 
 module.exports = { isUsernameUnique, isEmailUnique };

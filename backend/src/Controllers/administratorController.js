@@ -10,7 +10,8 @@ const { isUsernameUnique, isEmailUnique } = require('../utils');
 const addAdmin = async (req, res) => {
     const { 
         Username,
-        Password 
+        Password,
+        Email 
     } = req.body;
 res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -20,13 +21,18 @@ res.setHeader('Access-Control-Allow-Origin', '*');
             throw new Error('Username is already taken.');
           }
 
-          if (!Username || !Password) { 
+          if (!(await isEmailUnique(Email))) {
+            throw new Error("Email is already taken.");
+          }
+
+          if (!Username || !Password || !Email) { 
             throw Error('All fields must be filled.');
         }
     
         const administrator = await Administrator.create({
           Username,
-          Password
+          Password,
+          Email
         });
         await administrator.save();
         res.status(200).json({administrator})
