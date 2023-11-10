@@ -72,56 +72,69 @@ const sendOTP = async ({ body }, res) => {
   }
 };
 
+
 // Async function to update the user's password in MongoDB
 const updatePassword = async ({ body }, res) => {
   const { Email, otp, newPassword } = body;
   try {
     // Find the OTP document in the database
-    const otpDocument = OTP.findOne({ Email : Email , otp : otp });
-    console.log("OTP DOC", otpDocument);
+    const otpDocument = await OTP.findOneAndDelete({ Email: Email, otp: otp });
 
     if (!otpDocument) {
       console.log(`Invalid OTP`);
       res.status(400).json({ error: 'Invalid OTP' });
       return;
     }
-    else{
-     otpDocument.remove();
-    }
 
     // Update the user's password in MongoDB
-    const updatedPatient = await patient.findOneAndUpdate(
-      { Email: Email },
-      { Password: newPassword },
-      { new: true }
-    );
+    const updateQuery = { Email: Email };
+    const updateField = { Password: newPassword };
 
-    if (updatedPatient) {
-      console.log(`Password updated for Patient with email: ${email}`);
+    const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+
+    if (updatedPatient || updatedPharmacist) {
+      console.log(`Password updated for user with email: ${Email}`);
+      res.status(200).json({ message: 'Password updated successfully' });
     } else {
-      const updatedPharmacist = await pharmacist.findOneAndUpdate(
-        { Email: Email },
-        { password: newPassword },
-        { new: true }
-      );
-
-      if (updatedPharmacist) {
-        console.log(`Password updated for pharmacist with email: ${Email}`);
-      }  else {
-          console.log('User not found');
-          res.status(404).json({ error: 'User not found' });
-        }
-      }
-    
-
-    res.status(200).json({ message: 'Password updated successfully' });
+      console.log('User not found');
+      res.status(404).json({ error: 'User not found' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update password' });
   }
 };
 
+const changePassword = async ({ body }, res) => {
+  const { email, oldPassword, newPassword } = body;
+  try {
+    // Find and update the password for patient or pharmacist
+    const updateQuery = { Email: email, Password: oldPassword };
+    const updateField = { Password: newPassword };
+
+    const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+
+    if (updatedPatient || updatedPharmacist) {
+      console.log(`Password updated for user with email: ${email}`);
+      res.status(200).json({ message: 'Password updated successfully' });
+    } else {
+      console.log('Invalid email or password');
+      res.status(401).json({ error: 'Invalid email or password' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to change password' });
+  }
+};
+
+
+
+
+
 module.exports = {
   sendOTP,
-  updatePassword
+  updatePassword,
+  changePassword
 };
