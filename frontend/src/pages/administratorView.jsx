@@ -1,6 +1,6 @@
 
 import Table from '../components/Table.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBarAdministrator from '../components/NavBarAdministrator.jsx';
@@ -13,6 +13,7 @@ function AdministratorView() {
   const[resultPatient, setResultPatient] = useState([]);
   const[resultPharmacist, setResultPharmacist] = useState([]);
   const[resultRequest, setResultRequest] = useState([]);
+  const {username} = useParams();
 // Inside your AdministratorView component
 
 const onAcceptOrReject = async (Username, action) => {
@@ -98,7 +99,7 @@ let navigate = useNavigate()
 
   return (
     <div>
-        <NavBarAdministrator/>
+        <NavBarAdministrator username={username}/>
         <div>
             <MainBtn
               txt="Add Administrator"

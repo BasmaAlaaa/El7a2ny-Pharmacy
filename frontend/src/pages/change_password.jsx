@@ -1,20 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import MainBtn from '../components/Button.jsx';
-import Form from '../components/Form.jsx';
-import Validation from '../validate/validate';
 import Input from '../components/Input.jsx';
 import { useState } from 'react';
+import axios from 'axios';
+import NavBar from '../components/NavBar.jsx';
 
 function ChangePassword() {
-  let {errors,handleSubmit,register} = Validation('changePassword')
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const {username} = useParams();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {oldPassword:oldPassword, newPassword:password, confirmPassword:confirmPassword}
+    console.log(data)
+    const response = axios.post(`http://localhost:4000/ChangePassword/${username}`, data)
+    .then(res =>console.log(res.data)).catch(err => console.log(err.request))
+  }
 
 
   return (
     <div>
       {/* <Form title="change password" inputArr={inputArr} btnArr={btnArr} /> */}
+      <NavBar />
       <form
       className="d-flex justify-content-center"
     >
@@ -54,7 +63,7 @@ function ChangePassword() {
             <MainBtn
               txt='save'
               style='green-btn'
-              // action={handleSubmit(c)}
+              action={handleSubmit}
               
             />
           </div>
