@@ -54,6 +54,6 @@ const{
   changePassword
 } = require ('../src/Controllers/OtpController')
 
-app.get('/ChangePassword',changePassword);
+app.get('/ChangePassword/:Username',changePassword);
 app.post('/OtpResetPassword',sendOTP);
 app.get('/UpdatePassword',updatePassword);

@@ -112,23 +112,28 @@ const updatePassword = async ({ body }, res) => {
   }
 };
 
-const changePassword = async ({ body }, res) => {
-  const { email, oldPassword, newPassword } = body;
-  try {
+const changePassword = async (req, res) => {
+  const { Username } = req.params;
+  const { oldPassword, newPassword, confirmPassword } = req.body;  try {
     // Find and update the password for patient or pharmacist
-    const updateQuery = { Email: email, Password: oldPassword };
-    const updateField = { Password: newPassword };
+    if(newPassword === confirmPassword){  
+      const updateQuery = { Username: Username, Password: oldPassword };
+      const updateField = { Password: newPassword };
 
-    const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
-    const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
-    const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
+      const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
+      const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+      const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
-    if (updatedPatient || updatedPharmacist || updatedAdmin) {
-      console.log(`Password updated for user with email: ${email}`);
-      res.status(200).json({ message: 'Password updated successfully' });
-    } else {
-      console.log('Invalid email or password');
-      res.status(401).json({ error: 'Invalid email or password' });
+      if (updatedPatient || updatedPharmacist || updatedAdmin) {
+        console.log(`Password updated for user with email: ${Username}`);
+        res.status(200).json({ message: 'Password updated successfully' });
+      } else {
+        console.log('Invalid email or password');
+        res.status(401).json({ error: 'Invalid email or password' });
+      }
+    }
+    else{
+      return res.status(401).json({ error: 'New Password and Confirm Password do not match' });
     }
   } catch (error) {
     console.error(error);
