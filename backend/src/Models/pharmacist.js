@@ -37,16 +37,28 @@ const pharmacistSchema = new Schema({
     required: true
   },
   IDDocument: {
-    type: String,
-    required: true
+    data: {
+      type: Buffer,
+    },
+    contentType: {
+      type: String,
+    },
   },
   PharmacyDegreeDocument: {
-    type: String,
-    required: true
+    data: {
+      type: Buffer,
+    },
+    contentType: {
+      type: String,
+    },
   },
   WorkingLicenseDocument: {
-    type: String,
-    required: true
+    data: {
+      type: Buffer,
+    },
+    contentType: {
+      type: String,
+    },
   },
 }, { timestamps: true });
 
