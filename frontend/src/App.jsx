@@ -35,7 +35,7 @@ function App() {
         <Routes>
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />
-          <Route exact path="/changePassword" element={<ChangePassword />} />
+          <Route exact path="/changePassword/:username" element={<ChangePassword />} />
           <Route exact path="/resetPassword" element={<ResetPassword />} />
           <Route exact path="/registerPatient" element={<RegisterPatient />} />
           <Route exact path="/registerPharmacist" element={<RegisterPharmacist />} />
@@ -45,11 +45,11 @@ function App() {
           <Route exact path="/medicineView/:name" element={<MedicineView />} />
           <Route exact path="/medicineList" element={<MedicineList />} />
           <Route exact path="/addAdministrator" element={<AddAdministrator />} />
-          <Route exact path="/addMedicine" element={<AddMedicine />} />
-          <Route exact path="/editMedicine/:name" element={<EditMedicine />} />
-          <Route exact path="/patientInfo/:username" element={<PatientInfo />} />
-          <Route exact path="/pharmacistInfo/:username" element={<PharmacistInfo />} />
-          <Route exact path="/requestInfo/:username" element={<RequestInfo />} />
+          <Route exact path="/addMedicine/:username" element={<AddMedicine />} />
+          <Route exact path="/editMedicine/:name/:username" element={<EditMedicine />} />
+          <Route exact path="/patientInfo/:username/:usernameAdmin" element={<PatientInfo />} />
+          <Route exact path="/pharmacistInfo/:username/:usernameAdmin" element={<PharmacistInfo />} />
+          <Route exact path="/requestInfo/:username/:usernameAdmin" element={<RequestInfo />} />
           <Route exact path="/cartInfo/:username" element={<CartInfo />} />
           <Route exact path="/checkout/:username" element={<Checkout />} />
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />

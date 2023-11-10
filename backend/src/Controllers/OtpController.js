@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const patient = require('../Models/patient');
 const pharmacist = require('../Models/pharmacist');
 const OTP = require('../Models/OTP');
+const Admin = require('../Models/administrator');
 
 // Function to generate a random OTP
 function generateOTP() {
@@ -21,9 +22,13 @@ const sendOTP = async ({ body }, res) => {
   const { Email } = body;
   const isPatient = await patient.findOne({ Email : Email});
   const isPharmacist = await pharmacist.findOne({ Email : Email });
+  const isAdmin = await Admin.findOne({ Email : Email });
+
   console.log('isPatient:', isPatient);
   console.log('isPharmacist:', isPharmacist);
-  if (!isPatient && !isPharmacist ) {
+  console.log('isAdmin:', isAdmin);
+
+  if (!isPatient && !isPharmacist && !isAdmin) {
     console.log('Invalid Email');
     res.status(400).json({ error: 'Invalid Email' });
     return;
@@ -34,7 +39,7 @@ const sendOTP = async ({ body }, res) => {
     const otp = generateOTP();
 
     // Store the OTP in MongoDB
-    const otpDocument = new OTP({ Email, otp });
+    const otpDocument = await new OTP({ Email, otp });
     await otpDocument.save();
 
     // Define the email options
@@ -92,8 +97,9 @@ const updatePassword = async ({ body }, res) => {
 
     const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
     const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
-    if (updatedPatient || updatedPharmacist) {
+    if (updatedPatient || updatedPharmacist || updatedAdmin) {
       console.log(`Password updated for user with email: ${Email}`);
       res.status(200).json({ message: 'Password updated successfully' });
     } else {
@@ -106,22 +112,28 @@ const updatePassword = async ({ body }, res) => {
   }
 };
 
-const changePassword = async ({ body }, res) => {
-  const { email, oldPassword, newPassword } = body;
-  try {
+const changePassword = async (req, res) => {
+  const { Username } = req.params;
+  const { oldPassword, newPassword, confirmPassword } = req.body;  try {
     // Find and update the password for patient or pharmacist
-    const updateQuery = { Email: email, Password: oldPassword };
-    const updateField = { Password: newPassword };
+    if(newPassword === confirmPassword){  
+      const updateQuery = { Username: Username, Password: oldPassword };
+      const updateField = { Password: newPassword };
 
-    const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
-    const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+      const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
+      const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+      const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
-    if (updatedPatient || updatedPharmacist) {
-      console.log(`Password updated for user with email: ${email}`);
-      res.status(200).json({ message: 'Password updated successfully' });
-    } else {
-      console.log('Invalid email or password');
-      res.status(401).json({ error: 'Invalid email or password' });
+      if (updatedPatient || updatedPharmacist || updatedAdmin) {
+        console.log(`Password updated for user with email: ${Username}`);
+        res.status(200).json({ message: 'Password updated successfully' });
+      } else {
+        console.log('Invalid email or password');
+        res.status(401).json({ error: 'Invalid email or password' });
+      }
+    }
+    else{
+      return res.status(401).json({ error: 'New Password and Confirm Password do not match' });
     }
   } catch (error) {
     console.error(error);

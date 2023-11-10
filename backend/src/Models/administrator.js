@@ -12,6 +12,11 @@ const administratorSchema = new Schema({
     type: String,
     required: true,
   },
+  Email: {
+    type: String,
+    required: true,
+    unique: true
+  }
 }, { timestamps: true });
 
 const Administrator = mongoose.model('Administrator', administratorSchema);

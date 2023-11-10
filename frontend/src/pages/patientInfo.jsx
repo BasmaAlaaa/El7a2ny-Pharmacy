@@ -6,7 +6,7 @@ import axios from "axios";
 
 function PatientInfo(){
 
-    const {username} = useParams();
+    const {username, usernameAdmin} = useParams();
     const[result, setResult] = useState([]);
     const[resultDelete, setResultDelete] = useState([]);
 
@@ -31,7 +31,7 @@ function PatientInfo(){
 
     return (
         <div>
-        <NavBarAdministrator/>
+        <NavBarAdministrator username={usernameAdmin}/>
         <h1>Patient Info</h1>
         <ul>
             <h3>Name: {result.Name}</h3>

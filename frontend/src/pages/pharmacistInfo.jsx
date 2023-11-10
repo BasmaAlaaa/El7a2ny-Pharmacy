@@ -4,7 +4,7 @@ import { useParams} from 'react-router-dom';
 import axios from "axios";
 
 function PharmacistInfo(){
-    const {username} = useParams();
+    const {username, usernameAdmin} = useParams();
     const[result, setResult] = useState([]);
     const[resultDelete, setResultDelete] = useState([]);
 
@@ -25,7 +25,7 @@ function PharmacistInfo(){
 
 return (
     <div>
-        <NavBarAdministrator/>
+        <NavBarAdministrator username={usernameAdmin}/>
         <h1>Pharmacist Info</h1>
         <ul>
         <h3>Name: {result.Name}</h3>

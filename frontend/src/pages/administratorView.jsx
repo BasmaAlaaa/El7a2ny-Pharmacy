@@ -1,6 +1,6 @@
 
 import Table from '../components/Table.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBarAdministrator from '../components/NavBarAdministrator.jsx';
@@ -13,6 +13,7 @@ function AdministratorView() {
   const[resultPatient, setResultPatient] = useState([]);
   const[resultPharmacist, setResultPharmacist] = useState([]);
   const[resultRequest, setResultRequest] = useState([]);
+  const {username} = useParams();
 // Inside your AdministratorView component
 
 const onAcceptOrReject = async (Username, action) => {
@@ -98,7 +99,7 @@ let navigate = useNavigate()
 
   return (
     <div>
-        <NavBarAdministrator/>
+        <NavBarAdministrator username={username}/>
         <div>
             <MainBtn
               txt="Add Administrator"
@@ -115,7 +116,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadPatient} data={resultPatient} filterText='' searchText=''/>
+      <Table tHead={tHeadPatient} data={resultPatient} filterText='' searchText='' username={username}/>
 
       <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Pharmacists</p>
@@ -123,7 +124,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadPharmacist} data={resultPharmacist} filterText='' searchText=''/>
+      <Table tHead={tHeadPharmacist} data={resultPharmacist} filterText='' searchText='' username={username}/>
 
     <div className="d-flex justify-content-between flex-row">
       <p className="text-capitalize fs-4 w-25">Pharmacists Requests</p>
@@ -131,7 +132,7 @@ let navigate = useNavigate()
         <div className="input-group w-50"></div> 
       </div>
     </div>
-      <Table tHead={tHeadRequests} data={resultRequest} filterText='' searchText=''/>
+      <Table tHead={tHeadRequests} data={resultRequest} filterText='' searchText='' username={username}/>
 
     </div>
   );
