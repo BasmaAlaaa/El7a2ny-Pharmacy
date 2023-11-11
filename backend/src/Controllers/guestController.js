@@ -5,6 +5,7 @@ const { isUsernameUnique, isEmailUnique } = require('../utils');
 const validator = require('validator');
 const upload = require('../Routes/multer-config');
 const Cart = require('../Models/Cart.js');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 //Function for Stripe
 async function createStripeCustomer({ Email, Name, Phone }) {
@@ -44,8 +45,8 @@ const registerPatient = async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
   // res.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
   // req.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
-  // req.setHeader('Access-Control-Allow-Origin', '*');
-  // req.setHeader('Access-Control-Allow-Credentials', true);
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Credentials', true);
 
   try {
 
