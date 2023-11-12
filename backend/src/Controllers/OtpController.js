@@ -100,7 +100,7 @@ const updatePassword = async ({ body }, res) => {
       return res.status(400).json({ error: 'Invalid OTP' });
     }
 
-    if(!(await validatePassword(newPassword))){
+    if (!(await validatePassword(newPassword))) {
       return res.status(200).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
@@ -122,7 +122,7 @@ const updatePassword = async ({ body }, res) => {
   } catch (error) {
     console.error('Failed to update password', error);
     res.status(500).json({ error: 'Failed to update password', details: error.message });
-  }  
+  }
 };
 
 const changePassword = async (req, res) => {
@@ -131,9 +131,15 @@ const changePassword = async (req, res) => {
   try {
     // Find and update the password for patient or pharmacist
     console.log("araf dah");
+    console.log("Old Password:", oldPassword);
+    
+    if (!(await validatePassword(oldPassword))) {
+      return res.status(401).send("Invalid old password");
+    }
+
     if (newPassword === confirmPassword) {
 
-      if(!(await validatePassword(newPassword))){
+      if (!(await validatePassword(newPassword))) {
         return res.status(400).send("Password must contain at least a uppercase, lowercase, a number and must be at least 8 characters long");
       }
 

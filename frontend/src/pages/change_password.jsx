@@ -17,25 +17,36 @@ function ChangePassword() {
   const navigate = useNavigate();
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      const data = { oldPassword: oldPassword, newPassword: password, confirmPassword: confirmPassword }
-      console.log(data)
-      const response = axios.put(`http://localhost:8000/ChangePassword/${username}`, data, { withCredentials: true });
-      if(response.status === 200) {
+  
+    try {
+      const data = { oldPassword: oldPassword, newPassword: password, confirmPassword: confirmPassword };
+      const response = await axios.put(`http://localhost:8000/ChangePassword/${username}`, data, {
+        withCredentials: true,
+        auth: {
+          username: username, 
+          password: oldPassword, 
+        },
+      });
+  
+      if (response.status === 200) {
         alert(`Password updated successfully`);
         console.log(response.data.message);
-        const res = axios.get('http://localhost:8000/logout');
+        const res = await axios.get('http://localhost:8000/logout');
         localStorage.removeItem('token');
-        navigate(`/login`);     
+        navigate(`/login`);
+      } else if (response.status === 401) {
+        alert(`Failed to update password. Invalid old password.`);
+      } else {
+        alert(`Failed to update password. Status: ${response.status}`);
       }
-    }catch(error){
-        alert(`Failed to change password`);
-        console.error('Error response:', error.response);
-          console.error('Error accepting request:', error);
-      };
-  }
+    } catch (error) {
+      alert(`Failed to update password. Error: ${error.message}`);
+      console.error('Error accepting request:', error);
+    }
+  };
+  
   return (
     <div>
       <NavBar />
