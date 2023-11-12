@@ -10,10 +10,11 @@ const MongoURI = process.env.MONGO_URI ;
 
 
 const app = express();
-app.use(cors());
-// app.use(cors({
-//   origin: '*',
-// }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
+
 
 app.use(express.json());
 const port = process.env.PORT || "8000";
@@ -54,6 +55,6 @@ const{
   changePassword
 } = require ('../src/Controllers/OtpController')
 
-app.post('/ChangePassword/:Username',changePassword);
 app.post('/OtpResetPassword',sendOTP);
-app.get('/UpdatePassword',updatePassword);
+app.post('/UpdatePassword',updatePassword); // forgot password
+app.put('/ChangePassword/:username',changePassword);

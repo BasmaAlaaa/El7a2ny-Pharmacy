@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
-const patient = require('../Models/patient');
-const pharmacist = require('../Models/pharmacist');
+const Patient = require('../Models/patient');
+const Pharmacist = require('../Models/pharmacist');
 const OTP = require('../Models/OTP');
 const Admin = require('../Models/administrator');
 
@@ -19,27 +19,34 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendOTP = async ({ body }, res) => {
+  console.log('im here');
   const { Email } = body;
-  const isPatient = await patient.findOne({ Email : Email});
-  const isPharmacist = await pharmacist.findOne({ Email : Email });
-  const isAdmin = await Admin.findOne({ Email : Email });
-
-  console.log('isPatient:', isPatient);
-  console.log('isPharmacist:', isPharmacist);
-  console.log('isAdmin:', isAdmin);
-
-  if (!isPatient && !isPharmacist && !isAdmin) {
-    console.log('Invalid Email');
-    res.status(400).json({ error: 'Invalid Email' });
-    return;
-  }
 
   try {
+    const isPatient = await Patient.findOne({ Email: Email });
+    const isPharmacist = await Pharmacist.findOne({ Email: Email });
+    const isAdmin = await Admin.findOne({ Email: Email });
+
+    console.log('isPatient:', isPatient);
+    console.log('isPharmacist:', isPharmacist);
+    console.log('isAdmin:', isAdmin);
+
+    if (!isPatient && !isPharmacist && !isAdmin) {
+      console.log('Invalid Email');
+      res.status(400).json({ error: 'Invalid Email' });
+      return;
+    }
+
     // Generate OTP
     const otp = generateOTP();
+    console.log(otp);
 
     // Store the OTP in MongoDB
-    const otpDocument = await new OTP({ Email, otp });
+    const otpDocument = await new OTP({
+      Email: Email, // Set the Email property
+      otp: otp,
+    });
+    otpDocument.validateSync();
     await otpDocument.save();
 
     // Define the email options
@@ -49,7 +56,7 @@ const sendOTP = async ({ body }, res) => {
       subject: 'Your OTP for Verification',
       text: `Dear User,
 
-      We hope this email finds you well. It seems like you've requested to reset your password for Suicide Squad Pharmacy, and we're here to assist you with that.
+      We hope this email finds you well. It seems like you've requested to reset your password for Suicide Squad Clinic, and we're here to assist you with that.
 
       To proceed with resetting your password,
 
@@ -57,13 +64,13 @@ const sendOTP = async ({ body }, res) => {
 
       If you didn't request this password reset, please ignore this email. Your account security is our top priority, and no changes will be made without your confirmation.
 
-      If you encounter any issues or have further questions, feel free to reach out to our support team at SuicideSquadGUC@gmail.com .
+      If you encounter any issues or have further questions, feel free to reach out to our support team at SuicideSquadGUC@gmail.com.
 
-      Thank you for choosing Suicide Squad Pharmacy. We appreciate your trust in us.
+      Thank you for choosing Suicide Squad Clinic. We appreciate your trust in us.
 
       Best regards,
 
-      Suicide Squad Support Team `
+      Suicide Squad Support Team `,
     };
 
     // Send the email
@@ -80,6 +87,7 @@ const sendOTP = async ({ body }, res) => {
 
 // Async function to update the user's password in MongoDB
 const updatePassword = async ({ body }, res) => {
+
   const { Email, otp, newPassword } = body;
   try {
     // Find the OTP document in the database
@@ -87,16 +95,15 @@ const updatePassword = async ({ body }, res) => {
 
     if (!otpDocument) {
       console.log(`Invalid OTP`);
-      res.status(400).json({ error: 'Invalid OTP' });
-      return;
+      return res.status(400).json({ error: 'Invalid OTP' });
     }
 
     // Update the user's password in MongoDB
     const updateQuery = { Email: Email };
     const updateField = { Password: newPassword };
 
-    const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
-    const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedPatient = await Patient.findOneAndUpdate(updateQuery, updateField, { new: true });
+    const updatedPharmacist = await Pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
     const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
     if (updatedPatient || updatedPharmacist || updatedAdmin) {
@@ -107,40 +114,42 @@ const updatePassword = async ({ body }, res) => {
       res.status(404).json({ error: 'User not found' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update password' });
-  }
+    console.error('Failed to update password', error);
+    res.status(500).json({ error: 'Failed to update password', details: error.message });
+  }  
 };
 
 const changePassword = async (req, res) => {
-  const { Username } = req.params;
-  const { oldPassword, newPassword, confirmPassword } = req.body;  try {
+  console.log('im here')
+  const { username } = req.params;
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+  try {
     // Find and update the password for patient or pharmacist
-    if(newPassword === confirmPassword){  
-      const updateQuery = { Username: Username, Password: oldPassword };
+    if (newPassword === confirmPassword) {
+      const updateQuery = { Username: username, Password: oldPassword };
       const updateField = { Password: newPassword };
 
-      const updatedPatient = await patient.findOneAndUpdate(updateQuery, updateField, { new: true });
-      const updatedPharmacist = await pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
+      console.log(updateQuery)
+      console.log(updateField)
+
+      const updatedPatient = await Patient.findOneAndUpdate(updateQuery, updateField, { new: true });
+      console.log('ppp', updatedPatient)
+      const updatedPharmacist = await Pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
       const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
       if (updatedPatient || updatedPharmacist || updatedAdmin) {
-        console.log(`Password updated for user with email: ${Username}`);
         res.status(200).json({ message: 'Password updated successfully' });
       } else {
-        console.log('Invalid email or password');
-        res.status(401).json({ error: 'Invalid email or password' });
+        res.status(401).json({ error: 'Invalid username or password.' });
       }
     }
-    else{
-      return res.status(401).json({ error: 'New Password and Confirm Password do not match' });
+    else {
+      return res.status(401).json({ error: "'New Password' and 'Confirm Password' do not match." });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Failed to change password' });
   }
 };
-
 
 
 

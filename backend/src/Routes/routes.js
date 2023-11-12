@@ -21,12 +21,12 @@ const {
 const {
     registerPatient,
     submitRequestToBePharmacist
-}= require('../Controllers/guestController');
+} = require('../Controllers/guestController');
 
 // Patient Controller
 const {
-    availableMedicinesDetailsByPatient, 
-    getMedicineByName, 
+    availableMedicinesDetailsByPatient,
+    getMedicineByName,
     getMedicineByMedicalUse,
     addAddressToPatient,
     getPatientAddresses,
@@ -44,7 +44,7 @@ const {
     availableMedicinesDetailsByPharmacist,
     availableMedicinesQuantity,
     medQuantityAndSales,
-    addMedicine, 
+    addMedicine,
     updateMed
 } = require('../Controllers/pharmacistController');
 
@@ -59,8 +59,8 @@ router.get('/PharmacistInfo/:Username', pharmacistInfo);
 router.get('/AllPharmacists', allPharmacists);
 router.get('/AllPatients', allPatients);
 router.get('/PatientInfo/:Username', patientInfo);
-router.get('/MedicineByName/:Name',getMedicineByName);
-router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
+router.get('/MedicineByName/:Name', getMedicineByName);
+router.get('/MedicineByMedicalUse/:MedicalUse', getMedicineByMedicalUse);
 router.post('/AcceptOrRejectPharmacistRequest/:Username', acceptOrRejectPharmacistRequest);
 
 // Routes of Guest
@@ -69,29 +69,30 @@ router.post('/SubmitRequestToBePharmacist', upload.fields([
     { name: 'IDDocument', maxCount: 1 },
     { name: 'PharmacyDegreeDocument', maxCount: 1 },
     { name: 'WorkingLicenseDocument', maxCount: 1 },
-  ]), submitRequestToBePharmacist);
+]), submitRequestToBePharmacist);
 
 // Routes of Patient
-router.get('/AvailableMedicinesDetailsByPatient',availableMedicinesDetailsByPatient);
-router.get('/MedicineByName/:Name',getMedicineByName);
-router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
-router.post('/AddAddressToPatient/:Username', addAddressToPatient); 
-router.get('/GetPatientAddresses/:Username', getPatientAddresses); 
+router.get('/AvailableMedicinesDetailsByPatient', availableMedicinesDetailsByPatient);
+router.get('/MedicineByName/:Name', getMedicineByName);
+router.get('/MedicineByMedicalUse/:MedicalUse', getMedicineByMedicalUse);
+router.post('/AddAddressToPatient/:Username', addAddressToPatient);
+router.get('/GetPatientAddresses/:Username', getPatientAddresses);
 router.get('/GetOrderDetails/:Username', getOrderDetails);
-router.put('/CancelOrder/:orderId', cancelOrder); 
-router.get('/viewCartItems/:Username',viewCartItems);
-router.delete('/removeItemFromCart/:Username/:MedicineName',removeAnItemFromCart);
-router.post('/addMedicineToCart/:Username/:MedicineName',addMedicineToCart);
-router.put('/updateQuantity/:Username/:MedicineName/:quantity',updateMedicineQuantityInCart);
+router.put('/CancelOrder/:orderId', cancelOrder);
+router.get('/viewCartItems/:Username', viewCartItems);
+router.delete('/removeItemFromCart/:Username/:MedicineName', removeAnItemFromCart);
+router.post('/addMedicineToCart/:Username/:MedicineName', addMedicineToCart);
+router.put('/updateQuantity/:Username/:MedicineName/:quantity', updateMedicineQuantityInCart);
 router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', checkoutOrder);
 
 // Routes of Pharmacist
-router.get('/AvailableMedicinesDetailsByPharmacist',availableMedicinesDetailsByPharmacist);
-router.get('/AvailableMedicinesQuantity',availableMedicinesQuantity);
-router.get('/MedQuantityAndSales/:Name',medQuantityAndSales);
+router.get('/AvailableMedicinesDetailsByPharmacist', availableMedicinesDetailsByPharmacist);
+router.get('/AvailableMedicinesQuantity', availableMedicinesQuantity);
+router.get('/MedQuantityAndSales/:Name', medQuantityAndSales);
 router.post('/AddMedicine', upload.single('Picture'), addMedicine);
 router.put('/UpdateMed/:Name', upload.single('Picture'), updateMed);
-router.get('/MedicineByName/:Name',getMedicineByName);
-router.get('/MedicineByMedicalUse/:MedicalUse',getMedicineByMedicalUse);
+router.get('/MedicineByName/:Name', getMedicineByName);
+router.get('/MedicineByMedicalUse/:MedicalUse', getMedicineByMedicalUse);
+
 
 module.exports = router;
