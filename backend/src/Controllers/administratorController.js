@@ -4,7 +4,7 @@ const Patient = require('../Models/patient');
 const Pharmacist = require('../Models/pharmacist');
 const PharmacistRequest = require('../Models/pharmacistRequest');
 const Medicine = require('../Models/medicine');
-const { isUsernameUnique, isEmailUnique } = require('../utils');
+const { isUsernameUnique, isEmailUnique, validatePassword } = require('../utils');
 
 // Task 5 : Add an admin
 const addAdmin = async (req, res) => {
@@ -13,8 +13,9 @@ const addAdmin = async (req, res) => {
         Password,
         Email 
     } = req.body;
-res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', true);
 
     try {
         if (!(await isUsernameUnique(Username))) {
@@ -23,6 +24,10 @@ res.setHeader('Access-Control-Allow-Origin', '*');
 
           if (!(await isEmailUnique(Email))) {
             throw new Error("Email is already taken.");
+          }
+
+          if(!(await validatePassword(newPassword))){
+            return res.status(200).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
           }
 
           if (!Username || !Password || !Email) { 
@@ -258,5 +263,6 @@ module.exports = {addAdmin,
     patientInfo,
     getMedicineByName,
     getMedicineByMedicalUse,
-    addPharmacist,acceptOrRejectPharmacistRequest
+    addPharmacist,
+    acceptOrRejectPharmacistRequest
 };

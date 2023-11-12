@@ -3,6 +3,8 @@ const Patient = require('../Models/patient');
 const Pharmacist = require('../Models/pharmacist');
 const OTP = require('../Models/OTP');
 const Admin = require('../Models/administrator');
+const { validatePassword } = require('../utils');
+
 
 // Function to generate a random OTP
 function generateOTP() {
@@ -98,6 +100,10 @@ const updatePassword = async ({ body }, res) => {
       return res.status(400).json({ error: 'Invalid OTP' });
     }
 
+    if(!(await validatePassword(newPassword))){
+      return res.status(200).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
+    }
+
     // Update the user's password in MongoDB
     const updateQuery = { Email: Email };
     const updateField = { Password: newPassword };
@@ -120,12 +126,17 @@ const updatePassword = async ({ body }, res) => {
 };
 
 const changePassword = async (req, res) => {
-  console.log('im here')
   const { username } = req.params;
   const { oldPassword, newPassword, confirmPassword } = req.body;
   try {
     // Find and update the password for patient or pharmacist
+    console.log("araf dah");
     if (newPassword === confirmPassword) {
+
+      if(!(await validatePassword(newPassword))){
+        return res.status(400).send("Password must contain at least a uppercase, lowercase, a number and must be at least 8 characters long");
+      }
+
       const updateQuery = { Username: username, Password: oldPassword };
       const updateField = { Password: newPassword };
 
@@ -133,7 +144,6 @@ const changePassword = async (req, res) => {
       console.log(updateField)
 
       const updatedPatient = await Patient.findOneAndUpdate(updateQuery, updateField, { new: true });
-      console.log('ppp', updatedPatient)
       const updatedPharmacist = await Pharmacist.findOneAndUpdate(updateQuery, updateField, { new: true });
       const updatedAdmin = await Admin.findOneAndUpdate(updateQuery, updateField, { new: true });
 
@@ -147,7 +157,7 @@ const changePassword = async (req, res) => {
       return res.status(401).json({ error: "'New Password' and 'Confirm Password' do not match." });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Failed to change password' });
+    return res.status(500).json({ error: 'Failed to change password' });
   }
 };
 
