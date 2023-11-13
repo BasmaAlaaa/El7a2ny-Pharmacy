@@ -3,12 +3,16 @@ const Patient = require('../Models/patient');
 const Pharmacist = require('../Models/pharmacist');
 const OTP = require('../Models/OTP');
 const Admin = require('../Models/administrator');
-const { validatePassword } = require('../utils');
-
 
 // Function to generate a random OTP
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+async function validatePassword(password) {
+  // Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  return passwordRegex.test(password);
 }
 
 // Create a transporter
@@ -93,15 +97,17 @@ const updatePassword = async ({ body }, res) => {
   const { Email, otp, newPassword } = body;
   try {
     // Find the OTP document in the database
+
+    if (!(await validatePassword(newPassword))) {
+      console.log("invalid pass");
+      return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
+    }
+
     const otpDocument = await OTP.findOneAndDelete({ Email: Email, otp: otp });
 
     if (!otpDocument) {
       console.log(`Invalid OTP`);
       return res.status(400).json({ error: 'Invalid OTP' });
-    }
-
-    if (!(await validatePassword(newPassword))) {
-      return res.status(200).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
     // Update the user's password in MongoDB
@@ -130,12 +136,6 @@ const changePassword = async (req, res) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
   try {
     // Find and update the password for patient or pharmacist
-    console.log("araf dah");
-    console.log("Old Password:", oldPassword);
-    
-    if (!(await validatePassword(oldPassword))) {
-      return res.status(401).send("Invalid old password");
-    }
 
     if (newPassword === confirmPassword) {
 

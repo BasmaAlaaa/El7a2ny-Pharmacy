@@ -27,7 +27,6 @@ const medicineSchema = new Schema({
   },
   QuantitySold: {
     type: Number,
-    required: true,
     default: 0
   },
   MedicalUse: {

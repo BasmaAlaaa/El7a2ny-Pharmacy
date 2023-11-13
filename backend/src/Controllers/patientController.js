@@ -74,68 +74,53 @@ const checkoutOrder = async (req, res) => {
   
   cartItems = cart.items;
 
-  const newOrder = await Order.create({
-    PatientUsername: Username,
-    Items: cartItems,
-    TotalAmount: cart.totalAmount,
-
-  });
-
-  while(cart.items.length > 0) {
-    cart.items.pop();
-  };
-  cart.totalAmount = 0;
-  await cart.save();
-
-  //Choosing payment method and shipping address
-
-  const orderId = newOrder._id;
-
-  const order = await Order.findById(orderId);
-
-  if (!order) {
-    return res.status(404).send({ error: 'Order not found' });
+  if((paymentMethod === "wallet" && patient.WalletAmount >= cart.totalAmount) || (paymentMethod === "card") || (paymentMethod === "cash")){
+    const newOrder = await Order.create({
+      PatientUsername: Username,
+      Items: cartItems,
+      TotalAmount: cart.totalAmount,
+  
+    });
+  
+    while(cart.items.length > 0) {
+      cart.items.pop();
+    };
+    cart.totalAmount = 0;
+    await cart.save();
+  
+    //Choosing payment method and shipping address
+  
+    const orderId = newOrder._id;
+  
+    const order = await Order.findById(orderId);
+  
+    if (!order) {
+      return res.status(404).send({ error: 'Order not found' });
+    }
+  
+    const updatedOrder = {
+      $set: {
+          PaymentMethod: paymentMethod,
+          ShippingAddress: ShippingAddress
+      },
+    };
+  
+    const updated = await Order.findOneAndUpdate({_id: orderId},updatedOrder);
+    
+    if(paymentMethod === "wallet"){
+      const updatedPat = {
+        $set: {
+          WalletAmount: (WalletAmount-order.TotalAmount),
+        },
+      };
+    
+      const update = await patientSchema.updateOne({Username: order.PatientUsername},updatedPat);
+    }
+    res.status(200).send(order);
   }
-
-  const updatedOrder = {
-    $set: {
-        PaymentMethod: paymentMethod,
-        ShippingAddress: ShippingAddress
-    },
-  };
-
-  const updated = await Order.findOneAndUpdate({_id: orderId},updatedOrder);
-
-  //Paying The Order
-
-  if(paymentMethod === "card"){
-
-  /*const paymentIntent = await stripe.paymentIntents.create({
-    amount: order.TotalAmount,
-    customer: patient.StripeCustomerId,
-    currency: 'egp',
-    description: "Paying for my order",
-
-  });*/
-
-  //await stripe.paymentIntents.confirm(paymentIntent);
-}
-else if(paymentMethod === "wallet"){
-
-if(patient.WalletAmount < order.TotalAmount)
-  return res.status(400).send("Your wallet amount won't cover the whole order amount!")
-
-if(patient.WalletAmount >= order.TotalAmount){
-  const updatedPat = {
-    $set: {
-      WalletAmount: (WalletAmount-order.TotalAmount),
-    },
-  };
-
-  const update = await patientSchema.updateOne({Username: order.PatientUsername},updatedPat);
-}
-}
-  res.status(200).send(order);
+  else{
+    return res.status(400).send("Your wallet amount won't cover the whole order amount!")
+  }
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
@@ -386,7 +371,8 @@ const addMedicineToCart = async (req, res) => {
       return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
     }
 
-    const index = cart.items.findIndex(x => x.medicine === MedicineName);
+    if(medicine.Quantity >= 1){
+      const index = cart.items.findIndex(x => x.medicine === MedicineName);
 
     if(index === -1){
       const newItem = {
@@ -404,7 +390,16 @@ const addMedicineToCart = async (req, res) => {
 
     await cart.save();
 
+    medicine.QuantitySold += 1;
+
+    await medicine.save();
+
     res.status(200).send({ message: `Medicine ${MedicineName} added to the cart` });
+    }
+    else{
+      res.status(400).send({ error: `Medicine ${MedicineName} is sold out` });
+    }
+    
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Internal server error' });
@@ -438,12 +433,23 @@ const updateMedicineQuantityInCart = async (req, res) => {
     const itemToUpdate = cart.items.find(item => item.medicine === MedicineName);
 
     if (itemToUpdate) {
-      const oldQuantity = itemToUpdate.quantity;
+      if(medicine.Quantity >= quantity){
+        const oldQuantity = itemToUpdate.quantity;
       const quantityChange = quantity - oldQuantity;
       itemToUpdate.quantity = quantity;
       cart.totalAmount += quantityChange * medicine.Price;
+      
       await cart.save();
+
+      medicine.QuantitySold += quantityChange;
+
+      await medicine.save();
+
       res.status(200).send({ message: `Quantity of Medicine ${MedicineName} in the cart updated to ${quantity}` });
+      }
+      else{
+        res.status(400).send({ error: `The quantity of medicine ${MedicineName} left is not enough` });
+      }
     } else {
       res.status(404).send({ error: `Medicine ${MedicineName} not found in the cart` });
     }

@@ -17,7 +17,7 @@ function RequestInfo(){
         if (response.status === 200) {
             alert(`Pharamcist accepted successfully`);
             console.log(response.data.message);
-            navigate('/administratorView');
+            //navigate('/administratorView');
           }}
           catch(error){
             alert(`Failed to accept Pharamcist `);
@@ -32,7 +32,7 @@ function RequestInfo(){
       if (response.status === 200) {
             alert(`Pharamcist rejected successfully`);
               console.log(response.data.message);
-              navigate('/administratorView');
+              //navigate('/administratorView');
           }}
           catch(error ){
             alert(`Failed to reject Pharamcist `);
@@ -44,7 +44,7 @@ function RequestInfo(){
       const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${username}`, { action });
       alert(`Pharmacist ${action === 'accept' ? 'accepted' : 'rejected'} successfully`);
       console.log(response.data.message);
-      navigate('/administratorView');
+      //navigate('/administratorView');
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.message;
       console.error('Error response:', error.response);

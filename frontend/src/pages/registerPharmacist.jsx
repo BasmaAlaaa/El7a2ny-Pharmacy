@@ -43,6 +43,7 @@ function RegisterPharmacist() {
   const [IDDocument, setIDDocument] = useState('');
   const [PharmacyDegreeDocument, setPharmacyDegreeDocument] = useState('');
   const [WorkingLicenseDocument, setWorkingLicenseDocument] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,9 +64,11 @@ function RegisterPharmacist() {
     data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
     data.append('WorkingLicenseDocument', WorkingLicenseDocument);
     console.log(data)
+
     const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
       .then(res => console.log(res.data)).catch(err => console.log(err))
-  }
+      navigate(`/login`);
+    }
 
 
   return (
