@@ -27,7 +27,7 @@ const addAdmin = async (req, res) => {
           }
 
           if(!(await validatePassword(Password))){
-            return res.status(200).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
+            return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
           }
 
           if (!Username || !Password || !Email) { 
