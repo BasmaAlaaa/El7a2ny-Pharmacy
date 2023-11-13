@@ -26,7 +26,7 @@ const addAdmin = async (req, res) => {
             throw new Error("Email is already taken.");
           }
 
-          if(!(await validatePassword(newPassword))){
+          if(!(await validatePassword(Password))){
             return res.status(200).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
           }
 

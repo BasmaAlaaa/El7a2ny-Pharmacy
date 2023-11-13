@@ -87,7 +87,7 @@ const patientSchema = new Schema({
     EmergencyContactName,
     EmergencyContactMobile,
     EmergencyContactRelation,
-    addresses
+    address
   ) {
     
     if (
@@ -135,9 +135,9 @@ const patientSchema = new Schema({
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
-      addresses,
       cart: newCart
     });
+    patient.addresses.push(address);
   
     return patient;
   };

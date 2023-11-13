@@ -44,18 +44,20 @@ function RegisterPatient() {
   const [emergencyName, setEmergencyName] = useState('')
   const [emergencyMobile, setEmergencyMobile] = useState('')
   const [emergencyRelation, setEmergencyRelation] = useState('')
+  const [address, setAddress] = useState('')
+  const navigate = useNavigate();
 
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation}
+    const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation, address: address}
     console.log(data)
  
       await axios.post('http://localhost:8000/Guest/RegisterPatient',
-      
         data)
       .then(res =>console.log(data)).catch(err => console.log(err.request))
-  }
+      navigate(`/login`);
+    }
   return (
     <div>
       <NavBar/>
@@ -105,6 +107,10 @@ function RegisterPatient() {
   <h3>
   <label>Emergency Contact Relation</label>
   <input type="text" value={emergencyRelation} required title="Emergency Contact Relation" placeholder="Enter Emergency Contact Relation" onChange={(e) => setEmergencyRelation(e.target.value)}/>
+  </h3>
+  <h3>
+  <label>Address</label>
+  <input type="text" value={address} required title="Address" placeholder="Enter Your Address" onChange={(e) => setAddress(e.target.value)}/>
   </h3>
   <h3>
   <button type="submit">Submit</button>

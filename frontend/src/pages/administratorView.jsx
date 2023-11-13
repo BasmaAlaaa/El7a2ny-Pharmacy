@@ -83,8 +83,6 @@ let navigate = useNavigate()
 
   }
 ];
-
-
   let tHeadRequests = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View', 'Status'];
   let dataRequests = [{
     name: 'Ahmed',
