@@ -1,10 +1,13 @@
-const patient =require('../Models/patient');
+const express = require("express");
+const app = express();
+const jwt = require("jsonwebtoken");
+const Patient = require('../Models/patient');
 const Pharmacist = require('../Models/pharmacist');
-const jwt = require ('jsonwebtoken');
 const Administrator = require('../Models/administrator');
+app.use(express.json());
+
 // create json web token
-const maxAge = 3 * 24 * 60 * 60;
-const createToken = (name) => {
+/*const createToken = (name) => {
     return jwt.sign({ name }, 'supersecret', {
         expiresIn: maxAge
     });
@@ -70,4 +73,130 @@ const logout = async (req, res) => {
 module.exports = {
     login,
     logout
-  };
+  };*/
+
+  //const maxAge = 3 * 24 * 60 * 60;
+
+  let refreshTokens = [];
+
+const refresh = (req, res) => {
+  //take the refresh token from the user
+  const refreshToken = req.body.token;
+
+  //send error if there is no token or it's invalid
+  if (!refreshToken) return res.status(401).json("You are not authenticated!");
+  if (!refreshTokens.includes(refreshToken)) {
+    return res.status(403).json("Refresh token is not valid!");
+  }
+  jwt.verify(refreshToken, "myRefreshSecretKey", (err, user) => {
+    err && console.log(err);
+    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
+
+    refreshTokens.push(newRefreshToken);
+
+    res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
+  });
+
+  //if everything is ok, create new access token, refresh token and send to user
+};
+
+const generateAccessToken = (user) => {
+  return jwt.sign({ _id: user._id, Username: user.Username }, "mySecretKey", {
+    expiresIn: '15m',
+  });
+};
+
+const generateRefreshToken = (user) => {
+  return jwt.sign({ _id: user._id, Username: user.Username }, "myRefreshSecretKey");
+};
+
+const login = async (req, res) => {
+  const { username, password } = req.body;
+  const patient = await Patient.findOne({Username: username, Password: password});
+  const admin = await Administrator.findOne({Username: username, Password: password});
+  const pharmacist = await Pharmacist.findOne({Username: username, Password: password});
+  
+  if (patient && !admin && !pharmacist) {
+    //Generate an access token
+    const accessToken = generateAccessToken(patient);
+    const refreshToken = generateRefreshToken(patient);
+    refreshTokens.push(refreshToken);
+    const userPatient = {
+      _id: patient._id,
+      Username: patient.Username,
+      accessToken,
+      refreshToken,
+    }
+    res.json({userPatient});
+  } else if (!patient && admin && !pharmacist) {
+    //Generate an access token
+    const accessToken = generateAccessToken(admin);
+    const refreshToken = generateRefreshToken(admin);
+    refreshTokens.push(refreshToken);
+    const userAdmin = {
+      _id: admin._id,
+      Username: admin.Username,
+      accessToken,
+      refreshToken,
+    }
+    res.json({userAdmin});
+  } 
+  else if (!patient && !admin && pharmacist) {
+    //Generate an access token
+    const accessToken = generateAccessToken(pharmacist);
+    const refreshToken = generateRefreshToken(pharmacist);
+    refreshTokens.push(refreshToken);
+    const userpharmacist = {
+      _id: pharmacist._id,
+      Username: pharmacist.Username,
+      accessToken,
+      refreshToken,
+    }
+    res.json({userpharmacist});
+  } 
+  else {
+    res.status(400).json("Username or password incorrect!");
+  }
+};
+
+const verify = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+
+    jwt.verify(token, "mySecretKey", (err, user) => {
+      if (err) {
+        return res.status(403).json("Token is not valid!");
+      }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.status(401).json("You are not authenticated!");
+  }
+};
+
+const logout =  (req, res) => {
+  const { username } = req.params;
+  if (!(req.user.Username === username)) {
+    res.status(403).json("You are not logged in!");
+}else{
+  const refreshToken = req.body.token;
+  refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+  res.status(200).json("You logged out successfully.");
+}
+};
+
+module.exports = {
+  refresh,
+  login,
+  logout,
+  verify
+}

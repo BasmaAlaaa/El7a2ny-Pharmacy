@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Form from '../components/Form.jsx';
 import { useDispatch } from 'react-redux';
 import { loggedIn } from '../features/login.js';
@@ -23,17 +23,28 @@ function AddAdministrator() {
   //     action: handleSubmit(),
   //   },
   // ];
-  const [username, setUsername] = useState('')
+  const [Username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const [user, setUser] = useState(null);
+  const {username} = useParams();
 
+  const axiosJWT = axios.create();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {Username:username, Password:password, Email:email}
-    console.log(data)
-    const response = axios.post('http://localhost:8000/Admin/AddAdmin', data)
-.then(res =>console.log(res.data)).catch(err => console.log(err))
+    try{
+      const data = {Username:Username, Password:password, Email:email}
+    console.log(data);
+    console.log(sessionStorage.getItem("token"));
+    //const response = axios.post(`http://localhost:8000/Admin/AddAdmin/${username}`, data)
+    await axios.post(`http://localhost:8000/Admin/AddAdmin/${username}`,data,{
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    });
+    console.log("ya bashaa");
+    } catch(err){
+      alert("Adding another Admin failed");
+    }    
   }
 
   return (

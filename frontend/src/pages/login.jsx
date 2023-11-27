@@ -8,6 +8,8 @@ import MainBtn from "../components/Button.jsx";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
+
 
 function Login() {
   let { errors, handleSubmit, register } = Validation("login");
@@ -16,25 +18,61 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
+
+  const refreshToken = async () => {
+    try {
+      const res = await axios.post("/refresh", { token: user.refreshToken });
+      setUser({
+        ...user,
+        accessToken: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
+      });
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const axiosJWT = axios.create()
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      let currentDate = new Date();
+      const decodedToken = jwtDecode(user.accessToken);
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        const data = await refreshToken();
+        config.headers["authorization"] = "Bearer " + data.accessToken;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post("http://localhost:8000/login", {
-        Username: username,
+        username: username,
         password: password,
       });
-      localStorage.setItem("token", response.data.token);
+      console.log(response.data);
       if (response.data.userPatient) {
+        sessionStorage.setItem("token", response.data.userPatient.accessToken);
         navigate(`/patientView/${username}`);
       } else if (response.data.userpharmacist) {
+        sessionStorage.setItem("token", response.data.userpharmacist.accessToken);
         navigate(`/pharmacistView/${username}`);
       } else if (response.data.userAdmin) {
+        sessionStorage.setItem("token", response.data.userAdmin.accessToken);
         navigate(`/administratorView/${username}`);
       } else {
         console.error("User role not recognized");
         alert("User role not recognized");
       }
+      console.log(sessionStorage);
     } catch (error) {
       console.error(error.response ? error.response.data : error.message);
       alert(error.response ? error.response.data.error : error.message);

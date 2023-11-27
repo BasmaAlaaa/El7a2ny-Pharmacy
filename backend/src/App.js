@@ -36,13 +36,16 @@ app.get("/home", (req, res) => {
 });
 
 const {
-  availableMedicinesDetailsByPatient, 
+  refresh,
+  verify, 
   login,
   logout
 } = require('./Controllers/loginController');
 
+app.post("/refresh",refresh);
 app.post("/login",login);
-app.get("/logout",logout);
+app.post("/logout/:username",verify, logout);
+
 
 app.use("/Admin", router);
 app.use("/Guest", router);

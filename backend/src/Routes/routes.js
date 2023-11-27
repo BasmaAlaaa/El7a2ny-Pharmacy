@@ -48,20 +48,22 @@ const {
     updateMed
 } = require('../Controllers/pharmacistController');
 
+const { verify } = require('../Controllers/loginController');
+
 //Routes of Administrator
-router.post('/AddAdmin', addAdmin);
-router.post('/AddPharmacist', addPharmacist);
-router.delete('/RemovePatientOrPharmacist/:Username', removePatientOrPharmacist);
-router.get('/InfosOfAPharmacistRequest/:Username', infosOfAPharmacistRequest);
-router.get('/InfosOfRequestsByPharmacist', infosOfRequestsByPharmacist);
-router.get('/AvailableMedicinesDetailsByAdmin', availableMedicinesDetailsByAdmin);
-router.get('/PharmacistInfo/:Username', pharmacistInfo);
-router.get('/AllPharmacists', allPharmacists);
-router.get('/AllPatients', allPatients);
-router.get('/PatientInfo/:Username', patientInfo);
-router.get('/MedicineByName/:Name', getMedicineByName);
-router.get('/MedicineByMedicalUse/:MedicalUse', getMedicineByMedicalUse);
-router.post('/AcceptOrRejectPharmacistRequest/:Username', acceptOrRejectPharmacistRequest);
+router.post('/AddAdmin/:username', verify, addAdmin);
+router.post('/AddPharmacist/:username', verify, addPharmacist);
+router.delete('/RemovePatientOrPharmacist/:username/:Username', verify, removePatientOrPharmacist);
+router.get('/InfosOfAPharmacistRequest/:username/:Username', verify, infosOfAPharmacistRequest);
+router.get('/InfosOfRequestsByPharmacist/:username', verify, infosOfRequestsByPharmacist);
+router.get('/AvailableMedicinesDetailsByAdmin/:username', verify, availableMedicinesDetailsByAdmin);
+router.get('/PharmacistInfo/:username/:Username', verify, pharmacistInfo);
+router.get('/AllPharmacists/:username', verify, allPharmacists);
+router.get('/AllPatients/:username', verify, allPatients);
+router.get('/PatientInfo/:username/:Username', verify, patientInfo);
+router.get('/MedicineByName/:username/:Name', verify, getMedicineByName);
+router.get('/MedicineByMedicalUse/:username/:MedicalUse', verify, getMedicineByMedicalUse);
+router.post('/AcceptOrRejectPharmacistRequest/:username/:Username', verify, acceptOrRejectPharmacistRequest);
 
 // Routes of Guest
 router.post('/RegisterPatient', registerPatient);

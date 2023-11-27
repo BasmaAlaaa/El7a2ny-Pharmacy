@@ -10,17 +10,19 @@ function PatientInfo(){
     const[result, setResult] = useState([]);
     const[resultDelete, setResultDelete] = useState([]);
 
-
-
     useEffect(() => {
-  const response = axios.get(`http://localhost:8000/Admin/PatientInfo/${username}`)
+  const response = axios.get(`http://localhost:8000/Admin/PatientInfo/${usernameAdmin}/${username}`,{
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
 
   console.log(result)
 
   const handleRemove=() => {
-    const response = axios.delete(`http://localhost:8000/Admin/RemovePatientOrPharmacist/${username}`)
+    const response = axios.delete(`http://localhost:8000/Admin/RemovePatientOrPharmacist/${usernameAdmin}/${username}`,{
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
   .then(res =>setResultDelete(res.data)).catch(err => console.log(err))
   }
   console.log("result delete: ", resultDelete)

@@ -18,7 +18,9 @@ function AdministratorView() {
 
 const onAcceptOrReject = async (Username, action) => {
   try {
-      const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${Username}`, { action });
+      const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${username}/${Username}`, {action}, {
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      });
       if (response.status === 200) {
           alert(`Pharmacist ${action === 'accept' ? 'accepted' : 'rejected'} successfully`);
           // remove the request ml list
@@ -30,7 +32,9 @@ const onAcceptOrReject = async (Username, action) => {
   }
 };
   useEffect(() => {
-const response = axios.get('http://localhost:8000/Admin/AllPatients')
+const response = axios.get(`http://localhost:8000/Admin/AllPatients/${username}`,{
+  headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+})
 .then(res =>setResultPatient(res.data)).catch(err => console.log(err))
   }, [])
 console.log(resultPatient)
@@ -39,7 +43,9 @@ resultPatient.map((e) => {
 })
 
 useEffect(() => {
-  const response = axios.get('http://localhost:8000/Admin/AllPharmacists')
+  const response = axios.get(`http://localhost:8000/Admin/AllPharmacists/${username}`,{
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResultPharmacist(res.data)).catch(err => console.log(err))
     }, [])
   console.log(resultPharmacist)
@@ -48,7 +54,9 @@ useEffect(() => {
   })
 
   useEffect(() => {
-    const response = axios.get('http://localhost:8000/Admin/InfosOfRequestsByPharmacist')
+    const response = axios.get(`http://localhost:8000/Admin/InfosOfRequestsByPharmacist/${username}`,{
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
     .then(res =>setResultRequest(res.data)).catch(err => console.log(err))
       }, [])
     console.log(resultRequest)
@@ -102,7 +110,7 @@ let navigate = useNavigate()
             <MainBtn
               txt="Add Administrator"
               style="green-btn"
-              action={() => navigate('/addAdministrator')}
+              action={() =>navigate(`/addAdministrator/${username}`)}
               key="navBtn"
             />
           </div>

@@ -14,242 +14,342 @@ const addAdmin = async (req, res) => {
         Email 
     } = req.body;
 
+    const { username } = req.params;
+
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try {
+            const admin = await Administrator.findOne({Username: username});
+            if (!admin){
+                return res.status(404).json({error : "This admin doesn't exist!"})
+            }
+            if (!(await isUsernameUnique(Username))) {
+                throw new Error('Username is already taken.');
+              }
+              if (!(await isEmailUnique(Email))) {
+                throw new Error("Email is already taken.");
+              }
 
-    try {
-        if (!(await isUsernameUnique(Username))) {
-            throw new Error('Username is already taken.');
-          }
-
-          if (!(await isEmailUnique(Email))) {
-            throw new Error("Email is already taken.");
-          }
-
-          if(!(await validatePassword(Password))){
-            return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
-          }
-
-          if (!Username || !Password || !Email) { 
-            throw Error('All fields must be filled.');
-        }
+              if(!(await validatePassword(Password))){
+                return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
+              }
     
-        const administrator = await Administrator.create({
-          Username,
-          Password,
-          Email
-        });
-        await administrator.save();
-        res.status(200).json({administrator})
-    } catch(error) {
-        res.status(400).json({ error: error.message})
+              if (!Username || !Password || !Email) { 
+                throw Error('All fields must be filled.');
+            }            
+
+            const administrator = await Administrator.create({
+              Username,
+              Password,
+              Email
+            });
+            await administrator.save();
+            res.status(200).json({administrator})
+        } catch(error) {
+            res.status(400).json({ error: error.message})
+        }
     }
 }
 
 // Task 6 : Remove a patient or a pharmacist from database
 const removePatientOrPharmacist = async (req, res) => {
-        const {Username} = req.params;
+        const {username, Username} = req.params;
         res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-        const patient = await Patient.findOneAndDelete({Username: Username})
-        const pharmacist = await Pharmacist.findOneAndDelete({Username: Username})
-console.log("patient:", patient)
-console.log("pharmacist:", pharmacist)
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const patient = await Patient.findOneAndDelete({Username: Username})
+            const pharmacist = await Pharmacist.findOneAndDelete({Username: Username})
+            console.log("patient:", patient)
+            console.log("pharmacist:", pharmacist)
 
-        if(!patient && !pharmacist){
-            return res.status(400).json({error: "This user doesn't exist."})
-        }else if(patient && !pharmacist){
-            res.status(200).json(patient)
-        }else if(!patient && pharmacist){
-            res.status(200).json(pharmacist)
+            if(!patient && !pharmacist){
+                return res.status(400).json({error: "This user doesn't exist."})
+            }else if(patient && !pharmacist){
+                res.status(200).json(patient)
+            }else if(!patient && pharmacist){
+                res.status(200).json(pharmacist)
+            }
+        } catch(err){
+            res.status(400).json({ error: err.message})
+
         }
+    }
 }
 
 // Task 7 : view all infos of pharmacists' requests that want to apply to the platform
 const infosOfAPharmacistRequest = async (req, res) => {
-    const {Username} = req.params;
+    const {username, Username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-    const pharmacistsRequest = await PharmacistRequest.findOne({Username: Username});
-    if(!pharmacistsRequest){
-        return res.status(400).json({error: "There are no requests made by this pharmacist!"})
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const pharmacistsRequest = await PharmacistRequest.findOne({Username: Username});
+            if(!pharmacistsRequest){
+                return res.status(400).json({error: "There are no requests made by this pharmacist!"})
+            }
+            res.status(200).json(pharmacistsRequest);
+        } catch(err){
+            res.status(400).json({ error: err.message})
+        }
     }
-    res.status(200).json(pharmacistsRequest);
 }
 
 const infosOfRequestsByPharmacist = async (req, res) => {
+    const {username, Username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-    const pharmacistsRequests = await PharmacistRequest.find({}).sort({createdAt: -1});
-    if(!pharmacistsRequests){
-        return res.status(400).json({error: "There are no requests made by pharmacists."})
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{const pharmacistsRequests = await PharmacistRequest.find({}).sort({createdAt: -1});
+        if(!pharmacistsRequests){
+            return res.status(400).json({error: "There are no requests made by pharmacists."})
+        }
+        res.status(200).json(pharmacistsRequests);
+    } catch(err){
+        res.status(400).json({ error: err.message})
+
     }
-    res.status(200).json(pharmacistsRequests);
+    }
 }
 
 // Task 12: view a list of all available medicines' details
 const availableMedicinesDetailsByAdmin = async (req, res) => {
-    const medicines = await Medicine.find({});
+    const {username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-    if(!medicines){
-        return res.status(400).json({error: "There are no available medicines!"})
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+            try{const medicines = await Medicine.find({});
+    
+            if(!medicines){
+                return res.status(400).json({error: "There are no available medicines!"})
+            }
+            console.log("medicines",medicines)
+            res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse})));
+        } catch(err){
+            res.status(400).json({ error: err.message})
+
+        }
     }
-    console.log("medicines",medicines)
-    res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse})));
 }
 
 // Task 22: view pharmacist's info
 const pharmacistInfo = async (req, res) => {
-    const {Username} = req.params;
+    const {username, Username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const pharmacist = await Pharmacist.findOne({Username: Username},{_id:0, Password:0});
+            if(!pharmacist){
+                return res.status(400).json({error: "This pharmacist does not exist!"})
+            }
+            res.status(200).json(pharmacist);
+        } catch(err){
+            res.status(400).json({ error: err.message})
 
-    const pharmacist = await Pharmacist.findOne({Username: Username},{_id:0, Password:0});
-    if(!pharmacist){
-        return res.status(400).json({error: "This pharmacist does not exist!"})
+        }
     }
-    res.status(200).json(pharmacist);
 }
 
 const allPharmacists = async (req, res) => {
-    const pharmacists = await Pharmacist.find();
+    const {username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-    if(!pharmacists){
-        return res.status(400).json({error: "No registered pharmacists!"})
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const pharmacists = await Pharmacist.find();
+            if(!pharmacists){
+                return res.status(400).json({error: "No registered pharmacists!"})
+            }
+            res.status(200).json(pharmacists.map(
+                ({Username, Name, Email, DateOfBirth, HourlyRate, Affiliation, EducationalBackground}) => 
+                ({Username, Name, Email, DateOfBirth, HourlyRate, Affiliation, EducationalBackground})
+            ));
+        } catch(err){
+            res.status(400).json({ error: err.message})
+
+        }
     }
-    res.status(200).json(pharmacists.map(
-        ({Username, Name, Email, DateOfBirth, HourlyRate, Affiliation, EducationalBackground}) => 
-        ({Username, Name, Email, DateOfBirth, HourlyRate, Affiliation, EducationalBackground})
-    ));
 }
 
 const allPatients = async (req,res) => {
-    const patients = await Patient.find();
+    const {username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-    if(!patients){
-        return res.status(400).json({error: "No registered patients!"})
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const patients = await Patient.find();
+            if(!patients){
+                return res.status(400).json({error: "No registered patients!"})
+            }
+            res.status(200).json(patients.map(
+                ({Username, Name, Email, DateOfBirth, Gender, MobileNumber}) => 
+                ({Username, Name, Email, DateOfBirth, Gender, MobileNumber})
+            ));
+        } catch(err){
+            res.status(400).json({ error: err.message})
+        }
     }
-    res.status(200).json(patients.map(
-        ({Username, Name, Email, DateOfBirth, Gender, MobileNumber}) => 
-        ({Username, Name, Email, DateOfBirth, Gender, MobileNumber})
-    ));
 }
 
 // Task 23: view patient's info
 const patientInfo = async (req, res) => {
-    const {Username} = req.params;
+    const {username, Username} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-    const info = await Patient.findOne({Username: Username},{ _id: 0, Password: 0, Prescriptions: 0, EmergencyContactMobile: 0, EmergencyContactName:0, EmergencyContactRelation:0 });
-    if(!info){
-        return res.status(400).json({error: "This patient does not exist!"})
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const info = await Patient.findOne({Username: Username},{ _id: 0, Password: 0, Prescriptions: 0, EmergencyContactMobile: 0, EmergencyContactName:0, EmergencyContactRelation:0 });
+            if(!info){
+                return res.status(400).json({error: "This patient does not exist!"})
+            }
+            res.status(200).json(info);
+        } catch(err){
+            res.status(400).json({ error: err.message})
+        }
     }
-    
-        res.status(200).json(info);
 }
 
  // Search for medicine by name
  const getMedicineByName = async (req, res) => {
-    const {Name} = req.params;
+    const {username, Name} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-    const info = await Medicine.findOne({Name: Name},{ _id: 0, ActiveIngredients: 0, Price: 0, Picture: 0, MedicalUse:0 });
-    if(!info){
-        return res.status(400).json({error: "This medicine does not exist!"})
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const info = await Medicine.findOne({Name: Name},{ _id: 0, ActiveIngredients: 0, Price: 0, Picture: 0, MedicalUse:0 });
+            if(!info){
+                return res.status(400).json({error: "This medicine does not exist!"})
+            }
+            res.status(200).json(info);
+        } catch(err){
+            res.status(400).json({ error: err.message})
+        }
     }
-    
-        res.status(200).json(info);
 }
 
  // Filter medicine by medical use
  const getMedicineByMedicalUse = async (req, res) => {
-    const {MedicalUse} = req.params;
+    const {username, MedicalUse} = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  
-    const info = await Medicine.findOne({MedicalUse: MedicalUse},{ _id: 0, Name: 0, ActiveIngredients: 0, Price: 0, Picture: 0 });
-    if(!info){
-        return res.status(400).json({error: "This medicine does not exist!"})
-    }
-    
-        res.status(200).json(info);
-  }
-  
-  const addPharmacist = async (req, res) => {
-    const {Username, Name, Email, Password, DateOfBirth, HourlyRate, Affiliation, EducationalBackground} = req.body;
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-    try {
-        if (!(await isUsernameUnique(Username))) {
-            throw new Error('Username is already taken.');
-          }
-
-          if (!Username || 
-            !Name ||
-            !Email ||
-            !Password ||
-            !DateOfBirth ||
-            !HourlyRate ||
-            !Affiliation ||
-            !EducationalBackground
-            ) { 
-            throw Error('All fields must be filled.');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try{
+            const info = await Medicine.findOne({MedicalUse: MedicalUse},{ _id: 0, Name: 0, ActiveIngredients: 0, Price: 0, Picture: 0 });
+            if(!info){
+                return res.status(400).json({error: "This medicine does not exist!"})
+            }
+            res.status(200).json(info);
+        } catch(err){
+            res.status(400).json({ error: err.message})
         }
-    
-        const pharmacist = await  Pharmacist.create({
-            Username,
-            Name, 
-            Email, 
-            Password, 
-            DateOfBirth, 
-            HourlyRate, 
-            Affiliation, 
-            EducationalBackground
-        });
-        await pharmacist.save();
-        res.status(200).json({pharmacist})
-    } catch(error) {
-        res.status(400).json({ error: error.message})
     }
 }
+
+const addPharmacist = async (req, res) => {
+    const {username} = req.params;
+    const {Username, Name, Email, Password, DateOfBirth, HourlyRate, Affiliation, EducationalBackground} = req.body;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try {
+            if (!(await isUsernameUnique(Username))) {
+                throw new Error('Username is already taken.');
+            }
+
+            if (!Username || 
+                !Name ||
+                !Email ||
+                !Password ||
+                !DateOfBirth ||
+                !HourlyRate ||
+                !Affiliation ||
+                !EducationalBackground
+                ) { 
+                throw Error('All fields must be filled.');
+            }
+        
+            const pharmacist = await  Pharmacist.create({
+                Username,
+                Name, 
+                Email, 
+                Password, 
+                DateOfBirth, 
+                HourlyRate, 
+                Affiliation, 
+                EducationalBackground
+            });
+            await pharmacist.save();
+            res.status(200).json({pharmacist})
+        } catch(error) {
+            res.status(400).json({ error: error.message})
+        }
+    }
+}
+
 const acceptOrRejectPharmacistRequest = async (req, res) => {
-    const { Username } = req.params;
+    const { Username, username } = req.params;
     const { action } = req.body; 
 
-    try {
-                const pharmacistRequest = await PharmacistRequest.findOne({ Username, Status: 'pending' });
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', true);
 
-        if (!pharmacistRequest) {
-            return res.status(404).json({ error: "Pending pharmacist request with the given username not found" });
-        }
+    if (!(req.user.Username === username)) {
+        res.status(403).json("You are not logged in!");
+    }else{
+        try {
+            const pharmacistRequest = await PharmacistRequest.findOne({ Username, Status: 'pending' });
 
-        if (action === 'accept') {
-            const pharmacist = new Pharmacist(pharmacistRequest.toObject());
-            await pharmacist.save();
-            pharmacistRequest.Status = 'accepted';
-            await pharmacistRequest.save();
-            res.status(200).json({ message: 'Pharmacist request approved and added to the platform' });
-        } else if (action === 'reject') {
-            pharmacistRequest.Status = 'rejected';
-            await pharmacistRequest.save();
-            res.status(200).json({ message: 'Pharmacist request rejected' });
-        } else {
-            res.status(400).json({ error: 'Invalid action' });
+            if (!pharmacistRequest) {
+                return res.status(404).json({ error: "Pending pharmacist request with the given username not found" });
+            }
+
+            if (action === 'accept') {
+                const pharmacist = new Pharmacist(pharmacistRequest.toObject());
+                await pharmacist.save();
+                pharmacistRequest.Status = 'accepted';
+                await pharmacistRequest.save();
+                res.status(200).json({ message: 'Pharmacist request approved and added to the platform' });
+            } else if (action === 'reject') {
+                pharmacistRequest.Status = 'rejected';
+                await pharmacistRequest.save();
+                res.status(200).json({ message: 'Pharmacist request rejected' });
+            } else {
+                res.status(400).json({ error: 'Invalid action' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: "Server error", details: error.message });
         }
-    } catch (error) {
-        res.status(500).json({ error: "Server error", details: error.message });
     }
-};
-
+}
 
 
 module.exports = {addAdmin,

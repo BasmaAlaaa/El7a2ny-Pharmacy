@@ -1,6 +1,6 @@
 import Search from './Search.jsx';
 import Table from './Table.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import search from '../assets/images/svg/search.svg';
@@ -13,10 +13,13 @@ function MedicineList() {
   const[searchText, setSearchText] = useState('');
   const[filterText, setFilterText] = useState('');
   const[result, setResult] = useState([]);
+  const {username} = useParams();
 
 
   useEffect(() => {
-const response = axios.get('http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin')
+const response = axios.get(`http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin/${username}`,{
+  headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+})
 .then(res =>setResult(res.data)).catch(err => console.log(err))
   }, [])
 console.log(result)

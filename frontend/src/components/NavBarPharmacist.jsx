@@ -13,9 +13,13 @@ function NavBarPharmacist(props) {
   const handleLogout = async (event) => {
     event.preventDefault(); 
     try {
-    const response = await axios.get('http://localhost:8000/logout');
-    localStorage.removeItem('token');
-    navigate(`/login`);}
+      console.log(sessionStorage.getItem("token"));
+      const response = await axios.post(`http://localhost:8000/logout/${props.username}`,"",{
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      });
+      sessionStorage.removeItem('token');
+      console.log(sessionStorage.getItem("token"));
+      navigate(`/login`);}
     catch (error) {
       console.error(error.response ? error.response.data : error.message);
       alert(error.response ? error.response.data.error : error.message);

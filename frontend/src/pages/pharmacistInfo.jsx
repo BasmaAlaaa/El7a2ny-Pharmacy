@@ -11,14 +11,18 @@ function PharmacistInfo(){
 
 
     useEffect(() => {
-  const response = axios.get(`http://localhost:8000/Admin/PharmacistInfo/${username}`)
+  const response = axios.get(`http://localhost:8000/Admin/PharmacistInfo/${usernameAdmin}/${username}`,{
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
 
   console.log(result)
 
   const handleRemove=() => {
-    const response = axios.delete(`http://localhost:8000/Admin/RemovePatientOrPharmacist/${username}`)
+    const response = axios.delete(`http://localhost:8000/Admin/RemovePatientOrPharmacist/${usernameAdmin}/${username}`,{
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
   .then(res =>setResultDelete(res.data)).catch(err => console.log(err))
   }
   console.log(resultDelete)

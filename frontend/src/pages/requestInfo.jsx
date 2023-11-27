@@ -13,7 +13,10 @@ function RequestInfo(){
 
     const handleAccept = async (Username, action) => {
       try{
-        const response =await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${Username}`, { action: 'accept' });
+        const response =await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${usernameAdmin}/${Username}`, { action: 'accept' },
+        {
+          headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+        });
         if (response.status === 200) {
             alert(`Pharamcist accepted successfully`);
             console.log(response.data.message);
@@ -28,7 +31,10 @@ function RequestInfo(){
 
   const handleReject = async (Username, action) => {
     try{
-      const response =await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${Username}`, { action: 'reject' });
+      const response =await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${usernameAdmin}/${Username}`, {action: 'reject'},
+      {
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      });
       if (response.status === 200) {
             alert(`Pharamcist rejected successfully`);
               console.log(response.data.message);
@@ -41,7 +47,9 @@ function RequestInfo(){
   };
   const handleAcceptReject = async (action) => {
     try {
-      const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${username}`, { action });
+      const response = await axios.post(`http://localhost:8000/Admin/acceptOrRejectPharmacistRequest/${usernameAdmin}/${username}`, {action},{
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      });
       alert(`Pharmacist ${action === 'accept' ? 'accepted' : 'rejected'} successfully`);
       console.log(response.data.message);
       //navigate('/administratorView');
@@ -53,7 +61,9 @@ function RequestInfo(){
   };
   
     useEffect(() => {
-  const response = axios.get(`http://localhost:8000/Admin/InfosOfAPharmacistRequest/${username}`)
+  const response = axios.get(`http://localhost:8000/Admin/InfosOfAPharmacistRequest/${usernameAdmin}/${username}`,{
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
 
