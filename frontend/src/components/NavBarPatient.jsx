@@ -54,7 +54,14 @@ function NavBarPatient(props) {
               key="navBtn"
             />
           </div>
-
+          <div>
+            <MainBtn
+              txt="view Order History"
+              style="green-btn"
+              action={() => navigate(`/orderDetails/${props.username}`)}
+              key="navBtn"
+            />
+          </div>
           <div>
             <MainBtn
               txt="Logout"
