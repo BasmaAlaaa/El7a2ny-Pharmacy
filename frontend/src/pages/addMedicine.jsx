@@ -52,7 +52,9 @@ function AddMedicine() {
     data.append('MedicalUse', medicalUse);
     
     console.log("fontend",data)
-    const addmeds = axios.post('http://localhost:8000/Pharmacist/AddMedicine', data)
+    const addmeds = axios.post(`http://localhost:8000/Pharmacist/AddMedicine/${username}`, data, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
       .then(res => console.log(res.data)).catch(err => console.log(err))
   }
 

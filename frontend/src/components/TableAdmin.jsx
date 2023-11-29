@@ -6,24 +6,14 @@ function CaseTableBody({ data, username }) {
 
   return (
     <>
-    <th>{data.Name}</th>
-    <td>{data.ActiveIngredients}</td>
-    <td>{data.Price}</td>
-    <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>
-    <td>{data.MedicalUse}</td>
-    <td>{data.Quantity}</td>
-    <td>{data.QuantitySold}</td>
-      
-      <td className="py-3 text-align-center">
-      <div className="d-flex flex-row">
-      <button
-        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-        onClick={()=>navigate(`/editMedicine/${data.Name}/${username}`)}
-      >
-        Edit
-      </button>
-      </div>
-      </td>
+    {data.Name && <th>{data.Name}</th>}
+
+    {data.ActiveIngredients && <td>{data.ActiveIngredients}</td>}
+    {data.Price && <td>{data.Price}</td>}
+    {data.Picture && <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>}
+    {data.MedicalUse && <td>{data.MedicalUse}</td>}
+    {data.Quantity && <td>{data.Quantity}</td>}
+    {data.Sales && <td>{data.Sales}</td>}
     </>
   );
 }
@@ -41,7 +31,7 @@ function CaseTableBody({ data, username }) {
 //   );
 // }
 
-function TablePharmacist({ tHead, data, searchText, filterText, username}) {
+function TableAdmin({ tHead, data, searchText, filterText, username}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -73,4 +63,4 @@ function TablePharmacist({ tHead, data, searchText, filterText, username}) {
   );
 }
 
-export default TablePharmacist;
+export default TableAdmin;

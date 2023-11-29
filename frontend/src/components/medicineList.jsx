@@ -1,5 +1,5 @@
 import Search from './Search.jsx';
-import Table from './Table.jsx';
+import TableAdmin from './TableAdmin.jsx';
 import { useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -22,7 +22,7 @@ const response = axios.get(`http://localhost:8000/Admin/AvailableMedicinesDetail
 })
 .then(res =>setResult(res.data)).catch(err => console.log(err))
   }, [])
-console.log(result)
+console.log(result) 
 result.map((e) => {
   console.log(e)
 })
@@ -33,7 +33,7 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse','Add to cart'];
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse'];
 
   return (
     <div>
@@ -68,7 +68,7 @@ let navigate = useNavigate()
         </select>
       </div>
     </div>
-      <Table tHead={tHead} data={result} searchText={searchText} filterText={filterText}/>
+      <TableAdmin tHead={tHead} data={result} searchText={searchText} filterText={filterText}/>
     </div>
   );
 }

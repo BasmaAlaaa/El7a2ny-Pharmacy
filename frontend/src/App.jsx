@@ -43,7 +43,7 @@ function App() {
           <Route exact path="/pharmacistView/:username" element={<PharmacistView />} />
           <Route exact path="/administratorView/:username" element={<AdministratorView />} />
           <Route exact path="/medicineView/:name" element={<MedicineView />} />
-          <Route exact path="/medicineList" element={<MedicineList />} />
+          <Route exact path="/medicineList/:username" element={<MedicineList />} />
           <Route exact path="/addAdministrator/:username" element={<AddAdministrator />} />
           <Route exact path="/addMedicine/:username" element={<AddMedicine />} />
           <Route exact path="/editMedicine/:name/:username" element={<EditMedicine />} />
@@ -53,8 +53,6 @@ function App() {
           <Route exact path="/cartInfo/:username" element={<CartInfo />} />
           <Route exact path="/checkout/:username" element={<Checkout />} />
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
-
-
         </Routes>
       </main>
     </div>

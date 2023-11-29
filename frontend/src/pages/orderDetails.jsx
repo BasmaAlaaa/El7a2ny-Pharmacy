@@ -19,7 +19,9 @@ function OrderDetails(){
     const[result, setResult] = useState([]);
 
     useEffect(() => {
-  const response = axios.get(`http://localhost:8000/Patient/GetOrderDetails/${username}`)
+  const response = axios.get(`http://localhost:8000/Patient/GetOrderDetails/${username}`, {
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
   //  setId(result._id);

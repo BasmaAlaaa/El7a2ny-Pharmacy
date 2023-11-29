@@ -4,14 +4,16 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 function MedicineView() {
-  const {name} = useParams();
+  const {name, username} = useParams();
   useEffect(() => {
     const getRequest = {
         url: 'http://localhost:8000/Pharmacist/MedicineByName',
         method: 'GET',
         data: {
+          username: {username},
           name: {name}
         },
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
       };
       
       axios(getRequest)

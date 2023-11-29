@@ -34,14 +34,18 @@ function EditMedicine() {
     e.preventDefault();
     const data = { ActiveIngredients: activeIngredients }
     console.log(data)
-    const response = axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${name}`, data)
+    const response = axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${username}/${name}`, data, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
       .then(res => console.log(res.data)).catch(err => console.log(err))
   }
   const updatePrice = (e) => {
     e.preventDefault();
     const data = { Price: price }
     console.log(data)
-    const response = axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${name}`, data)
+    const response = axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${username}/${name}`, data, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
       .then(res => console.log(res.data)).catch(err => console.log(err))
   }
   const updatePicture = (e) => {
@@ -49,13 +53,10 @@ function EditMedicine() {
     const data = new FormData();
     data.append('Picture', picture);
     console.log(data);
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // };
 
-    axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${name}`, data)
+    axios.put(`http://localhost:8000/Pharmacist/UpdateMed/${username}/${name}`, data, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
   }

@@ -11,7 +11,9 @@ function CaseTableBody({ data, username }) {
 
   const handleCancel = async(id) => {
 
-      const response = axios.put(`http://localhost:8000/Patient/CancelOrder/${id}`)
+      const response = axios.put(`http://localhost:8000/Patient/CancelOrder/${id}`,{
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      })
        .then(res =>setResultCancel(res)).catch(err => console.log(err))
      
           window.location.reload(true);        

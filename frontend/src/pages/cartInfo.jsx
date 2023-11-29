@@ -18,7 +18,9 @@ function CarttInfo(){
 
 
     useEffect(() => {
-  const response = axios.get(`http://localhost:8000/Patient/viewCartItems/${username}`)
+  const response = axios.get(`http://localhost:8000/Patient/viewCartItems/${username}`,{
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
   console.log(result.items)

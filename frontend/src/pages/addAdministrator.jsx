@@ -37,7 +37,6 @@ function AddAdministrator() {
       const data = {Username:Username, Password:password, Email:email}
     console.log(data);
     console.log(sessionStorage.getItem("token"));
-    //const response = axios.post(`http://localhost:8000/Admin/AddAdmin/${username}`, data)
     await axios.post(`http://localhost:8000/Admin/AddAdmin/${username}`,data,{
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     });

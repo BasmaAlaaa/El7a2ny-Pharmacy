@@ -23,7 +23,9 @@ function Checkout() {
     console.log('typee', type)
 
     useEffect(() => {
-      const response = axios.get(`http://localhost:8000/Patient/GetPatientAddresses/${username}`)
+      const response = axios.get(`http://localhost:8000/Patient/GetPatientAddresses/${username}`,{
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      })
       .then(res =>setAllAddresses(res.data)).catch(err => console.log(err))
         }, [])
         console.log('all add', allAddresses);
@@ -41,13 +43,17 @@ function Checkout() {
     const handleSubmit = (e) => {
       const data = {newAddress:address};
       console.log(data)
-      const response = axios.post(`http://localhost:8000/Patient/AddAddressToPatient/${username}`, data)
+      const response = axios.post(`http://localhost:8000/Patient/AddAddressToPatient/${username}`, data, {
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      })
   .then(res =>console.log(res.data)).catch(err => console.log(err))
     }
 console.log('typeee', type)
     const handleSubmitOrder = async(e) => {
      // try{
-        const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`)
+        const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
+          headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+        })
         .then(res =>navigate(`/orderDetails/${username}`)).catch(err => alert(err))
         // if (response.status === 200) {
         //       navigate(`/orderDetails/${username}`);

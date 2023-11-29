@@ -8,7 +8,9 @@ function CaseTableBody({ data, username }) {
   const[result, setResult] = useState('');
   const handleAdd = async() => {
     try{
-    const response = await axios.post(`http://localhost:8000/Patient/AddMedicineToCart/${username}/${data.Name}`)
+    const response = await axios.post(`http://localhost:8000/Patient/AddMedicineToCart/${username}/${data.Name}`, "", {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
    // .then(res =>setResult(res)).catch(err => console.log(err))
       if (response.status === 200) {
             alert(response.data.message);
@@ -41,7 +43,7 @@ function CaseTableBody({ data, username }) {
     {data.EducationalBackground&&<td>{data.EducationalBackground}</td>}
       
 
-      {data.ActiveIngredients &&
+      {data.ActiveIngredients && 
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button

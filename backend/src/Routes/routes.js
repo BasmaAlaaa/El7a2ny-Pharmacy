@@ -74,27 +74,27 @@ router.post('/SubmitRequestToBePharmacist', upload.fields([
 ]), submitRequestToBePharmacist);
 
 // Routes of Patient
-router.get('/AvailableMedicinesDetailsByPatient', availableMedicinesDetailsByPatient);
-router.get('/MedicineByName/:Name', getMedicineByName);
-router.get('/MedicineByMedicalUse/:MedicalUse', getMedicineByMedicalUse);
-router.post('/AddAddressToPatient/:Username', addAddressToPatient);
-router.get('/GetPatientAddresses/:Username', getPatientAddresses);
-router.get('/GetOrderDetails/:Username', getOrderDetails);
-router.put('/CancelOrder/:orderId', cancelOrder);
-router.get('/viewCartItems/:Username', viewCartItems);
-router.delete('/removeItemFromCart/:Username/:MedicineName', removeAnItemFromCart);
-router.post('/addMedicineToCart/:Username/:MedicineName', addMedicineToCart);
-router.put('/updateQuantity/:Username/:MedicineName/:quantity', updateMedicineQuantityInCart);
-router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', checkoutOrder);
+router.get('/AvailableMedicinesDetailsByPatient/:Username', verify, availableMedicinesDetailsByPatient);
+router.get('/MedicineByName/:Username/:Name', verify, getMedicineByName);
+router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByMedicalUse);
+router.post('/AddAddressToPatient/:Username', verify, addAddressToPatient);
+router.get('/GetPatientAddresses/:Username', verify, getPatientAddresses);
+router.get('/GetOrderDetails/:Username', verify, getOrderDetails);
+router.put('/CancelOrder/:orderId', verify, cancelOrder);
+router.get('/viewCartItems/:Username', verify, viewCartItems);
+router.delete('/removeItemFromCart/:Username/:MedicineName', verify, removeAnItemFromCart);
+router.post('/addMedicineToCart/:Username/:MedicineName', verify, addMedicineToCart);
+router.put('/updateQuantity/:Username/:MedicineName/:quantity', verify, updateMedicineQuantityInCart);
+router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', verify, checkoutOrder);
 
 // Routes of Pharmacist
-router.get('/AvailableMedicinesDetailsByPharmacist', availableMedicinesDetailsByPharmacist);
-router.get('/AvailableMedicinesQuantity', availableMedicinesQuantity);
-router.get('/MedQuantityAndSales/:Name', medQuantityAndSales);
-router.post('/AddMedicine', upload.single('Picture'), addMedicine);
-router.put('/UpdateMed/:Name', upload.single('Picture'), updateMed);
-router.get('/MedicineByName/:Name', getMedicineByName);
-router.get('/MedicineByMedicalUse/:MedicalUse', getMedicineByMedicalUse);
+router.get('/AvailableMedicinesDetailsByPharmacist/:Username', verify, availableMedicinesDetailsByPharmacist);
+router.get('/AvailableMedicinesQuantity/:Username', verify, availableMedicinesQuantity);
+router.get('/MedQuantityAndSales/:Username/:Name', verify, medQuantityAndSales);
+router.post('/AddMedicine/:Username', verify, upload.single('Picture'), addMedicine);
+router.put('/UpdateMed/:Username/:Name', verify, upload.single('Picture'), updateMed);
+router.get('/MedicineByName/:Username/:Name', verify, getMedicineByName);
+router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByMedicalUse);
 
 
 module.exports = router;

@@ -14,7 +14,9 @@ function PatientView(){
   
   
     useEffect(() => {
-  const response = axios.get('http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin')
+  const response = axios.get(`http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin/${username}`, {
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
     }, [])
   console.log(result)

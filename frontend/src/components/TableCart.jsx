@@ -6,7 +6,9 @@ function CaseTableBody({ data, username }) {
   let navigate = useNavigate();
   const handleRemove = async() => {
     try{
-    const response = await axios.delete(`http://localhost:8000/Patient/removeItemFromCart/${username}/${data.medicine}`)
+    const response = await axios.delete(`http://localhost:8000/Patient/removeItemFromCart/${username}/${data.medicine}`, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
    // .then(res =>setResult(res)).catch(err => console.log(err))
       if (response.status === 200) {
             alert(response.data.message);
@@ -21,7 +23,9 @@ function CaseTableBody({ data, username }) {
       const handleQuantityAdd = async() => {
         try{
           const newQuantity = data.quantity+1;
-        const response = await axios.put(`http://localhost:8000/Patient/updateQuantity/${username}/${data.medicine}/${newQuantity}`)
+        const response = await axios.put(`http://localhost:8000/Patient/updateQuantity/${username}/${data.medicine}/${newQuantity}`,"",{
+          headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+        })
        // .then(res =>setResult(res)).catch(err => console.log(err))
           if (response.status === 200) {
                 alert(response.data.message);
@@ -36,7 +40,9 @@ function CaseTableBody({ data, username }) {
           const handleQuantityRemove = async() => {
             if(data.quantity>1){
             try{
-            const response = await axios.put(`http://localhost:8000/Patient/updateQuantity/${username}/${data.medicine}/${data.quantity-1}`) 
+            const response = await axios.put(`http://localhost:8000/Patient/updateQuantity/${username}/${data.medicine}/${data.quantity-1}`, "", {
+              headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+            }) 
             if (response.status === 200) {
               alert(response.data.message);
                 console.log(response.data.message);
@@ -49,7 +55,9 @@ function CaseTableBody({ data, username }) {
           }
           else{
             try{
-              const response = await axios.delete(`http://localhost:8000/Patient/removeItemFromCart/${username}/${data.medicine}`)
+              const response = await axios.delete(`http://localhost:8000/Patient/removeItemFromCart/${username}/${data.medicine}`, {
+                headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+              })
               if (response.status === 200) {
                 alert(response.data.message);
                   console.log(response.data.message);
