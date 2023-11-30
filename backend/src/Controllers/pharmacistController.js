@@ -1,6 +1,8 @@
 const { default: mongoose } = require('mongoose');
+const nodemailer = require('nodemailer');
 const Medicine = require("../Models/medicine");
-
+const Pharmacist= require("../Models/pharmacist");
+const Notification = require("../Models/notifications");    
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPharmacist = async (req, res) => {
 
@@ -190,6 +192,107 @@ const getMedicineByMedicalUse = async (req, res) => {
   }
 }
 
+// Check if any medicine quantity is out of stock add a notification
+const checkMedicineQuantityNotification = async () => {
+  try {
+    const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
+    for (const medicine of outOfStockMedicines) {
+      const existingNotification = await Notification.findOne({ type: "Pharmacist", message: ` ${medicine.Name} is out of stock` });
+
+      if (!existingNotification) {
+        const newNotification = await Notification.create({
+          type: "Pharmacist",
+          MedicineName: `${medicine.Name}`,
+          message: ` ${medicine.Name} is out of stock`,
+        });
+        await newNotification.save();
+        console.log('notification added');
+        console.log(outOfStockMedicines); // Print out the outOfStockMedicines array
+      } else {
+        console.log('notification already exists');
+      }
+    } 
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteNotificationIfQuantityNotZero = async () => {
+  try {
+    const notifications = await Notification.find({ type: "Pharmacist" });
+
+    for (let i = 0; i < notifications.length; i++) {
+      const notification = notifications[i];
+      const medicine = await Medicine.findOne({ Name: notification.MedicineName });
+      console.log('Medicine:', medicine);
+
+      if (medicine && medicine.Quantity > 0) {
+        await Notification.findOneAndDelete({ MedicineName: notification.MedicineName });
+        console.log(`Notification for ${notification.MedicineName} deleted`);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+// Check if any medicine quantity is out of stock and send an email notification to all pharmacists
+const checkMedicineQuantityEmailNotification = async () => {
+  try {
+    const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
+
+    if (outOfStockMedicines.length > 0) {
+      const pharmacists = await Pharmacist.find();
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'SuicideSquadGUC@gmail.com',
+          pass: 'wryq ofjx rybi hpom'
+        }
+      });
+
+      for (const pharmacist of pharmacists) {
+        const mailOptions = {
+          
+          from: 'SuicideSquadGUC@gmail.com',
+          to: pharmacist.Email, // Send email to each pharmacist
+          subject: 'Medicine out of stock',
+          text: `Dear ${pharmacist.Name},
+
+          I hope this message finds you well. We wanted to inform you that the following medicines in your pharmacy are currently depleted:
+          
+          ${outOfStockMedicines.map((medicine) => `- ${medicine.Name}`).join('\n')}
+          
+          As a valued partner, we understand the importance of maintaining a steady supply of essential medications for your customers.
+          
+          To address this issue promptly, we recommend placing a restocking order at your earliest convenience to ensure that these medicines remain available to meet the needs of your customers.
+          
+          If you encounter any challenges or require assistance in the ordering process, please don't hesitate to reach out to our support team at SuicideSquadGUC@gmail.com.
+          
+          Thank you for your attention to this matter, and we appreciate your continued partnership.
+
+          Best regards,
+          Suicide Squad Support Team`
+        };
+        console.log('Email sent to:', pharmacist.Email);
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.error(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
 module.exports = {
   availableMedicinesDetailsByPharmacist,
   availableMedicinesQuantity,
@@ -197,5 +300,12 @@ module.exports = {
   addMedicine,
   updateMed,
   getMedicineByName,
-  getMedicineByMedicalUse
+  getMedicineByMedicalUse,
+  checkMedicineQuantityNotification,
+  checkMedicineQuantityEmailNotification,
+  deleteNotificationIfQuantityNotZero,
+
 };
+
+
+

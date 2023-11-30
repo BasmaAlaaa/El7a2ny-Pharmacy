@@ -45,7 +45,10 @@ const {
     availableMedicinesQuantity,
     medQuantityAndSales,
     addMedicine,
-    updateMed
+    updateMed,
+    checkMedicineQuantityNotification,
+    checkMedicineQuantityEmailNotification,
+    deleteNotificationIfQuantityNotZero
 } = require('../Controllers/pharmacistController');
 
 const { verify } = require('../Controllers/loginController');
@@ -95,6 +98,8 @@ router.post('/AddMedicine/:Username', verify, upload.single('Picture'), addMedic
 router.put('/UpdateMed/:Username/:Name', verify, upload.single('Picture'), updateMed);
 router.get('/MedicineByName/:Username/:Name', verify, getMedicineByName);
 router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByMedicalUse);
-
+router.post('/CheckMedicineQuantityNotification',checkMedicineQuantityNotification);
+router.post('/CheckMedicineQuantityEmailNotification', checkMedicineQuantityEmailNotification);
+router.post('/deleteNotificationIfQuantityNotZero', deleteNotificationIfQuantityNotZero);
 
 module.exports = router;
