@@ -31,6 +31,7 @@ return (
               key="navBtn"
             />
     <MedicineListPharmacist username={username}/>
+    <h2>Wallet Amount:</h2>
     </div>
 )
 }

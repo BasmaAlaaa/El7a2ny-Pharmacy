@@ -68,7 +68,9 @@ return (
       </div>
     </div>
       <Table tHead={tHead} data={result} searchText={searchText} filterText={filterText} username={username}/>
-    </div>    </div>
+    </div> 
+    <h2>Wallet Amount:</h2>
+   </div>
 )
 }
 export default PatientView;
