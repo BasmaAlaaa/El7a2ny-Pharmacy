@@ -55,7 +55,12 @@ console.log('typeee', type)
         alert('Missing fields')
       }
         else{
-          const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
+          axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityEmailNotification', {
+          headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+        })
+        .then(res =>console.log(res.data)).catch(err => console.log(err))
+
+          axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
           headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
         })
         .then(res =>navigate(`/orderDetails/${username}`)).catch(err => alert(err))
