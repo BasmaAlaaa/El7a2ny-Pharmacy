@@ -22,7 +22,7 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
       if(!medicines){
           res.status(400).json({error: "There are no available medicines!"})
       }
-      res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture}) => ({Name, ActiveIngredients, Price, Picture})));
+      res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity})));
     } catch (error) {
       res.status(500).json({ error: "Server error", details: error.message });
     }
