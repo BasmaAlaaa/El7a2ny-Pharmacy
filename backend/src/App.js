@@ -52,6 +52,8 @@ app.use("/Guest", router);
 app.use("/Patient", router);
 app.use("/Pharmacist", router);
 
+app.use('/DocotorFromTheClinic', router)
+
 const{
   sendOTP,
   updatePassword,
