@@ -14,7 +14,7 @@ function PatientView(){
   
   
     useEffect(() => {
-  const response = axios.get(`http://localhost:8000/Admin/AvailableMedicinesDetailsByAdmin/${username}`, {
+  const response = axios.get(`http://localhost:8000/Patient/AvailableMedicinesDetailsByPatient/${username}`, {
     headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
   })
   .then(res =>setResult(res.data)).catch(err => console.log(err))
@@ -30,7 +30,7 @@ function PatientView(){
   console.log(filterText)
   let navigate = useNavigate()
   
-    let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse','Add to cart'];
+    let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Available', 'Add to Cart'];
 
 return (
     <div>
@@ -68,7 +68,9 @@ return (
       </div>
     </div>
       <Table tHead={tHead} data={result} searchText={searchText} filterText={filterText} username={username}/>
-    </div>    </div>
+    </div> 
+    <h2>Wallet Amount:</h2>
+   </div>
 )
 }
 export default PatientView;

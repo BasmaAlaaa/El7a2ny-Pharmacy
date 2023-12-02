@@ -31,7 +31,6 @@ function CaseTableBody({ data, username }) {
     {data.Price && <td>{data.Price}</td>}
     {data.Picture && <td> <img src = {data.Picture} alt='image' width={60} height={60}/> </td>}
     {data.MedicalUse && <td>{data.MedicalUse}</td>}
-    {data.Quantity && <td>{data.Quantity}</td>}
     {data.Sales && <td>{data.Sales}</td>}
 
     {data.Gender&&<td>{data.Gender}</td>}
@@ -41,9 +40,10 @@ function CaseTableBody({ data, username }) {
     {data.Affiliation&&<td>{data.Affiliation}</td>}
     {data.HourlyRate&&<td>{data.HourlyRate}</td>}
     {data.EducationalBackground&&<td>{data.EducationalBackground}</td>}
-      
-
-      {data.ActiveIngredients && 
+    {data.Quantity===0 && <td>Sold Out</td>}
+    {data.Quantity>0 && <td>Available</td>}
+    
+    {data.ActiveIngredients && data.Quantity>0 &&
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
@@ -55,6 +55,7 @@ function CaseTableBody({ data, username }) {
       </div>
       </td>
       }
+
       {data.Gender &&
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">

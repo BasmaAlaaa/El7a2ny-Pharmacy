@@ -51,7 +51,16 @@ function Checkout() {
 console.log('typeee', type)
     const handleSubmitOrder = async(e) => {
      // try{
-        const response = axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
+      if(type==='card' && !(cardCVV && cardDate && cardNumber)){
+        alert('Missing fields')
+      }
+        else{
+          axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityEmailNotification', {
+          headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+        })
+        .then(res =>console.log(res.data)).catch(err => console.log(err))
+
+          axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
           headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
         })
         .then(res =>navigate(`/orderDetails/${username}`)).catch(err => alert(err))
@@ -64,8 +73,9 @@ console.log('typeee', type)
         //       alert(`Failed to submit order `);
         //       //console.error('Error removing item:', error);
         //     };
-            e.preventDefault();        
+            e.preventDefault();  
         }
+      }
 
   let tHead = ['Address', 'Select'];
 
@@ -176,15 +186,6 @@ console.log('typeee', type)
             required={true}
            onChange={(e) => setCardCVV(e.target.value)}
           />
-
-          <div className="mt-3">
-            <MainBtn
-              txt='Add Card'
-              style='green-btn'
-              action={handleAdd}
-              
-            />
-            </div>
 
             </div>
 }

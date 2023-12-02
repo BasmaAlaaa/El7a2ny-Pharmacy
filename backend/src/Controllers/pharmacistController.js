@@ -260,7 +260,7 @@ const checkMedicineQuantityEmailNotification = async () => {
           subject: 'Medicine out of stock',
           text: `Dear ${pharmacist.Name},
 
-          I hope this message finds you well. We wanted to inform you that the following medicines in your pharmacy are currently depleted:
+          I hope this message finds you well. We wanted to inform you that the following medicines in your pharmacy are currently out of stock:
           
           ${outOfStockMedicines.map((medicine) => `- ${medicine.Name}`).join('\n')}
           
@@ -306,6 +306,3 @@ module.exports = {
   deleteNotificationIfQuantityNotZero,
 
 };
-
-
-

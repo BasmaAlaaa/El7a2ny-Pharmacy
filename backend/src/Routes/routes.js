@@ -102,4 +102,9 @@ router.post('/CheckMedicineQuantityNotification',checkMedicineQuantityNotificati
 router.post('/CheckMedicineQuantityEmailNotification', checkMedicineQuantityEmailNotification);
 router.post('/deleteNotificationIfQuantityNotZero', deleteNotificationIfQuantityNotZero);
 
+
+
+const {GetMedicineByDoctor}=require('../Controllers/DoctorFromTheClinic');
+router.get('/GetMedicineByDoctor/:Name',GetMedicineByDoctor);
+
 module.exports = router;

@@ -15,7 +15,7 @@ function CaseTableBody({ data, username }) {
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
       })
        .then(res =>setResultCancel(res)).catch(err => console.log(err))
-     
+      console.log('result cancel',resultCancel);
           window.location.reload(true);        
       }
   return (
