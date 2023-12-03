@@ -193,15 +193,18 @@ const getMedicineByMedicalUse = async (req, res) => {
 }
 
 // Check if any medicine quantity is out of stock add a notification
-const checkMedicineQuantityNotification = async () => {
+const checkMedicineQuantityNotification = async (req) => {
+  const {Username} = req.params;
   try {
     const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
     for (const medicine of outOfStockMedicines) {
       const existingNotification = await Notification.findOne({ type: "Pharmacist", message: ` ${medicine.Name} is out of stock` });
-
+        console.log(Username);
       if (!existingNotification) {
+
         const newNotification = await Notification.create({
           type: "Pharmacist",
+          username: `${Username}`,
           MedicineName: `${medicine.Name}`,
           message: ` ${medicine.Name} is out of stock`,
         });
@@ -290,8 +293,18 @@ const checkMedicineQuantityEmailNotification = async () => {
   }
 };
 
-
-
+// Display all notifications
+const displayNotifications = async (req, res) => {
+  try {
+    await checkMedicineQuantityNotification(req, res);
+    await deleteNotificationIfQuantityNotZero();
+    const notifications = await Notification.find();
+    const notificationMessages = notifications.map(notification => notification.message);
+    res.status(200).json(notificationMessages);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch notifications" });
+  }
+};
 
 module.exports = {
   availableMedicinesDetailsByPharmacist,
@@ -304,5 +317,5 @@ module.exports = {
   checkMedicineQuantityNotification,
   checkMedicineQuantityEmailNotification,
   deleteNotificationIfQuantityNotZero,
-
+  displayNotifications
 };
