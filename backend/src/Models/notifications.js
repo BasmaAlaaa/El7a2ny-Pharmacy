@@ -5,6 +5,11 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  username:{
+    type: String,
+    required: true
+  },
+  
   MedicineName: {
     type: String,
     required: true

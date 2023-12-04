@@ -54,8 +54,9 @@ const {
     unarchiveMedicine,
     viewSalesReportOnChosenMonth,
     viewSalesReportOnMedicine,
-    viewSalesReportOnDate
+    viewSalesReportOnDate,
 
+    displayNotifications
 } = require('../Controllers/pharmacistController');
 
 const { verify } = require('../Controllers/loginController');
@@ -115,6 +116,10 @@ router.get('/viewSalesReportOnChosenMonth/:Username/:chosenMonth',viewSalesRepor
 router.get('/viewSalesReportOnMedicine/:Username/:medicineName',viewSalesReportOnMedicine);
 router.get('/viewSalesReportOnDate/:Username/:date',viewSalesReportOnDate);
 
+router.post('/CheckMedicineQuantityNotification/:Username',verify,checkMedicineQuantityNotification);
+router.post('/CheckMedicineQuantityEmailNotification/:Username',verify, checkMedicineQuantityEmailNotification);
+router.post('/deleteNotificationIfQuantityNotZero/:Username',verify, deleteNotificationIfQuantityNotZero);
+router.get('/displayNotifications/:Username',verify, displayNotifications);
 
 
 

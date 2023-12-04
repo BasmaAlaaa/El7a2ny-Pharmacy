@@ -11,7 +11,7 @@ const MongoURI = "mongodb+srv://samaelharras:samaelharras123@aclcluster.hmtxznh.
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: "*",
   credentials: true,
 }));
 
