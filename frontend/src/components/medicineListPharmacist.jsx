@@ -29,7 +29,7 @@ const onFilterValueChanged=(event)=>{
 console.log(filterText)
 let navigate = useNavigate()
 
-  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'Quantity', 'Sales', 'Edit'];
+  let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'Quantity', 'Sales', 'Edit', 'archive/unarchive'];
   let data = [{
     medicineName: 'Cataflam',
     activeIngredients: 'Paracetamol',
