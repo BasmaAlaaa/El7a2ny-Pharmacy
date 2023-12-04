@@ -424,14 +424,6 @@ const viewSalesReportOnDate = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-
-
-
-
-
-
-
-
 // Display all notifications
 const displayNotifications = async (req, res) => {
   try {
