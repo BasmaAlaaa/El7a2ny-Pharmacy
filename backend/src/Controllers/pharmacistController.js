@@ -196,7 +196,12 @@ const getMedicineByMedicalUse = async (req, res) => {
 // Check if any medicine quantity is out of stock add a notification
 const checkMedicineQuantityNotification = async (req) => {
   const {Username} = req.params;
+
   try {
+    if (Username===undefined){
+      res.status(403).json("undefined user");
+      return;
+    }
     const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
     for (const medicine of outOfStockMedicines) {
       const existingNotification = await Notification.findOne({ type: "Pharmacist", message: `${medicine.Name} is out of stock` });
