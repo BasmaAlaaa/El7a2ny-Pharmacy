@@ -4,12 +4,16 @@ import NavBarPharmacist from "../components/NavBarPharmacist";
 import MedicineListPharmacist from "../components/medicineListPharmacist";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import TableNotifications from "../components/TableNotifications";
 
 
 function PharmacistView(){
     const navigate = useNavigate();
     const {username} = useParams();
-    const [result, setResult] = useState('');
+    const [notifications, setNotifications] = useState([]);
+    let tHeadNot = ['Message'];
+
+
     useEffect(() => {
         axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityNotification', {
           headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
@@ -20,6 +24,13 @@ function PharmacistView(){
         })
         .then(res =>console.log(res.data)).catch(err => console.log(err))
           }, [])
+    useEffect(() => {
+            const response = axios.get(`http://localhost:8000/Pharmacist/displayNotifications/${username}`,{
+              headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+            })
+              .then(res => setNotifications(res.data)).catch(err => console.log(err))
+          }, [])
+          console.log('notif', notifications);
         
 return (
     <div>
@@ -32,6 +43,8 @@ return (
             />
     <MedicineListPharmacist username={username}/>
     <h2>Wallet Amount:</h2>
+    <h2>Notifications:</h2>
+    <TableNotifications tHead={tHeadNot} data={notifications} />
     </div>
 )
 }
