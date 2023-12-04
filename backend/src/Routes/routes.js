@@ -36,7 +36,8 @@ const {
     removeAnItemFromCart,
     addMedicineToCart,
     updateMedicineQuantityInCart,
-    checkoutOrder
+    checkoutOrder,
+    viewAlternatives
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -48,7 +49,13 @@ const {
     updateMed,
     checkMedicineQuantityNotification,
     checkMedicineQuantityEmailNotification,
-    deleteNotificationIfQuantityNotZero
+    deleteNotificationIfQuantityNotZero,
+    archiveMedicine,
+    unarchiveMedicine,
+    viewSalesReportOnChosenMonth,
+    viewSalesReportOnMedicine,
+    viewSalesReportOnDate
+
 } = require('../Controllers/pharmacistController');
 
 const { verify } = require('../Controllers/loginController');
@@ -89,6 +96,7 @@ router.delete('/removeItemFromCart/:Username/:MedicineName', verify, removeAnIte
 router.post('/addMedicineToCart/:Username/:MedicineName', verify, addMedicineToCart);
 router.put('/updateQuantity/:Username/:MedicineName/:quantity', verify, updateMedicineQuantityInCart);
 router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', verify, checkoutOrder);
+router.get('/viewAlternatives/:Username/:medicineName',viewAlternatives);
 
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist/:Username', verify, availableMedicinesDetailsByPharmacist);
@@ -101,6 +109,12 @@ router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByM
 router.post('/CheckMedicineQuantityNotification',checkMedicineQuantityNotification);
 router.post('/CheckMedicineQuantityEmailNotification', checkMedicineQuantityEmailNotification);
 router.post('/deleteNotificationIfQuantityNotZero', deleteNotificationIfQuantityNotZero);
+router.put('/archiveMedicine/:Username/:medicineName' , archiveMedicine);
+router.put('/unarchiveMedicine/:Username/:medicineName' , unarchiveMedicine);
+router.get('/viewSalesReportOnChosenMonth/:Username/:chosenMonth',viewSalesReportOnChosenMonth);
+router.get('/viewSalesReportOnMedicine/:Username/:medicineName',viewSalesReportOnMedicine);
+router.get('/viewSalesReportOnDate/:Username/:date',viewSalesReportOnDate);
+
 
 
 

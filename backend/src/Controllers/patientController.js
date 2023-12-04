@@ -3,11 +3,12 @@ const Medicine = require('../Models/medicine');
 const Patient = require('../Models/patient');
 const Order = require('../Models/Order');
 const Cart =require('../Models/Cart');
-
+const SReport = require('../Models/SReport');
 require("dotenv").config();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
-// Task 12: view a list of all available medicines
+// Task 12: view a list of all available medicines 
+// i edited this function in order to make the patient only view unarchived medicines  (megz)
 const availableMedicinesDetailsByPatient = async (req, res) => {
 
   const { Username } = req.params;
@@ -17,12 +18,22 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
   if (!(req.user.Username === Username)) {
       res.status(403).json("You are not logged in!");
   }else{
-    try{
-      const medicines = await Medicine.find();
-      if(!medicines){
-          res.status(400).json({error: "There are no available medicines!"})
+    try {
+      // Only fetching unarchived medicines
+      const medicines = await Medicine.find({ Status: 'unarchived' });
+
+      if (!medicines || medicines.length === 0) {
+        res.status(400).json({ error: "There are no available medicines!" });
+      } else {
+        res.status(200).json(medicines.map(({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity }) => ({
+          Name,
+          ActiveIngredients,
+          Price,
+          Picture,
+          MedicalUse,
+          Quantity
+        })));
       }
-      res.status(200).json(medicines.map(({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity}) => ({Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity})));
     } catch (error) {
       res.status(500).json({ error: "Server error", details: error.message });
     }
@@ -109,6 +120,36 @@ const checkoutOrder = async (req, res) => {
         TotalAmount: cart.totalAmount,
     
       });
+
+
+      const currentMonth = new Date().toLocaleString('default',{month: 'long'});
+      let total = 0;
+      total+= cart.totalAmount;
+
+      let salesDocument = await SReport.findOne();
+      if(!salesDocument)
+        salesDocument = new SReport();
+
+      const salesEntry = salesDocument.monthlySales.find(entry => entry.Month === currentMonth);
+      if(salesEntry)
+        salesEntry.totalSales+=total;
+      else{
+        salesDocument.monthlySales.push({Month: currentMonth ,totalSales : total});
+      }
+      const currentDate = new Date();
+      const dateWithoutTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  
+      // loop over the cart items and add them to the medicineSales array
+      for (const cartItem of cart.items) {
+        const medicine = await Medicine.findOne({ Name: cartItem.medicine }); 
+
+          salesDocument.medicineSales.push({
+          medicineName: cartItem.medicine,
+          date: dateWithoutTime,
+          total: cartItem.quantity * medicine.Price,
+        });
+      }
+      await salesDocument.save();
     
       while(cart.items.length > 0) {
         cart.items.pop();
@@ -256,6 +297,9 @@ const cancelOrder = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
   try {
+
+    
+    
       // Update the status of the order to 'Cancelled'
       const order = await Order.findOneAndUpdate(
           { _id: orderId, Status: { $ne: "Cancelled" } }, // This condition ensures that orders that are already cancelled are not updated again.
@@ -266,6 +310,9 @@ const cancelOrder = async (req, res) => {
       if (!order) {
           return res.status(404).json({ error: "Order not found or it has already been cancelled." });
       }
+
+      
+      
 
       if (!(req.user.Username === order.PatientUsername)) {
         return res.status(403).json("You are not logged in!");
@@ -495,6 +542,39 @@ const updateMedicineQuantityInCart = async (req, res) => {
   }
 };
 
+const viewAlternatives = async (req, res) => {
+  try {
+    const { Username, medicineName } = req.params;
+    const requestedMedicine = await Medicine.findOne({ Name: medicineName, Quantity: 0, Status: 'unarchived' });
+
+    if (!requestedMedicine) {
+      return res.status(404).json({ message: 'Medicine not found or not out of stock' });
+    }
+
+    const alternativeMedicines = await Medicine.find({
+      ActiveIngredients: requestedMedicine.ActiveIngredients,
+      Quantity: { $gt: 0 }, 
+      Status: 'unarchived', 
+    });
+
+    if (alternativeMedicines.length === 0) {
+      return res.status(404).json({ message: 'No alternative medicines available' });
+    }
+
+    res.status(200).json(alternativeMedicines.map(({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity }) => ({
+      Name,
+      ActiveIngredients,
+      Price,
+      Picture,
+      MedicalUse,
+      Quantity
+    })));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 
 module.exports = {
   availableMedicinesDetailsByPatient,
@@ -508,5 +588,6 @@ module.exports = {
   removeAnItemFromCart,
   addMedicineToCart,
   updateMedicineQuantityInCart,
-  checkoutOrder
+  checkoutOrder,
+  viewAlternatives
 };

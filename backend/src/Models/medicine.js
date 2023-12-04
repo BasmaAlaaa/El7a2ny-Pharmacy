@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const medicineSchema = new Schema({
-    //ingredients (array), Price number, quantity number
-  Name : {
+  Name: {
     type: String,
     required: true,
     unique: true
@@ -32,6 +31,11 @@ const medicineSchema = new Schema({
   MedicalUse: {
     type: String,
     required: true,
+  },
+  Status: {
+    type: String,
+    enum: ['archived', 'unarchived'],
+    default: 'unarchived'
   }
 }, { timestamps: true });
 

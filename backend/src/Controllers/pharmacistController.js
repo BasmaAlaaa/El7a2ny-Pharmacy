@@ -2,7 +2,8 @@ const { default: mongoose } = require('mongoose');
 const nodemailer = require('nodemailer');
 const Medicine = require("../Models/medicine");
 const Pharmacist= require("../Models/pharmacist");
-const Notification = require("../Models/notifications");    
+const Notification = require("../Models/notifications");  
+const SReport = require("../Models/SReport") ;
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPharmacist = async (req, res) => {
 
@@ -290,6 +291,142 @@ const checkMedicineQuantityEmailNotification = async () => {
   }
 };
 
+const archiveMedicine = async (req, res) => {
+  try {
+    const { medicineName, Username } = req.params;
+    const medicine = await Medicine.findOne({ Name: medicineName });
+
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+    medicine.Status = 'archived';
+    await medicine.save();
+
+    res.json({ message: 'Medicine archived successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const unarchiveMedicine = async (req, res) => {
+  try {
+    const { medicineName, Username } = req.params;
+    const medicine = await Medicine.findOne({ Name: medicineName });
+
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+    medicine.Status = 'unarchived';
+    await medicine.save();
+
+    res.json({ message: 'Medicine unarchived successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+const viewSalesReportOnChosenMonth = async (req, res) => {
+  try {
+    const { Username, chosenMonth } = req.params;
+
+    const salesReport = await SReport.findOne();
+
+    //console.log(salesReport);
+    if (!salesReport) {
+      return res.status(404).json({ message: `Sales report not found ` });
+    }
+
+    const monthlySales = salesReport.monthlySales.find((entry) => entry.Month === chosenMonth);
+    //console.log(monthlySales);
+    if (!monthlySales) {
+      return res.status(404).json({ message: `No sales data found for ${chosenMonth}` });
+    }
+
+    const medicineSales = salesReport.medicineSales.filter(
+      (entry) => new Date(entry.date).toLocaleString('default', { month: 'long' }) === chosenMonth
+    );
+    //console.log(medicineSales);
+    
+
+    res.status(200).json({
+      username: Username,
+      chosenMonth,
+      monthlySales: monthlySales.totalSales,
+      medicineSales,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+const viewSalesReportOnMedicine = async (req, res) => {
+  try {
+    const { Username ,medicineName } = req.params;
+
+    const salesReport = await SReport.findOne();
+
+    if (!salesReport) {
+      return res.status(404).json({ message: 'Sales report not found' });
+    }
+
+    if (medicineName) {
+      const salesForMedicine = salesReport.medicineSales.filter(
+        (entry) => entry.medicineName.toLowerCase() === medicineName.toLowerCase()
+      );
+
+      return res.status(200).json({
+        username: Username,
+        medicineName,
+        salesForMedicine,
+      });
+    } else {
+      return res.status(400).json({ message: 'Please provide a medicine name' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const viewSalesReportOnDate = async (req, res) => {
+  try {
+    const { Username ,date } = req.params;
+
+    const salesReport = await SReport.findOne();
+
+    if (!salesReport) {
+      return res.status(404).json({ message: 'Sales report not found' });
+    }
+
+    if (date) {
+      const salesOnDate = salesReport.medicineSales.filter(
+        (entry) => new Date(entry.date).toLocaleDateString() === new Date(date).toLocaleDateString()
+      );
+
+      return res.status(200).json({
+        username: Username,
+        date,
+        salesOnDate,
+      });
+    } else {
+      return res.status(400).json({ message: 'Please provide a date ' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+
+
+
 
 
 
@@ -304,5 +441,10 @@ module.exports = {
   checkMedicineQuantityNotification,
   checkMedicineQuantityEmailNotification,
   deleteNotificationIfQuantityNotZero,
+  archiveMedicine,
+  unarchiveMedicine,
+  viewSalesReportOnChosenMonth,
+  viewSalesReportOnMedicine,
+  viewSalesReportOnDate
 
 };

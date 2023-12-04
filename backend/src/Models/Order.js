@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
-
+const SReport = require('./SReport.js');
 const orderSchema = new Schema({    
     PatientUsername:{
         type: String,
@@ -55,13 +55,21 @@ if (!PaymentMethod) {
     throw Error('Payment method must be specified.');
 }
 
+
     const order = await this.create({
         PatientUsername,
         PaymentMethod,
         ShippingAddress
     });
-  
+
+
+    
+
+
+
+
+
     return order;
-  };
+}
   const Order = mongoose.model('Order', orderSchema);
   module.exports = Order;
