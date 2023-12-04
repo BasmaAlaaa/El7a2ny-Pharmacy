@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 
 function CaseTableBody({ data, username }) {
@@ -24,6 +25,35 @@ function CaseTableBody({ data, username }) {
       </button>
       </div>
       </td>
+    {data.Status==='unarchived' &&
+    <td className="py-3 text-align-center">
+    <div className="d-flex flex-row">
+    <button
+      className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+      onClick={()=> axios.put(`http://localhost:8000/Doctor/archiveMedicine/${username}/${data.Name}`,"",{
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      }).then(res => console.log(res)).catch(err => console.log(err))
+    }
+    >
+      Archive
+    </button>
+    </div>
+    </td>
+    }
+    {data.Status==='archived' &&
+    <td className="py-3 text-align-center">
+    <div className="d-flex flex-row">
+    <button
+      className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+      onClick={()=> axios.put(`http://localhost:8000/Doctor/unArchiveMedicine/${username}/${data.Name}`,"",{
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      }).then(res => console.log(res)).catch(err => console.log(err))}
+    >
+      Unarchive
+    </button>
+    </div>
+    </td>
+    }
     </>
   );
 }

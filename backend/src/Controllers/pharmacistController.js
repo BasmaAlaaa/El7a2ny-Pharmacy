@@ -19,7 +19,7 @@ const availableMedicinesDetailsByPharmacist = async (req, res) => {
       if (!medicines) {
         res.status(400).json({ error: "There are no available medicines!" })
       }
-      res.status(200).json(medicines.map(({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold }) => ({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold })));
+      res.status(200).json(medicines.map(({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold, Status }) => ({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity, QuantitySold, Status })));
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
