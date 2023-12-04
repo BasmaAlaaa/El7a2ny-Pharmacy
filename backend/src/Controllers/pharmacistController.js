@@ -2,7 +2,7 @@ const { default: mongoose } = require('mongoose');
 const nodemailer = require('nodemailer');
 const Medicine = require("../Models/medicine");
 const Pharmacist= require("../Models/pharmacist");
-const Notification = require("../Models/notifications");  
+const Notification = require("../Models/NotificationPharmacy");  
 const SReport = require("../Models/SReport") ;
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPharmacist = async (req, res) => {
@@ -199,7 +199,7 @@ const checkMedicineQuantityNotification = async (req) => {
   try {
     const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
     for (const medicine of outOfStockMedicines) {
-      const existingNotification = await Notification.findOne({ type: "Pharmacist", message: ` ${medicine.Name} is out of stock` });
+      const existingNotification = await Notification.findOne({ type: "Pharmacist", message: `${medicine.Name} is out of stock` });
         console.log(Username);
       if (!existingNotification) {
 
@@ -207,7 +207,7 @@ const checkMedicineQuantityNotification = async (req) => {
           type: "Pharmacist",
           username: `${Username}`,
           MedicineName: `${medicine.Name}`,
-          message: ` ${medicine.Name} is out of stock`,
+          message: `${medicine.Name} is out of stock`,
         });
         await newNotification.save();
         console.log('notification added');
