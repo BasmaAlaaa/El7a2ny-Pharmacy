@@ -3,7 +3,8 @@ import axios from "axios";
 
 
 function CaseTableBody({ data, username }) {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
+  console.log('usss', username)
 
   return (
     <>
