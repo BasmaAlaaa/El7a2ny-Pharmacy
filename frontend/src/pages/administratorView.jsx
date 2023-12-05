@@ -113,6 +113,12 @@ let navigate = useNavigate()
               action={() =>navigate(`/addAdministrator/${username}`)}
               key="navBtn"
             />
+            <MainBtn
+              txt="View Sales Report"
+              style="green-btn"
+              action={() => navigate(`/salesReportInfo/${username}/${"admin"}`)}
+              key="navBtn"
+            />
           </div>
           <MedicineList/>
 

@@ -23,6 +23,7 @@ import ResetPassword from './pages/reset_passowrd';
 import CartInfo from './pages/cartInfo';
 import Checkout from './pages/checkout';
 import OrderDetails from './pages/orderDetails';
+import SalesReportInfo from './pages/salesReportInfo';
 
 
 
@@ -53,6 +54,8 @@ function App() {
           <Route exact path="/cartInfo/:username" element={<CartInfo />} />
           <Route exact path="/checkout/:username" element={<Checkout />} />
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
+          <Route exact path="/salesReportInfo/:username/:type" element={<SalesReportInfo />} />
+
         </Routes>
       </main>
     </div>

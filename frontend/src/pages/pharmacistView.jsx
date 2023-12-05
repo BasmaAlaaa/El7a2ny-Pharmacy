@@ -41,6 +41,12 @@ return (
               action={() => navigate(`/addMedicine/${username}`)}
               key="navBtn"
             />
+             <MainBtn
+              txt="View Sales Report"
+              style="green-btn"
+              action={() => navigate(`/salesReportInfo/${username}/${"pharmacist"}`)}
+              key="navBtn"
+            />
     <MedicineListPharmacist username={username}/>
     <h2>Wallet Amount:</h2>
     <h2>Notifications:</h2>
