@@ -121,7 +121,6 @@ const checkoutOrder = async (req, res) => {
     
       });
 
-
       const currentMonth = new Date().toLocaleString('default',{month: 'long'});
       let total = 0;
       total+= cart.totalAmount;
@@ -406,6 +405,11 @@ const removeAnItemFromCart = async (req, res) => {
       cart.items.splice(indexToRemove, 1);
   
       await cart.save();
+
+      medicine.QuantitySold -= 1;
+      medicine.Quantity += 1;
+
+      await medicine.save();
   
       res.status(200).send({ message: `Medicine ${MedicineName} removed from the cart` });
     } catch (error) {
@@ -464,6 +468,7 @@ const addMedicineToCart = async (req, res) => {
       await cart.save();
 
       medicine.QuantitySold += 1;
+      medicine.Quantity -= 1;
 
       await medicine.save();
 
@@ -524,6 +529,7 @@ const updateMedicineQuantityInCart = async (req, res) => {
         await cart.save();
 
         medicine.QuantitySold += quantityChange;
+        medicine.Quantity -= quantityChange;
 
         await medicine.save();
 
