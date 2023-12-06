@@ -231,12 +231,7 @@ const checkMedicineQuantityNotification = async (req) => {
 };
 
 const deleteNotificationIfQuantityNotZero = async () => {
-  const {Username} = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  if (!(req.user.Username === Username)) {
-    res.status(403).json("You are not logged in!");
-  }else{
+  
     try {
       const notifications = await Notification.find({ type: "Pharmacist" });
 
@@ -253,16 +248,10 @@ const deleteNotificationIfQuantityNotZero = async () => {
     } catch (error) {
       console.error(error);
     }
-  }
 };
 
 const checkMedicineQuantityEmailNotification = async () => {
-  const {Username} = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  if (!(req.user.Username === Username)) {
-    res.status(403).json("You are not logged in!");
-  }else{
+  
     try {
       const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
 
@@ -303,7 +292,6 @@ const checkMedicineQuantityEmailNotification = async () => {
     } catch (error) {
       console.error(error);
     }
-  }
 };
 
 const archiveMedicine = async (req, res) => {
