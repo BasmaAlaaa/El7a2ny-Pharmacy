@@ -429,6 +429,36 @@ const displayNotifications = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch notifications" });
   }
 };
+const getPharmacistWalletAmount = async (req, res) => {
+  const { Username } = req.params;
+
+  try {
+      const pharmacist = await Pharmacist.findOne({ Username });
+      if (!pharmacist) {
+          return res.status(404).json({ error: 'Pharmacist not found' });
+      }
+
+      res.status(200).json({ walletAmount: pharmacist.WalletAmount });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
+const updatePharmacistSalary = async (pharmacistUsername) => {
+  // Ensure hoursWorked is a valid number
+ // if (typeof hoursWorked !== 'number' || hoursWorked < 0) {
+   // throw new Error('Invalid hours worked');
+ // }
+
+  const pharmacist = await Pharmacist.findOne({ Username: pharmacistUsername });
+  if (pharmacist) {
+    const salary = pharmacist.HourlyRate * 176; // Calculate monthly salary
+    pharmacist.WalletAmount += salary;
+    await pharmacist.save();
+    return { message: "Salary updated successfully" };
+  } else {
+    throw new Error('Pharmacist not found');
+  }
+};
 
 module.exports = {
   availableMedicinesDetailsByPharmacist,
@@ -446,5 +476,7 @@ module.exports = {
   viewSalesReportOnChosenMonth,
   viewSalesReportOnMedicine,
   viewSalesReportOnDate,
-  displayNotifications
+  displayNotifications,
+  getPharmacistWalletAmount,
+  updatePharmacistSalary
 };

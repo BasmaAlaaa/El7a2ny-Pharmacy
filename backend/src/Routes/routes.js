@@ -37,7 +37,9 @@ const {
     addMedicineToCart,
     updateMedicineQuantityInCart,
     checkoutOrder,
-    viewAlternatives
+    viewAlternatives,
+    getPatientWalletAmount,
+    getAllOrders,
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -55,6 +57,8 @@ const {
     viewSalesReportOnChosenMonth,
     viewSalesReportOnMedicine,
     viewSalesReportOnDate,
+    getPharmacistWalletAmount,
+    updatePharmacistSalary,
 
     displayNotifications
 } = require('../Controllers/pharmacistController');
@@ -98,7 +102,8 @@ router.post('/addMedicineToCart/:Username/:MedicineName', verify, addMedicineToC
 router.put('/updateQuantity/:Username/:MedicineName/:quantity', verify, updateMedicineQuantityInCart);
 router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', verify, checkoutOrder);
 router.get('/viewAlternatives/:Username/:medicineName',viewAlternatives);
-
+router.get('/getPatientWalletAmount/:Username', verify, getPatientWalletAmount);
+router.get('/getAllOrders/:Username', verify, getAllOrders);
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist/:Username', verify, availableMedicinesDetailsByPharmacist);
 router.get('/AvailableMedicinesQuantity/:Username', verify, availableMedicinesQuantity);
@@ -120,6 +125,8 @@ router.post('/CheckMedicineQuantityNotification/:Username',verify,checkMedicineQ
 router.post('/CheckMedicineQuantityEmailNotification/:Username',verify, checkMedicineQuantityEmailNotification);
 router.post('/deleteNotificationIfQuantityNotZero/:Username',verify, deleteNotificationIfQuantityNotZero);
 router.get('/displayNotifications/:Username',verify, displayNotifications);
+router.get('/getPharmacistWalletAmount/:Username', verify, getPharmacistWalletAmount);
+router.put('/updatePharmacistSalary/:Username/:hoursWorked', verify, updatePharmacistSalary);
 
 
 
