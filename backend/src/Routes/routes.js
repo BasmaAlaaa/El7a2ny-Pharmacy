@@ -14,8 +14,7 @@ const {
     allPatients,
     patientInfo,
     addPharmacist,
-    acceptOrRejectPharmacistRequest,
-    viewSalesReportOnChosenMonth
+    acceptOrRejectPharmacistRequest
 } = require('../Controllers/administratorController');
 
 // Guest Controller
@@ -82,7 +81,6 @@ router.get('/PatientInfo/:username/:Username', verify, patientInfo);
 router.get('/MedicineByName/:username/:Name', verify, getMedicineByName);
 router.get('/MedicineByMedicalUse/:username/:MedicalUse', verify, getMedicineByMedicalUse);
 router.post('/AcceptOrRejectPharmacistRequest/:username/:Username', verify, acceptOrRejectPharmacistRequest);
-router.get('/ViewSalesReportOnChosenMonth/:Username/:chosenMonth',verify, viewSalesReportOnChosenMonth)
 
 // Routes of Guest
 router.post('/RegisterPatient', registerPatient);
