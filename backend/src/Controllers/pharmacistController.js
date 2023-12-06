@@ -318,7 +318,6 @@ const unarchiveMedicine = async (req, res) => {
     res.status(403).json("You are not logged in!");
   }else{
     try {
-      const { medicineName, Username } = req.params;
       const medicine = await Medicine.findOne({ Name: medicineName });
 
       if (!medicine) {

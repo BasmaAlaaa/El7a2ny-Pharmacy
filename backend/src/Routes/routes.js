@@ -118,14 +118,14 @@ router.post('/AddMedicine/:Username', verify, upload.single('Picture'), addMedic
 router.put('/UpdateMed/:Username/:Name', verify, upload.single('Picture'), updateMed);
 router.get('/MedicineByName/:Username/:Name', verify, getMedicineByName);
 router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByMedicalUse);
-router.post('/CheckMedicineQuantityNotification',checkMedicineQuantityNotification);
-router.post('/CheckMedicineQuantityEmailNotification', checkMedicineQuantityEmailNotification);
-router.post('/deleteNotificationIfQuantityNotZero', deleteNotificationIfQuantityNotZero);
-router.put('/archiveMedicine/:Username/:medicineName' , archiveMedicine);
-router.put('/unarchiveMedicine/:Username/:medicineName' , unarchiveMedicine);
-router.get('/viewSalesReportOnChosenMonth/:Username/:chosenMonth',viewSalesReportOnChosenMonth);
-router.get('/viewSalesReportOnMedicine/:Username/:medicineName',viewSalesReportOnMedicine);
-router.get('/viewSalesReportOnDate/:Username/:date',viewSalesReportOnDate);
+router.post('/CheckMedicineQuantityNotification', verify,checkMedicineQuantityNotification);
+router.post('/CheckMedicineQuantityEmailNotification',verify, checkMedicineQuantityEmailNotification);
+router.post('/deleteNotificationIfQuantityNotZero',verify, deleteNotificationIfQuantityNotZero);
+router.put('/archiveMedicine/:Username/:medicineName' , verify,archiveMedicine);
+router.put('/unarchiveMedicine/:Username/:medicineName' ,verify, unarchiveMedicine);
+router.get('/viewSalesReportOnChosenMonth/:Username/:chosenMonth',verify,viewSalesReportOnChosenMonth);
+router.get('/viewSalesReportOnMedicine/:Username/:medicineName',verify,viewSalesReportOnMedicine);
+router.get('/viewSalesReportOnDate/:Username/:date',verify,viewSalesReportOnDate);
 
 router.post('/CheckMedicineQuantityNotification/:Username',verify,checkMedicineQuantityNotification);
 router.post('/CheckMedicineQuantityEmailNotification/:Username',verify, checkMedicineQuantityEmailNotification);
