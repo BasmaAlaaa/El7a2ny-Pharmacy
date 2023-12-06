@@ -19,7 +19,7 @@ function PharmacistView(){
       const response = axios.get(`http://localhost:8000/Pharmacist/getPharmacistWalletAmount/${username}`, {
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
       })
-      .then(res =>setWallet(res.data)).catch(err => console.log(err))
+      .then(res =>setWallet(res.data.walletAmount)).catch(err => console.log(err))
         }, [])
         console.log('www', wallet)
 
@@ -58,9 +58,10 @@ return (
               key="navBtn"
             />
     <MedicineListPharmacist username={username}/>
-    <h2>Wallet Amount: {wallet}</h2>
     <h2>Notifications:</h2>
     <TableNotifications tHead={tHeadNot} data={notifications} />
+    <h2>Wallet Amount: {wallet}</h2>
+
     </div>
 )
 }
