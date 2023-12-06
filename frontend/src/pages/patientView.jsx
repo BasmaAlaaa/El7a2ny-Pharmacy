@@ -30,7 +30,7 @@ function PatientView(){
   console.log(filterText)
   let navigate = useNavigate()
   
-    let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Available', 'Add to Cart'];
+    let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'MedicalUse', 'Available', 'Add to Cart', 'Alternatives'];
 
 return (
     <div>

@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TableIAlternatives from './TableAlternatives';
 
 
 function CaseTableBody({ data, username }) {
   let navigate = useNavigate()
-  const[result, setResult] = useState('');
+  const[result, setResult] = useState([]);
   const handleAdd = async() => {
     try{
     const response = await axios.post(`http://localhost:8000/Patient/AddMedicineToCart/${username}/${data.Name}`, "", {
@@ -21,7 +22,13 @@ function CaseTableBody({ data, username }) {
             console.error('Error adding item:', error);
           };
   }
-  //console.log('added', result);
+  useEffect(() => {
+    const response = axios.get(`http://localhost:8000/Patient/viewAlternatives/${username}/${data.Name}`, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
+    .then(res =>setResult(res.data)).catch(err => console.log(err))
+      }, [])
+    console.log('alt', result)
   return (
     <>
       
@@ -55,6 +62,9 @@ function CaseTableBody({ data, username }) {
       </div>
       </td>
       }
+      {data.ActiveIngredients && data.Quantity==0 && <td>Item Unavailable</td>}
+      {data.ActiveIngredients && data.Quantity==0 && <td><TableIAlternatives tHead={['']} data={result}/></td>}
+
 
       {data.Gender &&
       <td className="py-3 text-align-center">
