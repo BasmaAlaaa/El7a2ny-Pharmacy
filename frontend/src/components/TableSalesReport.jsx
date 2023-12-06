@@ -11,7 +11,7 @@ function CaseTableBody({ data, username }) {
   return (
     <>
     <th>{data.medicineName}</th>
-    <td>{data.date}</td>
+    {data.date && <td> {data.date.substring(0,10)}</td>}
     <td>{data.total}</td>      
       
     </>
@@ -46,11 +46,11 @@ function TableSalesReport({ tHead, data, searchText, searchDate}) {
           {data
           .filter((e) => {
             return searchText.toLowerCase() === '' ? 
-            e: e.Name.toLowerCase().includes(searchText.toLowerCase())
+            e: e.medicineName.toLowerCase().includes(searchText.toLowerCase())
           })
           .filter((e) => {
             return searchDate=== ''?
-            e: e.Date.substring(0,10) === searchDate
+            e: e.date.substring(0,10) === searchDate
           })
           .map((e) => (
             <tr className="text-capitalize">

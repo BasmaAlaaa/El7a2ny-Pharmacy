@@ -9,7 +9,7 @@ import TableSalesReport from "../components/TableSalesReport";
 function SalesReportInfo(){
     const {username, type} = useParams();
     const[result, setResult] = useState([]);
-    const[filterText, setFilterText] = useState('');
+    const[filterText, setFilterText] = useState('all');
     const[searchText, setSearchText] = useState('');
     const[searchDate, setSearchDate] = useState('');
 
@@ -21,18 +21,14 @@ function SalesReportInfo(){
 //   .then(res =>setResult(res.data)).catch(err => console.log(err))
 //     }, [])
 
-const onFilterValueChanged=(event)=>{
-    setFilterText(event.target.value);
-    console.log(filterText);
-    viewSales();
-    
-  }
-  const viewSales = async() => {
-    await axios.get(`http://localhost:8000/Pharmacist/viewSalesReportOnChosenMonth/${username}/${filterText}`,{
+  const viewSales = (e) => {
+    setFilterText(e);
+     axios.get(`http://localhost:8000/Pharmacist/viewSalesReportOnChosenMonth/${username}/${e}`,{
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     })
     .then(res =>setResult(res.data.medicineSales)).catch(err => console.log(err))
   }
+  
   console.log('sales', result)
 
 let tHead = ['Medicine Name', 'Date', 'Total'];
@@ -45,21 +41,20 @@ return (
         {type==='pharmacist' &&
         <NavBarPharmacist username={username}/>
         }
-        <select name='medicalUse' onChange={onFilterValueChanged}>
+        <select name='month' onChange={(e) => viewSales(e.target.value)}>
         <option value='all'>All</option>
-        <option value='january'>January</option>
-        <option value='february'>February</option>
-        <option value='march'>March</option>
-        <option value='april'>April</option>
-        <option value='may'>May</option>
-        <option value='june'>June</option>
-        <option value='july'>July</option>
-        <option value='august'>August</option>
-        <option value='september'>September</option>
-        <option value='october'>October</option>
+        <option value='January'>January</option>
+        <option value='February'>February</option>
+        <option value='March'>March</option>
+        <option value='April'>April</option>
+        <option value='May'>May</option>
+        <option value='June'>June</option>
+        <option value='July'>July</option>
+        <option value='August'>August</option>
+        <option value='September'>September</option>
+        <option value='October'>October</option>
         <option value='november'>November</option>
-        <option value='december'>December</option>
-
+        <option value='December'>December</option>
         </select>
         {filterText && filterText!="all" &&
         <div>
