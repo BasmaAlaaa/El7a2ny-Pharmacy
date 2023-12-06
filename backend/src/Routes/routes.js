@@ -40,6 +40,8 @@ const {
     viewAlternatives,
     getPatientWalletAmount,
     getAllOrders,
+    getMedicinesFromUnfilledPrescriptions,
+    addPrescriptionMedicineToCart,
 } = require('../Controllers/patientController');
 
 // Pharmacist Controller
@@ -104,6 +106,8 @@ router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', verify, 
 router.get('/viewAlternatives/:Username/:medicineName',viewAlternatives);
 router.get('/getPatientWalletAmount/:Username', verify, getPatientWalletAmount);
 router.get('/getAllOrders/:Username', verify, getAllOrders);
+router.get('/getMedicinesFromUnfilledPrescriptions/:Username', verify, getMedicinesFromUnfilledPrescriptions);
+router.post('/addPrescriptionMedicineToCart/:Username/:MedicineName', verify, addPrescriptionMedicineToCart);
 // Routes of Pharmacist
 router.get('/AvailableMedicinesDetailsByPharmacist/:Username', verify, availableMedicinesDetailsByPharmacist);
 router.get('/AvailableMedicinesQuantity/:Username', verify, availableMedicinesQuantity);
