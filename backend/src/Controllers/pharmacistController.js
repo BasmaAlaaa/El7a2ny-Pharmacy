@@ -194,16 +194,9 @@ const getMedicineByMedicalUse = async (req, res) => {
 }
 
 // Check if any medicine quantity is out of stock add a notification
-const checkMedicineQuantityNotification = async (req) => {
-  const {Username} = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  if (!(req.user.Username === Username)) {
-    res.status(403).json("You are not logged in!");
-  }else{
+const checkMedicineQuantityNotification = async () => {
     try {
       if (Username===undefined){
-        res.status(403).json("undefined user");
         return;
       }
       const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
@@ -227,7 +220,6 @@ const checkMedicineQuantityNotification = async (req) => {
     } catch (error) {
       console.error(error);
     }
-  }
 };
 
 const deleteNotificationIfQuantityNotZero = async () => {
