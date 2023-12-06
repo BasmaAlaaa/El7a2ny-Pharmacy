@@ -51,10 +51,10 @@ const patientSchema = new Schema({
     type: String,
     required: true
   },
-  Prescriptions:{
-    type: Array,
-    required: false
-  },
+  Prescriptions: [{
+    medicines: [{ type: String }],
+    status: { type: String, default: 'unfilled' }
+  }],
   addresses: 
  [{
       type:String,

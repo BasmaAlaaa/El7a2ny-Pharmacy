@@ -666,6 +666,77 @@ const getPatientWalletAmount = async (req, res) => {
     }
   }
 };
+const getMedicinesFromUnfilledPrescriptions = async (req, res) => {
+  const { Username } = req.params;
+
+  try {
+    const patient = await Patient.findOne({ Username });
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient not found' });
+    }
+
+    const unfilledPrescriptions = patient.Prescriptions.filter(prescription => prescription.status === 'unfilled');
+    const medicines = unfilledPrescriptions.reduce((acc, prescription) => {
+      acc.push(...prescription.medicines);
+      return acc;
+    }, []);
+
+    res.status(200).json(medicines);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+};
+const addPrescriptionMedicineToCart = async (req, res) => {
+  const { Username, MedicineName } = req.params;
+
+  try {
+    if (!(req.user.Username === Username)) {
+      return res.status(403).json({ error: "You are not logged in as the correct user!" });
+    }
+
+    const patient = await Patient.findOne({ Username });
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient not found' });
+    }
+
+    const cart = await Cart.findById(patient.cart);
+    if (!cart) {
+      return res.status(404).send({ error: 'Cart not found' });
+    }
+
+    const medicine = await Medicine.findOne({ Name: MedicineName });
+    if (!medicine) {
+      return res.status(404).send({ error: `Medicine ${MedicineName} not found` });
+    }
+
+    const prescription = patient.Prescriptions.find(p => p.medicines.includes(MedicineName) && p.status === 'unfilled');
+    if (!prescription) {
+      return res.status(400).send({ error: 'Medicine not in an unfilled prescription' });
+    }
+
+    const index = cart.items.findIndex(item => item.medicine === MedicineName);
+    if (index === -1) {
+      cart.items.push({ medicine: MedicineName, quantity: 1 });
+    } else {
+      cart.items[index].quantity++;
+    }
+    cart.totalAmount += medicine.Price;
+
+    await cart.save();
+    medicine.QuantitySold++;
+    medicine.Quantity--;
+    await medicine.save();
+
+    prescription.status = 'filled';
+    await patient.save();
+
+    res.status(200).send({ message: `Medicine ${MedicineName} added to the cart and prescription marked as filled` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+};
 
 module.exports = {
   availableMedicinesDetailsByPatient,
@@ -682,5 +753,7 @@ module.exports = {
   checkoutOrder,
   viewAlternatives,
   getPatientWalletAmount,
-  getAllOrders
+  getAllOrders,
+  getMedicinesFromUnfilledPrescriptions,
+  addPrescriptionMedicineToCart
 };
