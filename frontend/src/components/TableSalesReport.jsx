@@ -10,12 +10,9 @@ function CaseTableBody({ data, username }) {
 
   return (
     <>
-    <th>{data._id}</th>
-    <td>{data.PaymentMethod}</td>
-    <td>{data.Status}</td>
-    <td>{data.TotalAmount}</td>
-    <td>{data.ShippingAddress}</td>
-      
+    <th>{data.medicineName}</th>
+    <td>{data.date}</td>
+    <td>{data.total}</td>      
       
     </>
   );

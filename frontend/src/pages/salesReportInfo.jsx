@@ -23,14 +23,19 @@ function SalesReportInfo(){
 
 const onFilterValueChanged=(event)=>{
     setFilterText(event.target.value);
-    axios.get(`http://localhost:8000/Admin/viewSalesReportOnChosenMonth/${username}/${filterText}`,{
-    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-  })
-  .then(res =>setResult(res.data)).catch(err => console.log(err))
+    console.log(filterText);
+    viewSales();
+    
+  }
+  const viewSales = async() => {
+    await axios.get(`http://localhost:8000/Pharmacist/viewSalesReportOnChosenMonth/${username}/${filterText}`,{
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+    })
+    .then(res =>setResult(res.data.medicineSales)).catch(err => console.log(err))
   }
   console.log('sales', result)
 
-let tHead = ['Medicine Name', 'Quantity Sold', 'Date'];
+let tHead = ['Medicine Name', 'Date', 'Total'];
 
 return (
     <div>

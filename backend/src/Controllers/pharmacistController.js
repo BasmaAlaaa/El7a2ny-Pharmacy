@@ -351,7 +351,7 @@ const viewSalesReportOnChosenMonth = async (req, res) => {
         return res.status(404).json({ message: `Sales report not found ` });
       }
 
-      const monthlySales = salesReport.monthlySales.find((entry) => entry.Month === chosenMonth);
+      const monthlySales = salesReport.monthlySales.find((entry) => entry.Month.toLowerCase === chosenMonth.toLowerCase);
       //console.log(monthlySales);
       if (!monthlySales) {
         return res.status(404).json({ message: `No sales data found for ${chosenMonth}` });

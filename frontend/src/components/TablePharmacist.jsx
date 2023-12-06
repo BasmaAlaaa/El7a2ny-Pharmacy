@@ -31,9 +31,9 @@ function CaseTableBody({ data, username }) {
     <div className="d-flex flex-row">
     <button
       className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-      onClick={()=> axios.put(`http://localhost:8000/Doctor/archiveMedicine/${username}/${data.Name}`,"",{
+      onClick={()=> axios.put(`http://localhost:8000/Pharmacist/archiveMedicine/${username}/${data.Name}`,"",{
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-      }).then(res => console.log(res)).catch(err => console.log(err))
+      }).then(res => window.location.reload(true)).catch(err => alert(err))
     }
     >
       Archive
@@ -46,9 +46,9 @@ function CaseTableBody({ data, username }) {
     <div className="d-flex flex-row">
     <button
       className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
-      onClick={()=> axios.put(`http://localhost:8000/Doctor/unArchiveMedicine/${username}/${data.Name}`,"",{
+      onClick={()=> axios.put(`http://localhost:8000/Pharmacist/unarchiveMedicine/${username}/${data.Name}`,"",{
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-      }).then(res => console.log(res)).catch(err => console.log(err))}
+      }).then(res => window.location.reload(true)).catch(err => alert(err))}
     >
       Unarchive
     </button>

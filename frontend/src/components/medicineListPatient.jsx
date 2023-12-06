@@ -29,6 +29,7 @@ result.map((e) => {
 
 const onFilterValueChanged=(event)=>{
   setFilterText(event.target.value);
+  console.log('filter', filterText);
 }
 console.log(filterText)
 let navigate = useNavigate()
