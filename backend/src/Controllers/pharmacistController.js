@@ -196,237 +196,296 @@ const getMedicineByMedicalUse = async (req, res) => {
 // Check if any medicine quantity is out of stock add a notification
 const checkMedicineQuantityNotification = async (req) => {
   const {Username} = req.params;
-
-  try {
-    if (Username===undefined){
-      res.status(403).json("undefined user");
-      return;
-    }
-    const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
-    for (const medicine of outOfStockMedicines) {
-      const existingNotification = await Notification.findOne({ type: "Pharmacist", message: `${medicine.Name} is out of stock` });
-        console.log(Username);
-      if (!existingNotification) {
-        const newNotification = await Notification.create({
-          type: "Pharmacist",
-          username: `${Username}`,
-          MedicineName: `${medicine.Name}`,
-          message: `${medicine.Name} is out of stock`,
-        });
-        await newNotification.save();
-        console.log('notification added');
-        console.log(outOfStockMedicines); // Print out the outOfStockMedicines array
-      } else {
-        console.log('notification already exists');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      if (Username===undefined){
+        res.status(403).json("undefined user");
+        return;
       }
-    } 
-  } catch (error) {
-    console.error(error);
+      const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
+      for (const medicine of outOfStockMedicines) {
+        const existingNotification = await Notification.findOne({ type: "Pharmacist", message: `${medicine.Name} is out of stock` });
+          console.log(Username);
+        if (!existingNotification) {
+          const newNotification = await Notification.create({
+            type: "Pharmacist",
+            username: `${Username}`,
+            MedicineName: `${medicine.Name}`,
+            message: `${medicine.Name} is out of stock`,
+          });
+          await newNotification.save();
+          console.log('notification added');
+          console.log(outOfStockMedicines); // Print out the outOfStockMedicines array
+        } else {
+          console.log('notification already exists');
+        }
+      } 
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
 const deleteNotificationIfQuantityNotZero = async () => {
-  try {
-    const notifications = await Notification.find({ type: "Pharmacist" });
+  const {Username} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      const notifications = await Notification.find({ type: "Pharmacist" });
 
-    for (let i = 0; i < notifications.length; i++) {
-      const notification = notifications[i];
-      const medicine = await Medicine.findOne({ Name: notification.MedicineName });
-      console.log('Medicine:', medicine);
+      for (let i = 0; i < notifications.length; i++) {
+        const notification = notifications[i];
+        const medicine = await Medicine.findOne({ Name: notification.MedicineName });
+        console.log('Medicine:', medicine);
 
-      if (medicine && medicine.Quantity > 0) {
-        await Notification.findOneAndDelete({ MedicineName: notification.MedicineName });
-        console.log(`Notification for ${notification.MedicineName} deleted`);
+        if (medicine && medicine.Quantity > 0) {
+          await Notification.findOneAndDelete({ MedicineName: notification.MedicineName });
+          console.log(`Notification for ${notification.MedicineName} deleted`);
+        }
       }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
   }
 };
 
 const checkMedicineQuantityEmailNotification = async () => {
-  try {
-    const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
+  const {Username} = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
 
-    for (const medicine of outOfStockMedicines) {
-      const existingNotification = await Notification.findOne({ type: "Pharmacist", MedicineName: medicine.Name });
+      for (const medicine of outOfStockMedicines) {
+        const existingNotification = await Notification.findOne({ type: "Pharmacist", MedicineName: medicine.Name });
 
-      if (!existingNotification) {
-        // Send email notification to pharmacist
-        const pharmacists = await Pharmacist.find();
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'SuicideSquadGUC@gmail.com',
-            pass: 'wryq ofjx rybi hpom'
+        if (!existingNotification) {
+          // Send email notification to pharmacist
+          const pharmacists = await Pharmacist.find();
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'SuicideSquadGUC@gmail.com',
+              pass: 'wryq ofjx rybi hpom'
+            }
+          });
+
+          for (const pharmacist of pharmacists) {
+            const mailOptions = {
+              from: 'SuicideSquadGUC@gmail.com',
+              to: pharmacist.Email,
+              subject: 'Medicine out of stock',
+              text: `Dear ${pharmacist.Name},
+
+              I hope this message finds you well. We wanted to inform you that the following medicine in your pharmacy is currently out of stock:
+              - ${medicine.Name}
+
+              Please take the necessary actions to restock the medicine.
+
+              Best regards,
+              Suicide Squad Pharmacy`
+            };
+
+            await transporter.sendMail(mailOptions);
           }
-        });
-
-        for (const pharmacist of pharmacists) {
-          const mailOptions = {
-            from: 'SuicideSquadGUC@gmail.com',
-            to: pharmacist.Email,
-            subject: 'Medicine out of stock',
-            text: `Dear ${pharmacist.Name},
-
-            I hope this message finds you well. We wanted to inform you that the following medicine in your pharmacy is currently out of stock:
-            - ${medicine.Name}
-
-            Please take the necessary actions to restock the medicine.
-
-            Best regards,
-            Suicide Squad Pharmacy`
-          };
-
-          await transporter.sendMail(mailOptions);
         }
       }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
   }
 };
 
 const archiveMedicine = async (req, res) => {
-  try {
-    const { medicineName, Username } = req.params;
-    const medicine = await Medicine.findOne({ Name: medicineName });
+  const { medicineName, Username } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      const medicine = await Medicine.findOne({ Name: medicineName });
 
-    if (!medicine) {
-      return res.status(404).json({ message: 'Medicine not found' });
+      if (!medicine) {
+        return res.status(404).json({ message: 'Medicine not found' });
+      }
+      medicine.Status = 'archived';
+      await medicine.save();
+
+      res.json({ message: 'Medicine archived successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-    medicine.Status = 'archived';
-    await medicine.save();
-
-    res.json({ message: 'Medicine archived successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
 const unarchiveMedicine = async (req, res) => {
-  try {
-    const { medicineName, Username } = req.params;
-    const medicine = await Medicine.findOne({ Name: medicineName });
+  const { medicineName, Username } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      const { medicineName, Username } = req.params;
+      const medicine = await Medicine.findOne({ Name: medicineName });
 
-    if (!medicine) {
-      return res.status(404).json({ message: 'Medicine not found' });
+      if (!medicine) {
+        return res.status(404).json({ message: 'Medicine not found' });
+      }
+      medicine.Status = 'unarchived';
+      await medicine.save();
+
+      res.json({ message: 'Medicine unarchived successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-    medicine.Status = 'unarchived';
-    await medicine.save();
-
-    res.json({ message: 'Medicine unarchived successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
 
 const viewSalesReportOnChosenMonth = async (req, res) => {
-  try {
-    const { Username, chosenMonth } = req.params;
+  const { Username, chosenMonth } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
 
-    const salesReport = await SReport.findOne();
+      const salesReport = await SReport.findOne();
 
-    //console.log(salesReport);
-    if (!salesReport) {
-      return res.status(404).json({ message: `Sales report not found ` });
+      //console.log(salesReport);
+      if (!salesReport) {
+        return res.status(404).json({ message: `Sales report not found ` });
+      }
+
+      const monthlySales = salesReport.monthlySales.find((entry) => entry.Month === chosenMonth);
+      //console.log(monthlySales);
+      if (!monthlySales) {
+        return res.status(404).json({ message: `No sales data found for ${chosenMonth}` });
+      }
+
+      const medicineSales = salesReport.medicineSales.filter(
+        (entry) => new Date(entry.date).toLocaleString('default', { month: 'long' }) === chosenMonth
+      );
+      //console.log(medicineSales);
+      
+
+      res.status(200).json({
+        username: Username,
+        chosenMonth,
+        monthlySales: monthlySales.totalSales,
+        medicineSales,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
     }
-
-    const monthlySales = salesReport.monthlySales.find((entry) => entry.Month === chosenMonth);
-    //console.log(monthlySales);
-    if (!monthlySales) {
-      return res.status(404).json({ message: `No sales data found for ${chosenMonth}` });
-    }
-
-    const medicineSales = salesReport.medicineSales.filter(
-      (entry) => new Date(entry.date).toLocaleString('default', { month: 'long' }) === chosenMonth
-    );
-    //console.log(medicineSales);
-    
-
-    res.status(200).json({
-      username: Username,
-      chosenMonth,
-      monthlySales: monthlySales.totalSales,
-      medicineSales,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 
 const viewSalesReportOnMedicine = async (req, res) => {
-  try {
-    const { Username ,medicineName } = req.params;
+  const { Username ,medicineName } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
 
-    const salesReport = await SReport.findOne();
+      const salesReport = await SReport.findOne();
 
-    if (!salesReport) {
-      return res.status(404).json({ message: 'Sales report not found' });
+      if (!salesReport) {
+        return res.status(404).json({ message: 'Sales report not found' });
+      }
+
+      if (medicineName) {
+        const salesForMedicine = salesReport.medicineSales.filter(
+          (entry) => entry.medicineName.toLowerCase() === medicineName.toLowerCase()
+        );
+
+        return res.status(200).json({
+          username: Username,
+          medicineName,
+          salesForMedicine,
+        });
+      } else {
+        return res.status(400).json({ message: 'Please provide a medicine name' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
     }
-
-    if (medicineName) {
-      const salesForMedicine = salesReport.medicineSales.filter(
-        (entry) => entry.medicineName.toLowerCase() === medicineName.toLowerCase()
-      );
-
-      return res.status(200).json({
-        username: Username,
-        medicineName,
-        salesForMedicine,
-      });
-    } else {
-      return res.status(400).json({ message: 'Please provide a medicine name' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 const viewSalesReportOnDate = async (req, res) => {
-  try {
-    const { Username ,date } = req.params;
+  const { Username ,date } = req.params;
 
-    const salesReport = await SReport.findOne();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
 
-    if (!salesReport) {
-      return res.status(404).json({ message: 'Sales report not found' });
+      const salesReport = await SReport.findOne();
+
+      if (!salesReport) {
+        return res.status(404).json({ message: 'Sales report not found' });
+      }
+
+      if (date) {
+        const salesOnDate = salesReport.medicineSales.filter(
+          (entry) => new Date(entry.date).toLocaleDateString() === new Date(date).toLocaleDateString()
+        );
+
+        return res.status(200).json({
+          username: Username,
+          date,
+          salesOnDate,
+        });
+      } else {
+        return res.status(400).json({ message: 'Please provide a date ' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
     }
-
-    if (date) {
-      const salesOnDate = salesReport.medicineSales.filter(
-        (entry) => new Date(entry.date).toLocaleDateString() === new Date(date).toLocaleDateString()
-      );
-
-      return res.status(200).json({
-        username: Username,
-        date,
-        salesOnDate,
-      });
-    } else {
-      return res.status(400).json({ message: 'Please provide a date ' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
   }
 };
 // Display all notifications
 const displayNotifications = async (req, res) => {
-  try {
-    await checkMedicineQuantityNotification(req, res);
-    await deleteNotificationIfQuantityNotZero();
-    const notifications = await Notification.find();
-    const notificationMessages = notifications.map(notification => notification.message);
-    res.status(200).json(notificationMessages);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch notifications" });
+  const { Username } = req.params;
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      await checkMedicineQuantityNotification(req, res);
+      await deleteNotificationIfQuantityNotZero();
+      const notifications = await Notification.find();
+      const notificationMessages = notifications.map(notification => notification.message);
+      res.status(200).json(notificationMessages);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
   }
 };
 const getPharmacistWalletAmount = async (req, res) => {
