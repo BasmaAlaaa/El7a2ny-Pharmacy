@@ -490,18 +490,24 @@ const displayNotifications = async (req, res) => {
 };
 const getPharmacistWalletAmount = async (req, res) => {
   const { Username } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+        const pharmacist = await Pharmacist.findOne({ Username });
+        if (!pharmacist) {
+            return res.status(404).json({ error: 'Pharmacist not found' });
+        }
 
-  try {
-      const pharmacist = await Pharmacist.findOne({ Username });
-      if (!pharmacist) {
-          return res.status(404).json({ error: 'Pharmacist not found' });
-      }
-
-      res.status(200).json({ walletAmount: pharmacist.WalletAmount });
-  } catch (error) {
-      res.status(500).json({ error: error.message });
+        res.status(200).json({ walletAmount: pharmacist.WalletAmount });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
   }
 };
+
 const updatePharmacistSalary = async (pharmacistUsername) => {
   // Ensure hoursWorked is a valid number
  // if (typeof hoursWorked !== 'number' || hoursWorked < 0) {

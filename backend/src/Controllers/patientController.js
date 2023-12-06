@@ -560,69 +560,110 @@ const updateMedicineQuantityInCart = async (req, res) => {
 };
 
 const viewAlternatives = async (req, res) => {
-  try {
-    const { Username, medicineName } = req.params;
-    const requestedMedicine = await Medicine.findOne({ Name: medicineName, Quantity: 0, Status: 'unarchived' });
+  const { Username, medicineName } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
-    if (!requestedMedicine) {
-      return res.status(404).json({ message: 'Medicine not found or not out of stock' });
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+      const requestedMedicine = await Medicine.findOne({ Name: medicineName, Quantity: 0, Status: 'unarchived' });
+
+      if (!requestedMedicine) {
+        return res.status(404).json({ message: 'Medicine not found or not out of stock' });
+      }
+
+      const ingredientsOfRequested = requestedMedicine.ActiveIngredients.split(",");
+      const allMedicines = await Medicine.find();
+      let alternatives;
+      for(const med  of allMedicines){
+        const alternativeIngredients = med.ActiveIngredients.split(",");
+        if(haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
+          alternatives.push({
+            Name: med.Name,
+            ActiveIngredients: med.ActiveIngredients,
+            Price: med.Price,
+            Picture: med.Picture,
+            MedicalUse: med.MedicalUse,
+            Quantity: med.Quantity
+          })
+        }
+      }
+
+      /* const alternativeMedicines = await Medicine.find({
+        ActiveIngredients: requestedMedicine.ActiveIngredients,
+        Quantity: { $gt: 0 }, 
+        Status: 'unarchived', 
+      }); */
+
+      if (alternatives.length === 0) {
+        return res.status(404).json({ message: 'No alternative medicines available' });
+      }
+
+      res.status(200).json(alternatives);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message});
     }
-
-    const alternativeMedicines = await Medicine.find({
-      ActiveIngredients: requestedMedicine.ActiveIngredients,
-      Quantity: { $gt: 0 }, 
-      Status: 'unarchived', 
-    });
-
-    if (alternativeMedicines.length === 0) {
-      return res.status(404).json({ message: 'No alternative medicines available' });
-    }
-
-    res.status(200).json(alternativeMedicines.map(({ Name, ActiveIngredients, Price, Picture, MedicalUse, Quantity }) => ({
-      Name,
-      ActiveIngredients,
-      Price,
-      Picture,
-      MedicalUse,
-      Quantity
-    })));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+async function haveCommonIngredients(alternativeIngredients, requestedMedicine){
+  var i = 0;
+  const found = false;
+  while(i < alternativeIngredients.length){
+    if(requestedMedicine.includes(alternativeIngredients[i])){
+      found = true;
+    }
+  }
+  return found;
+}
+
 const getAllOrders = async (req, res) => {
   const { Username } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
-  try {
-      const allOrders = await Order.find({ PatientUsername: Username });
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+        const allOrders = await Order.find({ PatientUsername: Username });
 
-      // Separating current and past orders
-      const currentOrders = allOrders.filter(order => 
-          ["Pending", "Confirmed"].includes(order.Status));
-      const pastOrders = allOrders.filter(order => 
-          ["Delivered", "Cancelled"].includes(order.Status));
+        // Separating current and past orders
+        const currentOrders = allOrders.filter(order => 
+            ["Pending", "Confirmed"].includes(order.Status));
+        const pastOrders = allOrders.filter(order => 
+            ["Delivered", "Cancelled"].includes(order.Status));
 
-      res.status(200).json({
-          currentOrders,
-          pastOrders
-      });
-  } catch (error) {
-      res.status(500).json({ error: error.message });
+        res.status(200).json({
+            currentOrders,
+            pastOrders
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
   }
 };
 const getPatientWalletAmount = async (req, res) => {
   const { Username } = req.params;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
-  try {
-      const patient = await Patient.findOne({ Username });
-      if (!patient) {
-          return res.status(404).json({ error: 'Patient not found' });
-      }
+  if (!(req.user.Username === Username)) {
+    res.status(403).json("You are not logged in!");
+  }else{
+    try {
+        const patient = await Patient.findOne({ Username });
+        if (!patient) {
+            return res.status(404).json({ error: 'Patient not found' });
+        }
 
-      res.status(200).json({ walletAmount: patient.WalletAmount });
-  } catch (error) {
-      res.status(500).json({ error: error.message });
+        res.status(200).json({ walletAmount: patient.WalletAmount });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
   }
 };
 
@@ -641,6 +682,5 @@ module.exports = {
   checkoutOrder,
   viewAlternatives,
   getPatientWalletAmount,
-  getAllOrders,
-  getPatientWalletAmount
+  getAllOrders
 };

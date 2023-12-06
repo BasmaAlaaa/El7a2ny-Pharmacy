@@ -351,6 +351,47 @@ const acceptOrRejectPharmacistRequest = async (req, res) => {
     }
 }
 
+const viewSalesReportOnChosenMonth = async (req, res) => {
+    const { Username, chosenMonth } = req.params;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!(req.user.Username === Username)) {
+      res.status(403).json("You are not logged in!");
+    }else{
+      try {
+  
+        const salesReport = await SReport.findOne();
+  
+        //console.log(salesReport);
+        if (!salesReport) {
+          return res.status(404).json({ message: `Sales report not found ` });
+        }
+  
+        const monthlySales = salesReport.monthlySales.find((entry) => entry.Month === chosenMonth);
+        //console.log(monthlySales);
+        if (!monthlySales) {
+          return res.status(404).json({ message: `No sales data found for ${chosenMonth}` });
+        }
+  
+        const medicineSales = salesReport.medicineSales.filter(
+          (entry) => new Date(entry.date).toLocaleString('default', { month: 'long' }) === chosenMonth
+        );
+        //console.log(medicineSales);
+        
+  
+        res.status(200).json({
+          username: Username,
+          chosenMonth,
+          monthlySales: monthlySales.totalSales,
+          medicineSales,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+      }
+    }
+  };
+
 
 module.exports = {addAdmin,
     removePatientOrPharmacist,
@@ -364,5 +405,6 @@ module.exports = {addAdmin,
     getMedicineByName,
     getMedicineByMedicalUse,
     addPharmacist,
-    acceptOrRejectPharmacistRequest
+    acceptOrRejectPharmacistRequest,
+    viewSalesReportOnChosenMonth
 };
