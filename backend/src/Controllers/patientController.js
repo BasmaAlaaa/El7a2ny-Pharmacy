@@ -579,7 +579,8 @@ const viewAlternatives = async (req, res) => {
       const alternatives = [];
       for(const med  of allMedicines){
         const alternativeIngredients = med.ActiveIngredients.split(",");
-        if(haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
+        if(await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
+          console.log("ana gowa");
           alternatives.push({
             Name: med.Name,
             ActiveIngredients: med.ActiveIngredients,
@@ -610,14 +611,14 @@ const viewAlternatives = async (req, res) => {
 };
 
 async function haveCommonIngredients(alternativeIngredients, requestedMedicine){
-  var i = 0;
-  const found = false;
+  let i = 0;
   while(i < alternativeIngredients.length){
     if(requestedMedicine.includes(alternativeIngredients[i])){
-      found = true;
+      return true;
     }
+    i++;
   }
-  return found;
+  return false;
 }
 
 const getAllOrders = async (req, res) => {
