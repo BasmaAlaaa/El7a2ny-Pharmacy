@@ -12,6 +12,16 @@ function PharmacistView(){
     const {username} = useParams();
     const [notifications, setNotifications] = useState([]);
     let tHeadNot = ['Message'];
+    const[wallet, setWallet] = useState('');
+
+    
+    useEffect(() => {
+      const response = axios.get(`http://localhost:8000/Pharmacist/getPharmacistWalletAmount/${username}`, {
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      })
+      .then(res =>setWallet(res.data)).catch(err => console.log(err))
+        }, [])
+        console.log('www', wallet)
 
 
     useEffect(() => {
@@ -48,7 +58,7 @@ return (
               key="navBtn"
             />
     <MedicineListPharmacist username={username}/>
-    <h2>Wallet Amount:</h2>
+    <h2>Wallet Amount: {wallet}</h2>
     <h2>Notifications:</h2>
     <TableNotifications tHead={tHeadNot} data={notifications} />
     </div>
