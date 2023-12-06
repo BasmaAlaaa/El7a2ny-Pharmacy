@@ -295,13 +295,14 @@ const cancelOrder = async (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
+
   try {
 
     
     
       // Update the status of the order to 'Cancelled'
       const order = await Order.findOneAndUpdate(
-          { _id: orderId, Status: { $ne: "Cancelled" } }, // This condition ensures that orders that are already cancelled are not updated again.
+          { _id: orderId, Status: { $ne: "Cancelled" } },
           { Status: "Cancelled" },
           { new: true } // This option returns the updated document
       );
@@ -314,7 +315,16 @@ const cancelOrder = async (req, res) => {
       
 
       if (!(req.user.Username === order.PatientUsername)) {
-        return res.status(403).json("You are not logged in!");
+          return res.status(403).json("You are not logged in!");
+      }
+
+      // Process refund if the order is not COD
+      if (order.PaymentMethod !== 'COD') {
+          const patient = await Patient.findOne({ Username: order.PatientUsername });
+          if (patient) {
+              patient.WalletAmount += order.TotalAmount; // Add the refund amount to the patient's wallet
+              await patient.save();
+          }
       }
 
       res.status(200).json({ message: "Order cancelled successfully.", order: order });
@@ -322,6 +332,7 @@ const cancelOrder = async (req, res) => {
       res.status(500).send({ error: error.message });
   }
 };
+
 
 const viewCartItems = async (req, res) => {
   const { Username } = req.params;
@@ -580,7 +591,40 @@ const viewAlternatives = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+const getAllOrders = async (req, res) => {
+  const { Username } = req.params;
 
+  try {
+      const allOrders = await Order.find({ PatientUsername: Username });
+
+      // Separating current and past orders
+      const currentOrders = allOrders.filter(order => 
+          ["Pending", "Confirmed"].includes(order.Status));
+      const pastOrders = allOrders.filter(order => 
+          ["Delivered", "Cancelled"].includes(order.Status));
+
+      res.status(200).json({
+          currentOrders,
+          pastOrders
+      });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
+const getPatientWalletAmount = async (req, res) => {
+  const { Username } = req.params;
+
+  try {
+      const patient = await Patient.findOne({ Username });
+      if (!patient) {
+          return res.status(404).json({ error: 'Patient not found' });
+      }
+
+      res.status(200).json({ walletAmount: patient.WalletAmount });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   availableMedicinesDetailsByPatient,
@@ -595,5 +639,8 @@ module.exports = {
   addMedicineToCart,
   updateMedicineQuantityInCart,
   checkoutOrder,
-  viewAlternatives
+  viewAlternatives,
+  getPatientWalletAmount,
+  getAllOrders,
+  getPatientWalletAmount
 };

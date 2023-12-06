@@ -49,21 +49,25 @@ function Checkout() {
   .then(res =>console.log(res.data)).catch(err => console.log(err))
     }
 console.log('typeee', type)
+
+const handleNotification = (e) => {
+  console.log('dakhalt')
+  axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityEmailNotification', "", {
+    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+  })
+  .then(navigate(`/orderDetails/${username}`)).catch(err => console.log('fi error', err))
+} 
     const handleSubmitOrder = async(e) => {
      // try{
       if(type==='card' && !(cardCVV && cardDate && cardNumber)){
         alert('Missing fields')
       }
         else{
-          axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityEmailNotification', "", {
-            headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-          })
-          .then(res =>console.log('emaillll',res.data)).catch(err => console.log(err))
 
           axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
           headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
         })
-        .then(res =>navigate(`/orderDetails/${username}`)).catch(err => alert(err))
+        .then(res =>handleNotification()).catch(err => alert(err))
         // if (response.status === 200) {
         //       navigate(`/orderDetails/${username}`);
         //         console.log(response.data.message);
@@ -73,8 +77,9 @@ console.log('typeee', type)
         //       alert(`Failed to submit order `);
         //       //console.error('Error removing item:', error);
         //     };
-            e.preventDefault();  
+        e.preventDefault();  
         }
+
       }
 
   let tHead = ['Address', 'Select'];

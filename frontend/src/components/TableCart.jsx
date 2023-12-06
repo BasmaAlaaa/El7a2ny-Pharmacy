@@ -32,7 +32,7 @@ function CaseTableBody({ data, username }) {
                   console.log(response.data.message);
               }}
               catch(error ){
-                alert(`Failed to remove item `);
+                alert(`Failed to add item `);
                 console.error('Error removing item:', error);
               };
               window.location.reload(true);        
