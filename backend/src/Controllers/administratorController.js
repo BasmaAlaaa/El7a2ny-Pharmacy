@@ -406,5 +406,4 @@ module.exports = {addAdmin,
     getMedicineByMedicalUse,
     addPharmacist,
     acceptOrRejectPharmacistRequest,
-    viewSalesReportOnChosenMonth
 };

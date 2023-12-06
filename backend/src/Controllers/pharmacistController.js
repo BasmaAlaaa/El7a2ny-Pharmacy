@@ -194,7 +194,7 @@ const getMedicineByMedicalUse = async (req, res) => {
 }
 
 // Check if any medicine quantity is out of stock add a notification
-const checkMedicineQuantityNotification = async (req) => {
+const checkMedicineQuantityNotification = async (req, res) => {
   const {Username} = req.params;
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
