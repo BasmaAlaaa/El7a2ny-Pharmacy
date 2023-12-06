@@ -103,7 +103,7 @@ router.delete('/removeItemFromCart/:Username/:MedicineName', verify, removeAnIte
 router.post('/addMedicineToCart/:Username/:MedicineName', verify, addMedicineToCart);
 router.put('/updateQuantity/:Username/:MedicineName/:quantity', verify, updateMedicineQuantityInCart);
 router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', verify, checkoutOrder);
-router.get('/viewAlternatives/:Username/:medicineName',viewAlternatives);
+router.get('/viewAlternatives/:Username/:medicineName',verify,viewAlternatives);
 router.get('/getPatientWalletAmount/:Username', verify, getPatientWalletAmount);
 router.get('/getAllOrders/:Username', verify, getAllOrders);
 router.get('/getMedicinesFromUnfilledPrescriptions/:Username', verify, getMedicinesFromUnfilledPrescriptions);

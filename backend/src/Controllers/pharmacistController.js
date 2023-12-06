@@ -397,11 +397,19 @@ const viewSalesReportOnMedicine = async (req, res) => {
           (entry) => entry.medicineName.toLowerCase() === medicineName.toLowerCase()
         );
 
+        let totalSales = 0;
+        for(const med of salesForMedicine){
+          totalSales += med.total;
+        }
+
         return res.status(200).json({
           username: Username,
           medicineName,
-          salesForMedicine,
+          totalSales,
+          salesForMedicine
         });
+
+
       } else {
         return res.status(400).json({ message: 'Please provide a medicine name' });
       }
@@ -433,10 +441,16 @@ const viewSalesReportOnDate = async (req, res) => {
           (entry) => new Date(entry.date).toLocaleDateString() === new Date(date).toLocaleDateString()
         );
 
+        let totalSales = 0;
+        for(const med of salesOnDate){
+          totalSales += med.total;
+        }
+
         return res.status(200).json({
           username: Username,
           date,
-          salesOnDate,
+          totalSales,
+          salesOnDate
         });
       } else {
         return res.status(400).json({ message: 'Please provide a date ' });
