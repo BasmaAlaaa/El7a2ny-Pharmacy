@@ -1,9 +1,12 @@
 const { default: mongoose } = require('mongoose');
+const nodemailer = require('nodemailer');
 const Medicine = require('../Models/medicine');
 const Patient = require('../Models/patient');
 const Order = require('../Models/Order');
 const Cart =require('../Models/Cart');
 const SReport = require('../Models/SReport');
+const Pharmacist = require('../Models/pharmacist');
+const Notification = require('../Models/NotificationPharmacy');
 require("dotenv").config();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
@@ -149,6 +152,9 @@ const checkoutOrder = async (req, res) => {
         });
       }
       await salesDocument.save();
+
+      console.log(cartItems);
+      await checkIfMedicineSoldOut(cartItems);
     
       while(cart.items.length > 0) {
         cart.items.pop();
@@ -176,13 +182,8 @@ const checkoutOrder = async (req, res) => {
       const updated = await Order.findOneAndUpdate({_id: orderId},updatedOrder);
       
       if(paymentMethod === "wallet"){
-        const updatedPat = {
-          $set: {
-            WalletAmount: (WalletAmount-order.TotalAmount),
-          },
-        };
-      
-        const update = await patientSchema.updateOne({Username: order.PatientUsername},updatedPat);
+        patient.WalletAmount -= total;
+        await patient.save();
       }
       res.status(200).send(order);
     }
@@ -191,7 +192,77 @@ const checkoutOrder = async (req, res) => {
     }
     } catch (error) {
       res.status(400).send({ error: error.message });
+    } 
+  }
+};
+
+async function checkIfMedicineSoldOut(cartItems){
+  const medicines = await Medicine.find();
+  let i = 0;
+  let items = [];
+  while(i < cartItems.length){
+    items.push(cartItems[i].medicine);
+    i++;
+  }
+  console.log(items);
+  for(const med of medicines){
+    if(items.includes(med.Name) && med.Quantity === 0){
+      console.log("should send an email");
+      await checkMedicineQuantityEmailNotification(med);
     }
+  }
+}
+
+async function checkMedicineQuantityEmailNotification(medicine){
+  
+  try {
+    //const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
+
+    //for (const medicine of outOfStockMedicines) {
+      const existingNotification = await Notification.findOne({ type: "Pharmacist", MedicineName: medicine.Name });
+      if (!existingNotification) {
+
+        const newNotification = await Notification.create({
+          type: "Pharmacist",
+          username: `${Username}`,
+          MedicineName: `${medicine.Name}`,
+          message: `${medicine.Name} is out of stock`,
+        });
+        await newNotification.save();
+
+        // Send email notification to pharmacist
+        const pharmacists = await Pharmacist.find();
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'SuicideSquadGUC@gmail.com',
+            pass: 'wryq ofjx rybi hpom'
+          }
+        });
+
+        for (const pharmacist of pharmacists) {
+          const mailOptions = {
+            from: 'SuicideSquadGUC@gmail.com',
+            to: pharmacist.Email,
+            subject: 'Medicine out of stock',
+            text: `Dear ${pharmacist.Name},
+
+            I hope this message finds you well. We wanted to inform you that the following medicine in your pharmacy is currently out of stock:
+            - ${medicine.Name}
+
+            Please take the necessary actions to restock the medicine.
+
+            Best regards,
+            Suicide Squad Pharmacy`
+          };
+
+          await transporter.sendMail(mailOptions);
+          console.log("email  sent");
+        }
+      }
+    //}
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -579,8 +650,7 @@ const viewAlternatives = async (req, res) => {
       const alternatives = [];
       for(const med  of allMedicines){
         const alternativeIngredients = med.ActiveIngredients.split(",");
-        if(await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
-          console.log("ana gowa");
+        if(!(med.Name === requestedMedicine.Name) && await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
           alternatives.push({
             Name: med.Name,
             ActiveIngredients: med.ActiveIngredients,

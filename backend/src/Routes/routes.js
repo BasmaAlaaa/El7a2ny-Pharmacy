@@ -52,7 +52,6 @@ const {
     addMedicine,
     updateMed,
     checkMedicineQuantityNotification,
-    checkMedicineQuantityEmailNotification,
     deleteNotificationIfQuantityNotZero,
     archiveMedicine,
     unarchiveMedicine,
@@ -119,7 +118,6 @@ router.put('/UpdateMed/:Username/:Name', verify, upload.single('Picture'), updat
 router.get('/MedicineByName/:Username/:Name', verify, getMedicineByName);
 router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByMedicalUse);
 router.post('/CheckMedicineQuantityNotification', verify,checkMedicineQuantityNotification);
-router.post('/CheckMedicineQuantityEmailNotification',verify, checkMedicineQuantityEmailNotification);
 router.post('/deleteNotificationIfQuantityNotZero',verify, deleteNotificationIfQuantityNotZero);
 router.put('/archiveMedicine/:Username/:medicineName' , verify,archiveMedicine);
 router.put('/unarchiveMedicine/:Username/:medicineName' ,verify, unarchiveMedicine);
@@ -128,7 +126,6 @@ router.get('/viewSalesReportOnMedicine/:Username/:medicineName',verify,viewSales
 router.get('/viewSalesReportOnDate/:Username/:date',verify,viewSalesReportOnDate);
 
 router.post('/CheckMedicineQuantityNotification/:Username',verify,checkMedicineQuantityNotification);
-router.post('/CheckMedicineQuantityEmailNotification/:Username',verify, checkMedicineQuantityEmailNotification);
 router.post('/deleteNotificationIfQuantityNotZero/:Username',verify, deleteNotificationIfQuantityNotZero);
 router.get('/displayNotifications/:Username',verify, displayNotifications);
 router.get('/getPharmacistWalletAmount/:Username', verify, getPharmacistWalletAmount);

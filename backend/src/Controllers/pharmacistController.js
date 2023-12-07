@@ -143,6 +143,8 @@ const updateMed = async (req, res) => {
         return res.status(404).json({ error: "No possible updates!" });
       }
 
+      await deleteNotificationIfQuantityNotZero();
+
       res.status(200).json(updatedMed);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -211,8 +213,8 @@ const checkMedicineQuantityNotification = async () => {
             message: `${medicine.Name} is out of stock`,
           });
           await newNotification.save();
-          console.log('notification added');
-          console.log(outOfStockMedicines); // Print out the outOfStockMedicines array
+          //console.log('notification added');
+          //console.log(outOfStockMedicines); // Print out the outOfStockMedicines array
         } else {
           console.log('notification already exists');
         }
@@ -235,50 +237,6 @@ const deleteNotificationIfQuantityNotZero = async () => {
         if (medicine && medicine.Quantity > 0) {
           await Notification.findOneAndDelete({ MedicineName: notification.MedicineName });
           console.log(`Notification for ${notification.MedicineName} deleted`);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-};
-
-const checkMedicineQuantityEmailNotification = async () => {
-  
-    try {
-      const outOfStockMedicines = await Medicine.find({ Quantity: 0 });
-
-      for (const medicine of outOfStockMedicines) {
-        const existingNotification = await Notification.findOne({ type: "Pharmacist", MedicineName: medicine.Name });
-
-        if (!existingNotification) {
-          // Send email notification to pharmacist
-          const pharmacists = await Pharmacist.find();
-          const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: 'SuicideSquadGUC@gmail.com',
-              pass: 'wryq ofjx rybi hpom'
-            }
-          });
-
-          for (const pharmacist of pharmacists) {
-            const mailOptions = {
-              from: 'SuicideSquadGUC@gmail.com',
-              to: pharmacist.Email,
-              subject: 'Medicine out of stock',
-              text: `Dear ${pharmacist.Name},
-
-              I hope this message finds you well. We wanted to inform you that the following medicine in your pharmacy is currently out of stock:
-              - ${medicine.Name}
-
-              Please take the necessary actions to restock the medicine.
-
-              Best regards,
-              Suicide Squad Pharmacy`
-            };
-
-            await transporter.sendMail(mailOptions);
-          }
         }
       }
     } catch (error) {
@@ -471,13 +429,11 @@ const displayNotifications = async (req, res) => {
     res.status(403).json("You are not logged in!");
   }else{
     try {
-      await checkMedicineQuantityNotification(req, res);
-      await deleteNotificationIfQuantityNotZero();
       const notifications = await Notification.find();
       const notificationMessages = notifications.map(notification => notification.message);
       res.status(200).json(notificationMessages);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch notifications" });
+      res.status(500).json({ message: error.message });
     }
   }
 };
@@ -527,7 +483,6 @@ module.exports = {
   getMedicineByName,
   getMedicineByMedicalUse,
   checkMedicineQuantityNotification,
-  checkMedicineQuantityEmailNotification,
   deleteNotificationIfQuantityNotZero,
   archiveMedicine,
   unarchiveMedicine,
