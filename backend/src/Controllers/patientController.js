@@ -650,7 +650,7 @@ const viewAlternatives = async (req, res) => {
       const alternatives = [];
       for(const med  of allMedicines){
         const alternativeIngredients = med.ActiveIngredients.split(",");
-        if(!(med.Name === requestedMedicine.Name) && await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
+        if(await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested) && requestedMedicine.Name!==med.Name){
           alternatives.push({
             Name: med.Name,
             ActiveIngredients: med.ActiveIngredients,

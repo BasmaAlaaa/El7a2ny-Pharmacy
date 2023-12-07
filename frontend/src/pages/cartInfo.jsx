@@ -25,7 +25,7 @@ function CarttInfo(){
     }, [])
   console.log(result.items)
 
-  let tHead = ['Name', 'Quantity', 'Remove from cart', 'Add', 'Remove'];
+  let tHead = ['Name', 'Quantity', 'Remove from cart'];
  
 
     return (

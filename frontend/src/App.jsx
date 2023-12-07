@@ -25,6 +25,8 @@ import Checkout from './pages/checkout';
 import OrderDetails from './pages/orderDetails';
 import SalesReportInfo from './pages/salesReportInfo';
 import NotificationsPharmacist from './pages/notificationsPharmacist';
+import Pharmacists from './pages/pharmacists';
+import Patients from './pages/patients';
 
 
 
@@ -37,7 +39,7 @@ function App() {
         <Routes>
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />
-          <Route exact path="/changePassword/:username" element={<ChangePassword />} />
+          <Route exact path="/changePassword/:username/:type" element={<ChangePassword />} />
           <Route exact path="/resetPassword" element={<ResetPassword />} />
           <Route exact path="/registerPatient" element={<RegisterPatient />} />
           <Route exact path="/registerPharmacist" element={<RegisterPharmacist />} />
@@ -57,6 +59,9 @@ function App() {
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
           <Route exact path="/salesReportInfo/:username/:type" element={<SalesReportInfo />} />
           <Route exact path="/notificationsPharmacist/:username" element={<NotificationsPharmacist />} />
+          <Route exact path="/Pharmacists/:username" element={<Pharmacists />} />
+          <Route exact path="/patients/:username" element={<Patients />} />
+
 
 
         </Routes>
