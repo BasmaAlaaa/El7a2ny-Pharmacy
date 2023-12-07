@@ -19,7 +19,7 @@ function CaseTableBody({ data, username }) {
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
-        className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
         onClick={()=>navigate(`/editMedicine/${data.Name}/${username}`)}
       >
         Edit
@@ -30,7 +30,7 @@ function CaseTableBody({ data, username }) {
     <td className="py-3 text-align-center">
     <div className="d-flex flex-row">
     <button
-      className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+      className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
       onClick={()=> axios.put(`http://localhost:8000/Pharmacist/archiveMedicine/${username}/${data.Name}`,"",{
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
       }).then(res => window.location.reload(true)).catch(err => alert(err))
@@ -45,7 +45,7 @@ function CaseTableBody({ data, username }) {
     <td className="py-3 text-align-center">
     <div className="d-flex flex-row">
     <button
-      className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+      className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
       onClick={()=> axios.put(`http://localhost:8000/Pharmacist/unarchiveMedicine/${username}/${data.Name}`,"",{
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
       }).then(res => window.location.reload(true)).catch(err => alert(err))}

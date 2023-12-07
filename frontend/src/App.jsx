@@ -24,6 +24,7 @@ import CartInfo from './pages/cartInfo';
 import Checkout from './pages/checkout';
 import OrderDetails from './pages/orderDetails';
 import SalesReportInfo from './pages/salesReportInfo';
+import NotificationsPharmacist from './pages/notificationsPharmacist';
 
 
 
@@ -55,6 +56,8 @@ function App() {
           <Route exact path="/checkout/:username" element={<Checkout />} />
           <Route exact path="/orderDetails/:username" element={<OrderDetails />} />
           <Route exact path="/salesReportInfo/:username/:type" element={<SalesReportInfo />} />
+          <Route exact path="/notificationsPharmacist/:username" element={<NotificationsPharmacist />} />
+
 
         </Routes>
       </main>

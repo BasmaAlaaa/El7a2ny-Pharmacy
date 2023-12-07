@@ -3,7 +3,9 @@ import { json, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import search from '../assets/images/svg/search.svg';
+import filter from '../assets/images/svg/filter.svg';
 import TablePharmacist from './TablePharmacist.jsx';
+import MainBtn from './Button.jsx';
 
 function MedicineListPharmacist(props) {
   const[searchText, setSearchText] = useState('');
@@ -67,14 +69,30 @@ let navigate = useNavigate()
             className="form-control border-start-0 search ps-0"
             placeholder="Search"
             onChange={(e) => setSearchText(e.target.value)}
-          />
-        </div>
-        <select name='medicalUse' onChange={onFilterValueChanged}>
-        <option value='all'>All</option>
-        <option value='pain Killer'>Pain killer</option>
-        <option value='antiinflammatory'>Antiinflammatory</option>
-        </select>
+          />        
       </div>
+
+        <select className="input-group-text bg-white border-end-0 search" name='medicalUse' onChange={onFilterValueChanged} >
+        <option  value='all'>All</option>
+        <option  value='pain Killer'>Pain killer</option>
+        <option  value='antiinflammatory'>Antiinflammatory</option>
+        <option  value='skincare'>Skincare</option>
+        <option  value='acne cream'>Acne Cream</option>
+        <option  value='supplements'>Supplements</option>
+
+
+
+        </select>
+     
+      </div>
+      <div className="input-group w-25">
+      <MainBtn
+              txt="Add Medicine"
+              style="green-btn"
+              action={() => navigate(`/addMedicine/${username}`)}
+              key="navBtn"
+    />
+    </div>
     </div>
       <TablePharmacist tHead={tHead} data={result} searchText={searchText} filterText={filterText} username={props.username}/>
     </div>
