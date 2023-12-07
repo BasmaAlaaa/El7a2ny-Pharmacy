@@ -89,9 +89,10 @@ const handleNotification = (e) => {
         <div>
             <NavBarPatient username={username}/>
  <form
-      className="d-flex justify-content-center"
+      //style={{ width: '100%' }}
+      className="d-flex justify-content-center "
     >
-      <div className="form-width">
+      <div style={{ width: '40%' }} className="form-width">
         <p className="text-capitalize fs-4">Delivery Address</p>
  
           <Input
@@ -130,7 +131,7 @@ const handleNotification = (e) => {
     <td className="py-3 text-align-center">
     <div className="d-flex flex-row">
     <button
-      className={`green-txt mx-2 text-decoration-underline text-capitalize border-0 bg-transparent`}
+      className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
         onClick={(s) =>{
           s.preventDefault();
           setDeliveryAddress(e)}

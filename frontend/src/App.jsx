@@ -37,7 +37,7 @@ function App() {
         <Routes>
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />
-          <Route exact path="/changePassword/:username" element={<ChangePassword />} />
+          <Route exact path="/changePassword/:username/:type" element={<ChangePassword />} />
           <Route exact path="/resetPassword" element={<ResetPassword />} />
           <Route exact path="/registerPatient" element={<RegisterPatient />} />
           <Route exact path="/registerPharmacist" element={<RegisterPharmacist />} />
