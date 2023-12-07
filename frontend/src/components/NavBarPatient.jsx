@@ -29,48 +29,47 @@ function NavBarPatient(props) {
             <img src='https://i.pinimg.com/originals/57/1a/e3/571ae39ce1b3360b0cf852322b413bdb.jpg' alt="Pharmacy" width={40} height={40} />
           </a>
         </div>
-
-        <div>
-            <MainBtn
-              txt="Home"
-              style="green-btn"
-              action={() => navigate(`/patientView/${props.username}`)}
-              key="navBtn"
-            />
-          </div>
-          <div>
-            <MainBtn
-              txt="View Cart"
-              style="green-btn"
-              action={() => navigate(`/cartInfo/${props.username}`)}
-              key="navBtn"
-            />
-          </div>
-          <div>
-            <MainBtn
-              txt="Change Password"
-              style="green-btn"
-              action={() => navigate(`/changePassword/${props.username}`)}
-              key="navBtn"
-            />
-          </div>
-          <div>
-            <MainBtn
-              txt="view Order History"
-              style="green-btn"
-              action={() => navigate(`/orderDetails/${props.username}`)}
-              key="navBtn"
-            />
-          </div>
-          <div>
-            <MainBtn
-              txt="Logout"
-              style="green-btn"
-              action={handleLogout}
-              key="navBtn"
-            />
-          </div>
         
+    <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/patientView/${props.username}`)}
+      >
+        Home
+      </button>
+    </div>     
+    <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/cartInfo/${props.username}`)}
+      >
+        Cart
+      </button>
+    </div> 
+    <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/orderDetails/${props.username}`)}
+      >
+        Order History
+      </button>
+    </div> 
+    <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/changePassword/${props.username}`)}
+      >
+        Change Password
+      </button>
+    </div> 
+    <div className="d-flex flex-row">
+      <button
+        className={`red-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>      
       </div>
     </nav>
   );

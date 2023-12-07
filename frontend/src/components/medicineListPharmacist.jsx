@@ -32,26 +32,6 @@ console.log(filterText)
 let navigate = useNavigate()
 
   let tHead = ['Name', 'Active Ingredients', 'Price', 'Photo', 'Medical Use', 'Quantity', 'Sales', 'Edit', 'archive/unarchive'];
-  let data = [{
-    medicineName: 'Cataflam',
-    activeIngredients: 'Paracetamol',
-    price: '100',
-    photo: 'https://mybigpharmacy.com/wp-content/uploads/2019/08/TZF0JQOIEVbtsIxSC55dRWbZ9fyZywiuK9NYLh2v.jpeg',
-    medicalUse: 'pain killer',
-    quantity: 10,
-    sales: 5
-  },
-  {
-    medicineName: 'Panadol',
-    activeIngredients: 'Paracetamol',
-    price: '100',
-    photo: 'https://mybigpharmacy.com/wp-content/uploads/2019/08/TZF0JQOIEVbtsIxSC55dRWbZ9fyZywiuK9NYLh2v.jpeg',
-    medicalUse: 'pain killer',
-    quantity: 10,
-    sales: 5
-  },
-]
-;
 
   return (
     <div>
