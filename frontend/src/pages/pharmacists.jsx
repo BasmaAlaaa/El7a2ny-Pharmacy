@@ -7,10 +7,8 @@ import NavBarAdministrator from '../components/NavBarAdministrator.jsx';
 import MainBtn from '../components/Button.jsx';
 import MedicineList from '../components/medicineList.jsx';
 
-function AdministratorView() {
-  const[searchText, setSearchText] = useState('');
-  const[filterText, setFilterText] = useState('');
-  const[resultPatient, setResultPatient] = useState([]);
+function Pharmacists() {
+
   const[resultPharmacist, setResultPharmacist] = useState([]);
   const[resultRequest, setResultRequest] = useState([]);
   const {username} = useParams();
@@ -31,16 +29,6 @@ const onAcceptOrReject = async (Username, action) => {
       alert(`Failed to ${action === 'accept' ? 'accept' : 'reject'} pharmacist`);
   }
 };
-  useEffect(() => {
-const response = axios.get(`http://localhost:8000/Admin/AllPatients/${username}`,{
-  headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-})
-.then(res =>setResultPatient(res.data)).catch(err => console.log(err))
-  }, [])
-console.log(resultPatient)
-resultPatient.map((e) => {
-  console.log(e)
-})
 
 useEffect(() => {
   const response = axios.get(`http://localhost:8000/Admin/AllPharmacists/${username}`,{
@@ -64,51 +52,35 @@ useEffect(() => {
       console.log(e)
     })
 
-const onFilterValueChanged=(event)=>{
-  setFilterText(event.target.value);
-}
-console.log(filterText)
 let navigate = useNavigate()
 
-  let tHeadPatient = ['Name', 'Gender', 'Mobile Number', 'View'];
-  let dataPatient = [{
-    name: 'Joy',
-    gender: 'female',
-    age: 20,
-    email: 'joy@gmail.com',
-    mobileNumber: '013232312321',
-    username: 'joy123'
-  }
-];
-
   let tHeadPharmacist = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View'];
-  let dataPharmacist = [{
-    name: 'Mohamed',
-    affiliation: 'X hospital',
-    hourlyRate: 1000,
-    educationalBackground: 'pharmacy',
-    username: 'mohamed123'
-
-  }
-];
   let tHeadRequests = ['Name', 'Affiliation', 'Hourly Rate', 'EducationalBackground', 'View', 'Status'];
-  let dataRequests = [{
-    name: 'Ahmed',
-    affiliation: 'Y Hospital',
-    hourlyRate: 1000,
-    educationalBackground: 'pharmacy',
-    username: 'ahmed123'
-
-  }
-];
 
 
   return (
     <div>
         <NavBarAdministrator username={username}/>
-          <MedicineList/>
+
+      <div className="d-flex justify-content-between flex-row">
+      <p className="text-capitalize fs-4 w-25">Pharmacists</p>
+      <div className="d-flex flex-row w-75 justify-content-end">
+        <div className="input-group w-50"></div> 
+      </div>
+    </div>
+
+      <Table tHead={tHeadPharmacist} data={resultPharmacist} filterText='' searchText='' username={username}/>
+
+
+    <div className="d-flex justify-content-between flex-row">
+      <p className="text-capitalize fs-4 w-25">Pharmacists Requests</p>
+      <div className="d-flex flex-row w-75 justify-content-end">
+        <div className="input-group w-50"></div> 
+      </div>
+    </div>
+      <Table tHead={tHeadRequests} data={resultRequest} filterText='' searchText='' username={username}/>
 
     </div>
   );
 }
-export default AdministratorView;
+export default Pharmacists;

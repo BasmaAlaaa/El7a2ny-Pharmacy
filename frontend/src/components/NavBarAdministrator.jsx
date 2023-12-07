@@ -35,31 +35,68 @@ function NavBarAdministrator(props) {
           </a>
         </div>
         
-          <div>
-          <MainBtn
-              txt="Home"
-              style="green-btn"
-              action={() => navigate(`/administratorView/${props.username}`)}
-              key="navBtn"
-            />
-          </div>
-          <div>
-            <MainBtn
-              txt="Change Password"
-              style="green-btn"
-              action={() => navigate(`/changePassword/${props.username}/${'admin'}`)}
-              key="navBtn"
-            />
-          </div>
-          <div>
-            <MainBtn
-              txt="Logout"
-              style="green-btn"
-              action={handleLogout}
-              key="navBtn"
-            />
-          </div>
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/administratorView/${props.username}`)}
+      >
+        Home
+      </button>
+      </div>
 
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/patients/${props.username}`)}
+      >
+        Patients
+      </button>
+      </div>
+
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/pharmacists/${props.username}`)}
+      >
+        Pharmacists
+      </button>
+      </div>
+
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/salesReportInfo/${props.username}/${"admin"}`)}
+      >
+        Sales Report
+      </button>
+      </div>
+
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() =>navigate(`/addAdministrator/${props.username}`)}
+      >
+        Add Administrator
+      </button>
+      </div>
+
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/changePassword/${props.username}/${'admin'}`)}
+      >
+        Change Password
+      </button>
+      </div>
+
+      <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+      </div>
 
       </div>
     </nav>
