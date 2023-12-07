@@ -63,7 +63,7 @@ function CaseTableBody({ data, username }) {
       </td>
       }
       {data.ActiveIngredients && data.Quantity==0 && <td>Item Unavailable</td>}
-      {data.ActiveIngredients && data.Quantity==0 && <td><TableIAlternatives tHead={['']} data={result}/></td>}
+      {data.ActiveIngredients && data.Quantity==0 && <td><TableIAlternatives tHead={[]} data={result}/></td>}
 
 
       {data.Gender &&

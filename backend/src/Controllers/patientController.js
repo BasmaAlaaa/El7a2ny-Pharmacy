@@ -579,7 +579,7 @@ const viewAlternatives = async (req, res) => {
       const alternatives = [];
       for(const med  of allMedicines){
         const alternativeIngredients = med.ActiveIngredients.split(",");
-        if(await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested)){
+        if(await haveCommonIngredients(alternativeIngredients,ingredientsOfRequested) && requestedMedicine.Name!==med.Name){
           console.log("ana gowa");
           alternatives.push({
             Name: med.Name,
