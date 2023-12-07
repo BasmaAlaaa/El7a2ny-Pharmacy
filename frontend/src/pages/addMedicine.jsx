@@ -6,10 +6,12 @@ import Validation from '../validate/validate';
 import { useState } from 'react';
 import axios from 'axios';
 import NavBarPharmacist from '../components/NavBarPharmacist.jsx';
+import MainBtn from '../components/Button.jsx';
+import Input from '../components/Input.jsx';
 
 function AddMedicine() {
   // let { errors, handleSubmit, register } = Validation('username')
-  // const navigate = useNavigate();
+   const navigate = useNavigate();
   // const dispatch = useDispatch();
   // let c = (data) => {
   //   console.log(data);
@@ -55,14 +57,14 @@ function AddMedicine() {
     const addmeds = axios.post(`http://localhost:8000/Pharmacist/AddMedicine/${username}`, data, {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     })
-      .then(res => console.log(res.data)).catch(err => console.log(err))
+      .then(res => navigate(`/pharmacistView/${username}`)).catch(err => alert(err))
   }
 
   return (
     <div>
       <NavBarPharmacist username={username} />
       {/* <Form title="Add Medicine" inputArr={inputArr} type="addMedicine" btnArr={btnArr} /> */}
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <h3>
           <label>Name</label>
           <input title='name' required placeholder='enter medicine name' type='text' onChange={(e) => setName(e.target.value)} />
@@ -94,6 +96,68 @@ function AddMedicine() {
         <h3>
           <button type="submit">Submit</button>
         </h3>
+      </form> */}
+      
+      <form
+        className="d-flex justify-content-center"
+        onSubmit={handleSubmit}
+      >
+        <div className="form-width">
+          <p className="text-capitalize fs-4">Add Medicine</p>
+
+          <Input
+            title='Name'
+            required={true}
+            placeholder='Enter medicine name'
+            type='text'
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            title='Active Ingredients'
+            required={true}
+            placeholder='Enter active ingredients'
+            type='text'
+            onChange={(e) => setActiveIngredients(e.target.value)}
+          />
+          <Input
+            title='Price'
+            required={true}
+            placeholder='Enter medicine price'
+            type='number'
+            onChange={(e) => setPrice(e.target.value)}
+          />
+          <Input
+            title='Quantity'
+            required={true}
+            placeholder='Enter quantity'
+            type='number'
+            onChange={(e) => setQuantity(e.target.value)}
+          />
+          <Input
+            title='Medical Use'
+            required={true}
+            placeholder='Enter medical use'
+            type='text'
+            onChange={(e) => setMedicalUse(e.target.value)}
+          />
+          <Input
+            title='Image'
+            required={true}
+            placeholder='Enter medicine image'
+            type='file'
+            onChange={(e) => setPicture(e.target.value)}
+          />
+          <div className="mt-3">
+            <MainBtn
+              txt='submit'
+              type="submit"
+              style='green-btn'
+              //action={handleSubmit}
+
+            />
+          </div>
+
+        </div>
       </form>
     </div>
   );
