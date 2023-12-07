@@ -15,13 +15,6 @@ function PatientView(){
 
     
     useEffect(() => {
-      const response = axios.get(`http://localhost:8000/Patient/getPatientWalletAmount/${username}`, {
-        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-      })
-      .then(res =>setWallet(res.data.walletAmount)).catch(err => console.log(err))
-        }, [])
-        console.log('www', wallet)
-    useEffect(() => {
   const response = axios.get(`http://localhost:8000/Patient/AvailableMedicinesDetailsByPatient/${username}`, {
     headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
   })
@@ -77,7 +70,6 @@ return (
     </div>
       <Table tHead={tHead} data={result} searchText={searchText} filterText={filterText} username={username}/>
     </div> 
-    <h2>Wallet Amount:{wallet}</h2>
    </div>
 )
 }

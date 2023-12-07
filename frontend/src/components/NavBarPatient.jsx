@@ -2,10 +2,12 @@ import MainBtn from './Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 function NavBarPatient(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login.loggedIn);
+  const[wallet, setWallet] = useState('');
   const handleLogout = async (event) => {
     event.preventDefault(); 
     try {
@@ -21,6 +23,14 @@ function NavBarPatient(props) {
       alert(error.response ? error.response.data.error : error.message);
     }
   };
+    useEffect(() => {
+      const response = axios.get(`http://localhost:8000/Patient/getPatientWalletAmount/${props.username}`, {
+        headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
+      })
+      .then(res =>setWallet(res.data.walletAmount)).catch(err => console.log(err))
+        }, [])
+    console.log('www', wallet)
+  
   return (
     <nav className="navbar shadow-sm mb-4">
       <div className="d-flex flex-row justify-content-between w-100 align-items-center">
@@ -62,6 +72,8 @@ function NavBarPatient(props) {
         Change Password
       </button>
     </div> 
+    <h5>Wallet:{wallet} EGP</h5>
+
     <div className="d-flex flex-row">
       <button
         className={`red-txt mx-2 text-capitalize border-0 bg-transparent`}
@@ -69,7 +81,8 @@ function NavBarPatient(props) {
       >
         Logout
       </button>
-    </div>      
+    </div>
+      
       </div>
     </nav>
   );
