@@ -86,6 +86,7 @@ const addMedicine = async (req, res) => {
       ActiveIngredients,
       Price,
       Quantity,
+      Picture,
       QuantitySold,
       MedicalUse } = req.body;
 
@@ -101,7 +102,7 @@ const addMedicine = async (req, res) => {
         ActiveIngredients: ActiveIngredients,
         Price: Price,
         Quantity: Quantity,
-        Picture: req.file.originalname,
+        Picture: Picture,
         QuantitySold: QuantitySold,
         MedicalUse: MedicalUse
       });
@@ -132,10 +133,10 @@ const updateMed = async (req, res) => {
 
       let updateData = { ...req.body };
 
-      // Check if a picture file is provided
-      if (req.file) {
-        updateData.Picture = req.file.originalname;
-      }
+      // // Check if a picture file is provided
+      // if (req.file) {
+      //   updateData.Picture = req.file.originalname;
+      // }
 
       const updatedMed = await Medicine.findOneAndUpdate({ Name: Name }, updateData, { new: true });
 
