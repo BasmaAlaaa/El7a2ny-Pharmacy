@@ -134,6 +134,7 @@ router.put('/updatePharmacistSalary/:Username/:hoursWorked', verify, updatePharm
 
 
 const {GetMedicineByDoctor}=require('../Controllers/DoctorFromTheClinic');
-router.get('/GetMedicineByDoctor/:Name',GetMedicineByDoctor);
+router.get('/GetMedicineByDoctor/:username/:Name', GetMedicineByDoctor);
+
 
 module.exports = router;
