@@ -47,7 +47,15 @@ function NavBarPatient(props) {
       >
         Home
       </button>
-    </div>     
+    </div>    
+    <div className="d-flex flex-row">
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={() => navigate(`/prescriptionsList/${props.username}`)}
+      >
+        Prescriptions
+      </button>
+    </div>  
     <div className="d-flex flex-row">
       <button
         className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
