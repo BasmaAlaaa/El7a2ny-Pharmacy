@@ -22,6 +22,7 @@ function PrescriptionInfo() {
       .then(res => setResult(res.data)).catch(err => console.log(err))
   }, [])
 
+
   const handlePay = (e) =>{
     e.preventDefault();
       const data = {paymentMethod:typePay}
@@ -51,13 +52,11 @@ console.log('el result aho', result)
       <NavBarPatient username={result.PatientUsername} />
       <h1>Prescription Info</h1>
       <ul>
-        <h3>Patient Name: {result.PatientName}</h3>
         <h3>Doctor Name: {result.DoctorName}</h3>
         <h3>Prescription Date: {result.Date && result.Date.substring(0,10)}</h3>
         <h3>Description: {result.Description}</h3>
-        <h3>Status: {result.Filled == true ? "Filled" : "Unfilled"}</h3>
       </ul>
-      {/* <TableCart /> */}
+      {/* <Table /> */}
       <form
       //style={{ width: '100%' }}
       className="d-flex justify-content-center "
