@@ -4,6 +4,8 @@ import Validation from '../validate/validate.js';
 import NavBar from '../components/NavBar.jsx';
 import { useState } from 'react';
 import axios from 'axios';
+import Input from '../components/Input.jsx';
+import MainBtn from '../components/Button.jsx';
 
 function RegisterPatient() {
   // let {errors,handleSubmit,register} = Validation('createAccount')
@@ -50,13 +52,27 @@ function RegisterPatient() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation, address: address}
-    console.log(data)
+    try{
+      const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation, address: address}
+      console.log(data)
+      const response = await axios.post('http://localhost:8000/Guest/RegisterPatient', data)
+      
+          if (response.status === 200) {
+            alert(`Registered successfully`);
+            console.log(response.data.message);
+            navigate(`/login`);
+          } else {
+            alert(`Failed to register. Status: ${response.status}`);
+          }
+        } catch (error) {
+          alert(`Failed to register. Error: ${error.message}`);
+          console.error('Error accepting request:', error);
+        }
  
-      await axios.post('http://localhost:8000/Guest/RegisterPatient',
-        data)
-      .then(res =>console.log(data)).catch(err => console.log(err.request))
-      navigate(`/login`);
+      // await axios.post('http://localhost:8000/Guest/RegisterPatient',
+      //   data)
+      // .then(res =>console.log(data)).catch(err => console.log(err.request))
+      // navigate(`/login`);
     }
   return (
     <div>
@@ -67,7 +83,7 @@ function RegisterPatient() {
         btnArr={btnArr}
         type="register"
       /> */}
-       <form onSubmit={handleSubmit}>
+       {/* <form onSubmit={handleSubmit}>
         <h3>
         <label>Name</label>
         <input  title= 'name' required placeholder= 'enter name' type= 'text' onChange={(e) => setName(e.target.value)} />
@@ -115,7 +131,104 @@ function RegisterPatient() {
   <h3>
   <button type="submit">Submit</button>
   </h3>
-</form>
+</form> */}
+<form
+        className="d-flex justify-content-center"
+        onSubmit={handleSubmit}
+      >
+      <div style={{ width: '35%' }} className="form-width">
+          <p className="text-capitalize fs-4">Register As Patient</p>
+          <Input
+            title='Name'
+            required={true}
+            placeholder='Enter name'
+            type='text'
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            title='Username'
+            required={true}
+            placeholder='Enter username'
+            type='text'
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            title='Email'
+            required={true}
+            placeholder='Enter email'
+            type='email'
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            title='Password'
+            required={true}
+            placeholder='Enter password'
+            type='password'
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            title='Date Of Birth'
+            required={true}
+            placeholder='Enter date'
+            type='date'
+            onChange={(e) => setDateOfBirth(e.target.value)}
+          />
+          <Input
+            title='Gender'
+            required={true}
+            placeholder='Enter gender'
+            type='text'
+            onChange={(e) => setGender(e.target.value)}
+          />
+          <Input
+            title='Mobile Number'
+            required={true}
+            placeholder='Enter mobile number'
+            type='text'
+            onChange={(e) => setMobileNumber(e.target.value)}
+          />
+          <Input
+            title='Emergency Contact Full Name'
+            required={true}
+            placeholder='Enter emergency contact full name'
+            type='text'
+            onChange={(e) => setEmergencyName(e.target.value)}
+          />
+          <Input
+            title='Emergency Contact Mobile Number'
+            required={true}
+            placeholder='Enter emergency contact mobile number'
+            type='text'
+            onChange={(e) => setEmergencyMobile(e.target.value)}
+          />
+          <Input
+            title='Emergency Contact Relation to Patient'
+            required={true}
+            placeholder='Enter emergency contact relation'
+            type='text'
+            onChange={(e) => setEmergencyRelation(e.target.value)}
+          />
+          <Input
+            title='Address'
+            required={true}
+            placeholder='Enter address'
+            type='text'
+            onChange={(e) => setAddress(e.target.value)}
+          />
+
+         
+          <div className="mt-3">
+            <MainBtn
+              txt='Submit'
+              type="submit"
+              style='green-btn'
+              //action={handleSubmit}
+
+            />
+          </div>
+
+        </div>
+      </form>
     </div>
   );
 }
