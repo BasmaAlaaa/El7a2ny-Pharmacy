@@ -4,6 +4,8 @@ import Validation from '../validate/validate.js';
 import NavBar from '../components/NavBar.jsx';
 import { useState } from 'react';
 import axios from 'axios';
+import Input from '../components/Input.jsx';
+import MainBtn from '../components/Button.jsx';
 
 function RegisterPharmacist() {
   // let {errors,handleSubmit,register} = Validation('createAccount')
@@ -45,42 +47,46 @@ function RegisterPharmacist() {
   const [WorkingLicenseDocument, setWorkingLicenseDocument] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const data = new FormData();
+    try{
+      const data = new FormData();
 
-    // Append other form fields
-    data.append('Name', name);
-    data.append('Username', username);
-    data.append('Email', email);
-    data.append('Password', password);
-    data.append('DateOfBirth', dateOfBirth);
-    data.append('HourlyRate', hourlyRate);
-    data.append('Affiliation', affiliation);
-    data.append('EducationalBackground', educationalBackground);
-
-    // Append file uploads
-    data.append('IDDocument', IDDocument);
-    data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
-    data.append('WorkingLicenseDocument', WorkingLicenseDocument);
-    console.log(data)
-
-    const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
-      .then(res => console.log(res.data)).catch(err => console.log(err))
-      navigate(`/login`);
+      // Append other form fields
+      data.append('Name', name);
+      data.append('Username', username);
+      data.append('Email', email);
+      data.append('Password', password);
+      data.append('DateOfBirth', dateOfBirth);
+      data.append('HourlyRate', hourlyRate);
+      data.append('Affiliation', affiliation);
+      data.append('EducationalBackground', educationalBackground);
+  
+      // Append file uploads
+      data.append('IDDocument', IDDocument);
+      data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
+      data.append('WorkingLicenseDocument', WorkingLicenseDocument);
+      console.log(data)
+  
+      const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
+            if (response.status === 200) {
+              alert(`Registered successfully`);
+              console.log(response.data.message);
+              navigate(`/login`);
+            } else {
+              alert(`Failed to register. Status: ${response.status}`);
+            }
+          } catch (error) {
+            alert(`Failed to register. Error: ${error.message}`);
+            console.error('Error accepting request:', error);
+          }
     }
 
 
   return (
     <div>
       <NavBar />
-      {/* <Form
-        title="create account"
-        inputArr={inputArr}
-        btnArr={btnArr}
-        type="register"
-      /> */}
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <h3>
           <label>Name</label>
           <input title='name' required placeholder='enter name' type='text' onChange={(e) => setName(e.target.value)} />
@@ -128,6 +134,103 @@ function RegisterPharmacist() {
         <h3>
           <button type="submit">Submit</button>
         </h3>
+      </form> */}
+      <form
+        className="d-flex justify-content-center"
+        onSubmit={handleSubmit}
+      >
+      <div style={{ width: '35%' }} className="form-width">
+          <p className="text-capitalize fs-4">Register As Pharmacist</p>
+          <Input
+            title='Name'
+            required={true}
+            placeholder='Enter name'
+            type='text'
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            title='Username'
+            required={true}
+            placeholder='Enter username'
+            type='text'
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            title='Email'
+            required={true}
+            placeholder='Enter email'
+            type='email'
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            title='Password'
+            required={true}
+            placeholder='Enter password'
+            type='password'
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            title='Date Of Birth'
+            required={true}
+            placeholder='Enter date'
+            type='date'
+            onChange={(e) => setDateOfBirth(e.target.value)}
+          />
+          <Input
+            title='Hourly Rate'
+            required={true}
+            placeholder='Enter hourly rate'
+            type='number'
+            onChange={(e) => setHourlyRate(e.target.value)}
+          />
+          <Input
+            title='Affiliation'
+            required={true}
+            placeholder='Enter affiliation'
+            type='text'
+            onChange={(e) => setAffiliation(e.target.value)}
+          />
+          <Input
+            title='EducationalBackgroung'
+            required={true}
+            placeholder='Enter educational background'
+            type='text'
+            onChange={(e) => setEducationalBackground(e.target.value)}
+          />
+          <Input
+            title='ID'
+            required={true}
+            placeholder='Enter ID'
+            type='file'
+            onChange={(e) => setIDDocument(e.target.value)}
+          />
+          <Input
+            title='Pharmacy Degree'
+            required={true}
+            placeholder='Enter pharmacy degree document'
+            type='file'
+            onChange={(e) => setPharmacyDegreeDocument(e.target.value)}
+          />
+          <Input
+            title='Working License'
+            required={true}
+            placeholder='Enter working license'
+            type='file'
+            onChange={(e) => setWorkingLicenseDocument(e.target.value)}
+          />
+
+         
+          <div className="mt-3">
+            <MainBtn
+              txt='Submit'
+              type="submit"
+              style='green-btn'
+              //action={handleSubmit}
+
+            />
+          </div>
+
+        </div>
       </form>
     </div>
   );
