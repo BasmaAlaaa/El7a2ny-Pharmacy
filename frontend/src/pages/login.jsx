@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import {jwtDecode} from "jwt-decode";
+import NavBar from "../components/NavBar.jsx";
 
 
 function Login() {
@@ -81,6 +82,7 @@ function Login() {
 
   return (
     <div>
+      <NavBar />
       {/* <Form title="login" inputArr={inputArr} type="login" btnArr={btnArr} /> */}
       <form className="d-flex justify-content-center">
         <div className="form-width">
