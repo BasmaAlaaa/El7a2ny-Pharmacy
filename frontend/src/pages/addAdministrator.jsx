@@ -42,7 +42,7 @@ function AddAdministrator() {
     await axios.post(`http://localhost:8000/Admin/AddAdmin/${username}`,data,{
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     })
-    .then(res => alert("Administrator added successfully")).catch(err => alert("Failed to add administrator"));
+    .then(res => alert("Administrator added successfully")).catch(err => alert("Failed to add administrator", err));
     window.location.reload(true);
      
   }

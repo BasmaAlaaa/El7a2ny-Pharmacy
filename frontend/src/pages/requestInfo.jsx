@@ -81,7 +81,7 @@ return (
             <h3>Name: {result.Name}</h3>
             <h3>UserName: {result.Username}</h3>
             <h3>Email: {result.Email}</h3>
-            <h3>Date of Birth: {result.DateOfBirth}</h3>
+            <h3>Date of Birth: {result.DateOfBirth && result.DateOfBirth.substring(0,10)}</h3>
             <h3>Hourly Rate: {result.HourlyRate}</h3>
             <h3>Affiliation: {result.Affiliation}</h3>
             <h3>Educational Background: {result.EducationalBackground}</h3>
@@ -92,6 +92,7 @@ return (
             Accept Request
         </button> */}
         <div>
+        <div className="input-group w-25">
             <MainBtn
               txt="Accept request"
               style="green-btn"
@@ -99,6 +100,8 @@ return (
               // action={() => navigate('/administratorView')}
               key="navBtn"
             />
+            </div>
+            <div className="input-group w-25">
              <MainBtn
               txt="Reject Request"
               style="white-btn"
@@ -106,6 +109,7 @@ return (
               // action={() => navigate('/administratorView')}
               key="navBtn"
             />
+          </div>
           </div>
         {/* <button>
             Reject Request

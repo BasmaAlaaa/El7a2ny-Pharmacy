@@ -91,7 +91,7 @@ function NavBarAdministrator(props) {
 
       <div className="d-flex flex-row">
       <button
-        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        className={`red-txt mx-2 text-capitalize border-0 bg-transparent`}
         onClick={handleLogout}
       >
         Logout
