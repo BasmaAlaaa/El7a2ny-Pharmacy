@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import NavBarPharmacist from '../components/NavBarPharmacist.jsx';
 import { useState } from 'react';
+import Input from '../components/Input.jsx';
+import MainBtn from '../components/Button.jsx';
 
 function EditMedicine() {
   const { username, name } = useParams();
@@ -61,9 +63,10 @@ function EditMedicine() {
   return (
     <div>
       <NavBarPharmacist username={username}/>
-      <h1>Edit Medicine</h1>
+      {/* <p className="text-capitalize fs-4">Edit Price</p> */}
+
       
-      <form>
+      {/* <form>
         <h3>
           <input placeholder='active ingredients' type='text' onChange={(e) => setActiveIngredients(e.target.value)} />
           <button onClick={updateIngredients}>
@@ -81,6 +84,77 @@ function EditMedicine() {
           <button onClick={updatePicture}>
             Update Medicine Image</button>
         </h3>
+      </form> */}
+      <form
+        className="d-flex justify-content-center"
+        onSubmit={updateIngredients}
+      >
+        <div style={{ width: '30%' }} className="form-width">
+        <h1>Edit Medicine</h1>
+
+          <Input
+            title='Active Ingredients'
+            required={true}
+            placeholder='Enter active ingredients'
+            type='text'
+            onChange={(e) => setActiveIngredients(e.target.value)}
+          />
+          <div className="mt-3">
+            <MainBtn
+              txt='submit'
+              type="submit"
+              style='green-btn'
+              //action={handleSubmit}
+
+            />
+          </div>
+        </div>
+      </form>
+      <form
+        className="d-flex justify-content-center"
+        onSubmit={updatePrice}
+      >
+        <div style={{ width: '30%' }} className="form-width">
+          <Input
+            title='Price'
+            required={true}
+            placeholder='Enter new price'
+            type='number'
+            onChange={(e) => setPrice(e.target.value)}
+          />
+          <div className="mt-3">
+            <MainBtn
+              txt='submit'
+              type="submit"
+              style='green-btn'
+              //action={handleSubmit}
+
+            />
+          </div>
+        </div>
+      </form>
+      <form
+        className="d-flex justify-content-center"
+        onSubmit={updatePicture}
+      >
+        <div style={{ width: '30%' }} className="form-width">
+          <Input
+            title='Medicine Picture'
+            required={true}
+            placeholder='Enter new medicine picture'
+            type='text'
+            onChange={(e) => setPicture(e.target.value)}
+          />
+          <div className="mt-3">
+            <MainBtn
+              txt='submit'
+              type="submit"
+              style='green-btn'
+              //action={handleSubmit}
+
+            />
+          </div>
+        </div>
       </form>
     </div>
   );
