@@ -93,7 +93,6 @@ const registerPatient = async (req, res) => {
 
 // Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req, res) => {
-
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
@@ -114,14 +113,14 @@ const submitRequestToBePharmacist = async (req, res) => {
     }
 
     if (!(await isUsernameUnique(Username))) {
-      res.status(400).json('Username is already taken.');
+      return res.status(400).json('Username is already taken.');
     }
 
     if (!(await isEmailUnique(Email))) {
-      res.status(400).json('Email is already in use.');
+      return res.status(400).json('Email is already in use.');
     }
 
-    if(!(await validatePassword(Password))){
+    if (!(await validatePassword(Password))) {
       return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
@@ -135,25 +134,27 @@ const submitRequestToBePharmacist = async (req, res) => {
       Affiliation,
       EducationalBackground,
       IDDocument: {
-        data: Buffer.from(req.files['IDDocument'][0].buffer),
+        data: req.files['IDDocument'][0].buffer,
         contentType: req.files['IDDocument'][0].mimetype,
       },
       PharmacyDegreeDocument: {
-        data: Buffer.from(req.files['PharmacyDegreeDocument'][0].buffer),
+        data: req.files['PharmacyDegreeDocument'][0].buffer,
         contentType: req.files['PharmacyDegreeDocument'][0].mimetype,
       },
       WorkingLicenseDocument: {
-        data: Buffer.from(req.files['WorkingLicenseDocument'][0].buffer),
+        data: req.files['WorkingLicenseDocument'][0].buffer,
         contentType: req.files['WorkingLicenseDocument'][0].mimetype,
       },
     });
 
-    request.save();
-    res.status(200).json({ request });
+    await request.save();
+
+    return res.status(200).json({ message: 'Request submitted successfully' });
 
   } catch (error) {
-    res.status(400).json({ error: error.message });
-  };
+    console.error('Error:', error.message);
+    return res.status(400).json({ error: error.message });
+  }
 };
 
 
