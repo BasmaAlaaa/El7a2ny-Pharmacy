@@ -635,61 +635,42 @@ const viewAlternatives = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-  if (!(req.user.Username === Username)) {
+  if (!(req.user && req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
-  } else {
-    try {
-      const requestedMedicine = await Medicine.findOne({ Name: medicineName, Quantity: 0, Status: 'unarchived' });
+    return;
+  }
 
-      if (!requestedMedicine) {
-        return res.status(404).json({ message: 'Medicine not found or not out of stock' });
-      }
+  try {
+    // Find the requested medicine
+    const requestedMedicine = await Medicine.findOne({
+      Name: medicineName,
+      Status: 'unarchived',
+    });
 
-      const ingredientsOfRequested = requestedMedicine.ActiveIngredients.split(",");
-      const allMedicines = await Medicine.find();
-      const alternatives = [];
-      for (const med of allMedicines) {
-        const alternativeIngredients = med.ActiveIngredients.split(",");
-        if (await haveCommonIngredients(alternativeIngredients, ingredientsOfRequested) && requestedMedicine.Name !== med.Name) {
-          alternatives.push({
-            Name: med.Name,
-            ActiveIngredients: med.ActiveIngredients,
-            Price: med.Price,
-            Picture: med.Picture,
-            MedicalUse: med.MedicalUse,
-            Quantity: med.Quantity
-          })
-        }
-      }
-
-      /* const alternativeMedicines = await Medicine.find({
-        ActiveIngredients: requestedMedicine.ActiveIngredients,
-        Quantity: { $gt: 0 }, 
-        Status: 'unarchived', 
-      }); */
-
-      if (alternatives.length === 0) {
-        return res.status(404).json({ message: 'No alternative medicines available' });
-      }
-
-      res.status(200).json(alternatives);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: error.message });
+    if (!requestedMedicine) {
+      res.status(404).json("Medicine not found");
+      return;
     }
+
+    // Find alternatives based on the main active ingredient
+    const alternatives = await Medicine.find({
+      ActiveIngredients: requestedMedicine.ActiveIngredients,
+      Status: 'unarchived',
+      Quantity: { $gt: 0 }, 
+      Name: { $ne: medicineName }, // Exclude the requested medicine itself
+    });
+
+    res.status(200).json({
+      requestedMedicine,
+      alternatives,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("Internal Server Error");
   }
 };
 
-async function haveCommonIngredients(alternativeIngredients, requestedMedicine) {
-  let i = 0;
-  while (i < alternativeIngredients.length) {
-    if (requestedMedicine.includes(alternativeIngredients[i])) {
-      return true;
-    }
-    i++;
-  }
-  return false;
-}
+module.exports = viewAlternatives;
 
 const getAllOrders = async (req, res) => {
   const { Username } = req.params;
