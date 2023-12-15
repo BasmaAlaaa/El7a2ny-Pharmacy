@@ -10,7 +10,7 @@ const GetMedicineByDoctor = async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   try {
-    const info = await Medicine.findOne({ Name: Name }, { _id: 0, ActiveIngredients: 0, Price: 0, Picture: 0, MedicalUse: 0 });
+    const info = await Medicine.findOne({ Name: Name }, { _id: 0, ActiveIngredients: 0, Picture: 0, MedicalUse: 0 });
     if (!info) {
       return res.status(400).json({ error: "This medicine does not exist!" })
     }
@@ -19,6 +19,7 @@ const GetMedicineByDoctor = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+
 
 const GetAllMedicines = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
