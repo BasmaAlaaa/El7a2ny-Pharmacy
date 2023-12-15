@@ -26,7 +26,7 @@ function CaseTableBody({ data, username }) {
     const response = axios.get(`http://localhost:8000/Patient/viewAlternatives/${username}/${data.Name}`, {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     })
-    .then(res =>setResult(res.data)).catch(err => console.log(err))
+    .then(res =>setResult(res.data.alternatives)).catch(err => console.log(err))
       }, [])
     console.log('alt', result)
   return (
