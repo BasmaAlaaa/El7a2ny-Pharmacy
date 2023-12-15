@@ -84,7 +84,7 @@ app.use("/Guest", router);
 app.use("/Patient", router);
 app.use("/Pharmacist", router);
 
-app.use('/DocotorFromTheClinic', router)
+app.use('/DoctorFromTheClinic', router)
 
 const{
   sendOTP,

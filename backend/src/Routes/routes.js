@@ -64,6 +64,9 @@ const {
     displayNotifications
 } = require('../Controllers/pharmacistController');
 
+// Doctor from the Clinic Controller
+const { GetMedicineByDoctor, GetAllMedicines} = require('../Controllers/DoctorFromTheClinic');
+
 const { verify } = require('../Controllers/loginController');
 
 //Routes of Administrator
@@ -102,7 +105,7 @@ router.delete('/removeItemFromCart/:Username/:MedicineName', verify, removeAnIte
 router.post('/addMedicineToCart/:Username/:MedicineName', verify, addMedicineToCart);
 router.put('/updateQuantity/:Username/:MedicineName/:quantity', verify, updateMedicineQuantityInCart);
 router.post('/checkoutOrder/:Username/:paymentMethod/:ShippingAddress', verify, checkoutOrder);
-router.get('/viewAlternatives/:Username/:medicineName',verify,viewAlternatives);
+router.get('/viewAlternatives/:Username/:medicineName', verify, viewAlternatives);
 router.get('/getPatientWalletAmount/:Username', verify, getPatientWalletAmount);
 router.get('/getAllOrders/:Username', verify, getAllOrders);
 router.get('/getMedicinesFromUnfilledPrescriptions/:Username', verify, getMedicinesFromUnfilledPrescriptions);
@@ -117,23 +120,24 @@ router.post('/AddMedicine/:Username', verify, upload.single('Picture'), addMedic
 router.put('/UpdateMed/:Username/:Name', verify, upload.single('Picture'), updateMed);
 router.get('/MedicineByName/:Username/:Name', verify, getMedicineByName);
 router.get('/MedicineByMedicalUse/:Username/:MedicalUse', verify, getMedicineByMedicalUse);
-router.post('/CheckMedicineQuantityNotification', verify,checkMedicineQuantityNotification);
-router.post('/deleteNotificationIfQuantityNotZero',verify, deleteNotificationIfQuantityNotZero);
-router.put('/archiveMedicine/:Username/:medicineName' , verify,archiveMedicine);
-router.put('/unarchiveMedicine/:Username/:medicineName' ,verify, unarchiveMedicine);
-router.get('/viewSalesReportOnChosenMonth/:Username/:chosenMonth',verify,viewSalesReportOnChosenMonth);
-router.get('/viewSalesReportOnMedicine/:Username/:medicineName',verify,viewSalesReportOnMedicine);
-router.get('/viewSalesReportOnDate/:Username/:date',verify,viewSalesReportOnDate);
+router.post('/CheckMedicineQuantityNotification', verify, checkMedicineQuantityNotification);
+router.post('/deleteNotificationIfQuantityNotZero', verify, deleteNotificationIfQuantityNotZero);
+router.put('/archiveMedicine/:Username/:medicineName', verify, archiveMedicine);
+router.put('/unarchiveMedicine/:Username/:medicineName', verify, unarchiveMedicine);
+router.get('/viewSalesReportOnChosenMonth/:Username/:chosenMonth', verify, viewSalesReportOnChosenMonth);
+router.get('/viewSalesReportOnMedicine/:Username/:medicineName', verify, viewSalesReportOnMedicine);
+router.get('/viewSalesReportOnDate/:Username/:date', verify, viewSalesReportOnDate);
 
-router.post('/CheckMedicineQuantityNotification/:Username',verify,checkMedicineQuantityNotification);
-router.post('/deleteNotificationIfQuantityNotZero/:Username',verify, deleteNotificationIfQuantityNotZero);
-router.get('/displayNotifications/:Username',verify, displayNotifications);
+router.post('/CheckMedicineQuantityNotification/:Username', verify, checkMedicineQuantityNotification);
+router.post('/deleteNotificationIfQuantityNotZero/:Username', verify, deleteNotificationIfQuantityNotZero);
+router.get('/displayNotifications/:Username', verify, displayNotifications);
 router.get('/getPharmacistWalletAmount/:Username', verify, getPharmacistWalletAmount);
 router.put('/updatePharmacistSalary/:Username/:hoursWorked', verify, updatePharmacistSalary);
 
 
 
-const {GetMedicineByDoctor}=require('../Controllers/DoctorFromTheClinic');
-router.get('/GetMedicineByDoctor/:Name',GetMedicineByDoctor);
+
+router.get('/GetMedicineByDoctor/:username/:Name', GetMedicineByDoctor);
+router.get('/GetAllMedicines/:DoctorUsername', GetAllMedicines);
 
 module.exports = router;

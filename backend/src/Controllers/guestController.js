@@ -27,9 +27,13 @@ async function createStripeCustomer({ Email, Name, Phone }) {
 
 // Task 1 : register as a patient
 const registerPatient = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
   const {
     Username,
     Name,
+    NationalID,
     Email,
     Password,
     DateOfBirth,
@@ -38,16 +42,10 @@ const registerPatient = async (req, res) => {
     EmergencyContactName,
     EmergencyContactMobile,
     EmergencyContactRelation,
-    address
+    address,
   } = req.body;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  // res.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
-  // req.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
-
   try {
-
     if (!(await isUsernameUnique(Username))) {
       throw new Error('Username is already taken.');
     }
@@ -56,11 +54,16 @@ const registerPatient = async (req, res) => {
       throw new Error('Email is already in use.');
     }
 
-    if(!(await validatePassword(Password))){
+    if (!(await validatePassword(Password))) {
       return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
-    //create a new cart for the patient
+    const patientExists = await Patient.findOne({ Email: Email });
+
+    if (patientExists) {
+      return res.status(404).send("You already registered.");
+    }
+
     const newCart = await Cart.create({
       items: [],
       totalAmount: 0,
@@ -68,9 +71,10 @@ const registerPatient = async (req, res) => {
 
     const customer = await createStripeCustomer({ Email, Name, MobileNumber });
 
-    const patient = await Patient.register(
+    const patient = new Patient({
       Username,
       Name,
+      NationalID,
       Email,
       Password,
       DateOfBirth,
@@ -79,19 +83,21 @@ const registerPatient = async (req, res) => {
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
-      address,
-      newCart
-    );
+      addresses: [address],  // Add the address to the addresses array
+      StripeCustomerId: customer.id,
+      cart: newCart
+    });
+
     await patient.save();
-    res.status(200).json({ patient })
+
+    res.status(200).json({ patient });
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
 // Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req, res) => {
-
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
@@ -112,14 +118,14 @@ const submitRequestToBePharmacist = async (req, res) => {
     }
 
     if (!(await isUsernameUnique(Username))) {
-      res.status(400).json('Username is already taken.');
+      return res.status(400).json('Username is already taken.');
     }
 
     if (!(await isEmailUnique(Email))) {
-      res.status(400).json('Email is already in use.');
+      return res.status(400).json('Email is already in use.');
     }
 
-    if(!(await validatePassword(Password))){
+    if (!(await validatePassword(Password))) {
       return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
@@ -133,25 +139,27 @@ const submitRequestToBePharmacist = async (req, res) => {
       Affiliation,
       EducationalBackground,
       IDDocument: {
-        data: Buffer.from(req.files['IDDocument'][0].buffer),
+        data: req.files['IDDocument'][0].buffer,
         contentType: req.files['IDDocument'][0].mimetype,
       },
       PharmacyDegreeDocument: {
-        data: Buffer.from(req.files['PharmacyDegreeDocument'][0].buffer),
+        data: req.files['PharmacyDegreeDocument'][0].buffer,
         contentType: req.files['PharmacyDegreeDocument'][0].mimetype,
       },
       WorkingLicenseDocument: {
-        data: Buffer.from(req.files['WorkingLicenseDocument'][0].buffer),
+        data: req.files['WorkingLicenseDocument'][0].buffer,
         contentType: req.files['WorkingLicenseDocument'][0].mimetype,
       },
     });
 
-    request.save();
-    res.status(200).json({ request });
+    await request.save();
+
+    return res.status(200).json({ message: 'Request submitted successfully' });
 
   } catch (error) {
-    res.status(400).json({ error: error.message });
-  };
+    console.error('Error:', error.message);
+    return res.status(400).json({ error: error.message });
+  }
 };
 
 

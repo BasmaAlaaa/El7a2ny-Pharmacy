@@ -26,13 +26,13 @@ function CaseTableBody({ data, username }) {
     const response = axios.get(`http://localhost:8000/Patient/viewAlternatives/${username}/${data.Name}`, {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     })
-    .then(res =>setResult(res.data)).catch(err => console.log(err))
+    .then(res =>setResult(res.data.alternatives)).catch(err => console.log(err))
       }, [])
     console.log('alt', result)
   return (
     <>
       
-    {data.Name && <th>{data.Name}</th>}
+    {(!data.Status || (data.Status ==="pending" || data.Status ==="Pending")) && data.Name && <th>{data.Name}</th>}
 
     {data.ActiveIngredients && <td>{data.ActiveIngredients}</td>}
     {data.Price && <td>{data.Price}</td>}
@@ -44,9 +44,9 @@ function CaseTableBody({ data, username }) {
     {data.Age&&<td>{data.Age}</td>}
     {data.MobileNumber&&<td>{data.MobileNumber}</td>}
 
-    {data.Affiliation&&<td>{data.Affiliation}</td>}
-    {data.HourlyRate&&<td>{data.HourlyRate}</td>}
-    {data.EducationalBackground&&<td>{data.EducationalBackground}</td>}
+    {(!data.Status || (data.Status ==="pending" || data.Status ==="Pending")) && data.Affiliation&&<td>{data.Affiliation}</td>}
+    {(!data.Status || (data.Status ==="pending" || data.Status ==="Pending")) && data.HourlyRate&&<td>{data.HourlyRate}</td>}
+    {(!data.Status || (data.Status ==="pending" || data.Status ==="Pending")) && data.EducationalBackground&&<td>{data.EducationalBackground}</td>}
     {data.Quantity===0 && <td>Sold Out</td>}
     {data.Quantity>0 && <td>Available</td>}
     
@@ -90,7 +90,7 @@ function CaseTableBody({ data, username }) {
       </div>
       </td>
       }
-      {data.Status &&
+      {(data.Status ==="pending" || data.Status ==="Pending") &&
       <td className="py-3 text-align-center">
       <div className="d-flex flex-row">
       <button
@@ -102,7 +102,7 @@ function CaseTableBody({ data, username }) {
       </div>
       </td>
       }
-      {data.Status&&<td>{data.Status}</td>}
+      {(data.Status ==="pending" || data.Status ==="Pending")&&<td>{data.Status}</td>}
     </>
   );
 }

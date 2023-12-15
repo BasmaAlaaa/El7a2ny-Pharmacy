@@ -31,6 +31,8 @@ import SalesReportInfo from './pages/salesReportInfo';
 import NotificationsPharmacist from './pages/notificationsPharmacist';
 import Pharmacists from './pages/pharmacists';
 import Patients from './pages/patients';
+import PrescriptionsList from './components/PrescriptionsList'
+import PrescriptionInfo from './pages/prescriptionInfo';
 
 // const socket = io.connect("http://localhost:8000");
 
@@ -64,6 +66,10 @@ function App() {
           <Route exact path="/notificationsPharmacist/:username" element={<NotificationsPharmacist />} />
           <Route exact path="/Pharmacists/:username" element={<Pharmacists />} />
           <Route exact path="/patients/:username" element={<Patients />} />
+          <Route exact path="/prescriptionsList/:username" element={<PrescriptionsList />} />
+          <Route exact path="/prescriptionInfo/:username/:id" element={<PrescriptionInfo />} />
+
+
           <Route exact path="/chat/:username" element={<Chat />} />
           <Route exact path="/chatPharmacistOptions/:username" element={<ChatPharmacistOptions />} />
           <Route exact path="/doctorView/:username" element={<DoctorView />} />

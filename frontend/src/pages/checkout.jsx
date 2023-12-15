@@ -50,13 +50,6 @@ function Checkout() {
     }
 console.log('typeee', type)
 
-const handleNotification = (e) => {
-  console.log('dakhalt')
-  axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityEmailNotification', "", {
-    headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-  })
-  .then(navigate(`/orderDetails/${username}`)).catch(err => console.log('fi error', err))
-} 
     const handleSubmitOrder = async(e) => {
      // try{
       if(type==='card' && !(cardCVV && cardDate && cardNumber)){
@@ -67,7 +60,7 @@ const handleNotification = (e) => {
           axios.post(`http://localhost:8000/Patient/checkoutOrder/${username}/${type}/${deliveryAddress}`,"",{
           headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
         })
-        .then(res =>handleNotification()).catch(err => alert(err))
+        .then(navigate(`/orderDetails/${username}`)).catch(err => alert('Failed to submit order order: ',err))
         // if (response.status === 200) {
         //       navigate(`/orderDetails/${username}`);
         //         console.log(response.data.message);

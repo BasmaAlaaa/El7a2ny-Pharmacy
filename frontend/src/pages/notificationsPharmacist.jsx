@@ -15,12 +15,6 @@ function NotificationsPharmacist(){
 
 
     useEffect(() => {
-        axios.post('http://localhost:8000/Pharmacist/CheckMedicineQuantityNotification', {
-          headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
-        })
-        .then(res =>console.log(res.data)).catch(err => console.log(err))
-          }, [])
-    useEffect(() => {
             const response = axios.get(`http://localhost:8000/Pharmacist/displayNotifications/${username}`,{
               headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
             })
