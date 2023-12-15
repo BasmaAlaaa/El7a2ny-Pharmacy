@@ -5,6 +5,7 @@ import NavBarPatient from "../components/NavBarPatient";
 import MainBtn from "../components/Button";
 import Input from "../components/Input";
 import TableCart from "../components/TableCart";
+import TableMedicines from "../components/TableMedicines";
 
 
 function PrescriptionInfo() {
@@ -28,14 +29,14 @@ console.log('el result aho', result)
   //   result.map((e) => {
   //     console.log(e)
   //   })
-  let tHead = ['Name', 'Dose'];
+  let tHead = ['Name', 'Dose', 'Add to cart'];
 
 
   return (
     <div>
       <NavBarPatient username={result.PatientUsername} />
       <h2>Prescription Medicines</h2>
-            <TableCart tHead={tHead} data={result.Medicines} username={result.PatientUsername}/>
+          {result.Medicines &&  <TableMedicines tHead={tHead} data={result.Medicines} username={result.PatientUsername}/>}
 
     </div>
   )

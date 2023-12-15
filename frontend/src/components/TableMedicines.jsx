@@ -2,12 +2,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-function CaseTableBody({ data }) {
+function CaseTableBody({ data, username }) {
   let navigate = useNavigate();
 
   const handleAdd = async() => {
     try{
-    const response = await axios.get(`http://localhost:4000/Doctor/AddMedicineToCart/${username}/${data.Name}`, "", {
+    const response = await axios.post(`http://localhost:8000/Patient/AddMedicineToCart/${username}/${data.Name}`, "", {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
     })
    // .then(res =>setResult(res)).catch(err => console.log(err))
@@ -31,7 +31,7 @@ function CaseTableBody({ data }) {
         className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
         onClick={handleAdd}
       >
-        Add to Prescription
+        Add to Cart
       </button>
       </div>
       </td>
@@ -53,7 +53,7 @@ function CaseTableBody({ data }) {
 //   );
 // }
 
-function TableMedicines({ tHead, data}) {
+function TableMedicines({ tHead, data, username}) {
   return (
     <div className="case-table card mt-4">
       <table className="table table-striped m-0">
@@ -68,7 +68,7 @@ function TableMedicines({ tHead, data}) {
           {data
           .map((e) => (
             <tr className="text-capitalize">
-                <CaseTableBody data={e} />
+                <CaseTableBody data={e} username={username}/>
             </tr>
           ))}
         </tbody>
