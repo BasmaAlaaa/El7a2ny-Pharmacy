@@ -814,7 +814,7 @@ module.exports = {
   getMedicineByName,
   getMedicineByMedicalUse,
   addAddressToPatient,
-  getPatientAddresses ,
+  getPatientAddresses,
   getOrderDetails,
   cancelOrder,
   viewCartItems,

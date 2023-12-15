@@ -2,11 +2,15 @@ import { Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import './assets/all.css';
+
+import Chat from './components/chat';
+import ChatPharmacistOptions from './pages/chatPharmacistOptions' ;
 import Login from './pages/login';
 import NavBar from './components/NavBar';
 import RegisterPatient from './pages/registerPatient';
 import RegisterPharmacist from './pages/registerPharmacist';
 import AdministratorView from './pages/administratorView'; 
+import DoctorView from './pages/doctorView';
 import PatientView from './pages/patientView'; 
 import PharmacistView from './pages/pharmacistView'; 
 import MedicineList from './components/medicineList';
@@ -28,8 +32,7 @@ import NotificationsPharmacist from './pages/notificationsPharmacist';
 import Pharmacists from './pages/pharmacists';
 import Patients from './pages/patients';
 
-
-
+// const socket = io.connect("http://localhost:8000");
 
 function App() {
   return (
@@ -61,9 +64,11 @@ function App() {
           <Route exact path="/notificationsPharmacist/:username" element={<NotificationsPharmacist />} />
           <Route exact path="/Pharmacists/:username" element={<Pharmacists />} />
           <Route exact path="/patients/:username" element={<Patients />} />
+          <Route exact path="/chat/:username" element={<Chat />} />
+          <Route exact path="/chatPharmacistOptions/:username" element={<ChatPharmacistOptions />} />
+          <Route exact path="/doctorView/:username" element={<DoctorView />} />
 
-
-
+          
         </Routes>
       </main>
     </div>

@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const Patient = require('../Models/patient');
 const Pharmacist = require('../Models/pharmacist');
 const Administrator = require('../Models/administrator');
+const Doctor = require('../Models/Doctor');
+
 app.use(express.json());
 
 // create json web token
@@ -121,8 +123,9 @@ const login = async (req, res) => {
   const patient = await Patient.findOne({Username: username, Password: password});
   const admin = await Administrator.findOne({Username: username, Password: password});
   const pharmacist = await Pharmacist.findOne({Username: username, Password: password});
-  
-  if (patient && !admin && !pharmacist) {
+  const doctor = await Doctor.findOne({Username: username, Password: password});
+
+  if (patient && !admin && !pharmacist && !doctor) {
     //Generate an access token
     const accessToken = generateAccessToken(patient);
     const refreshToken = generateRefreshToken(patient);
@@ -134,7 +137,7 @@ const login = async (req, res) => {
       refreshToken,
     }
     res.json({userPatient});
-  } else if (!patient && admin && !pharmacist) {
+  } else if (!patient && admin && !pharmacist && !doctor) {
     //Generate an access token
     const accessToken = generateAccessToken(admin);
     const refreshToken = generateRefreshToken(admin);
@@ -147,7 +150,7 @@ const login = async (req, res) => {
     }
     res.json({userAdmin});
   } 
-  else if (!patient && !admin && pharmacist) {
+  else if (!patient && !admin && pharmacist && !doctor) {
     //Generate an access token
     const accessToken = generateAccessToken(pharmacist);
     const refreshToken = generateRefreshToken(pharmacist);
@@ -159,6 +162,19 @@ const login = async (req, res) => {
       refreshToken,
     }
     res.json({userpharmacist});
+  } 
+  else if (!patient && !admin && !pharmacist && doctor) {
+    //Generate an access token
+    const accessToken = generateAccessToken(doctor);
+    const refreshToken = generateRefreshToken(doctor);
+    refreshTokens.push(refreshToken);
+    const userDoctor = {
+      _id: doctor._id,
+      Username: doctor.Username,
+      accessToken,
+      refreshToken,
+    }
+    res.json({userDoctor});
   } 
   else {
     res.status(400).json("Username or password incorrect!");

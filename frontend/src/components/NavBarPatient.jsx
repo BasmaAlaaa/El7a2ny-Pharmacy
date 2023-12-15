@@ -3,11 +3,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import io from "socket.io-client";
+
+ 
+import Chat from "./chat";
+
+const socket = io.connect("http://localhost:8000");
+
 function NavBarPatient(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login.loggedIn);
   const[wallet, setWallet] = useState('');
+  const [showChat, setShowChat] = useState(false);
+
   const handleLogout = async (event) => {
     event.preventDefault(); 
     try {
@@ -22,7 +31,7 @@ function NavBarPatient(props) {
       console.error(error.response ? error.response.data : error.message);
       alert(error.response ? error.response.data.error : error.message);
     }
-  };
+    };
     useEffect(() => {
       const response = axios.get(`http://localhost:8000/Patient/getPatientWalletAmount/${props.username}`, {
         headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
@@ -30,6 +39,12 @@ function NavBarPatient(props) {
       .then(res =>setWallet(res.data.walletAmount)).catch(err => console.log(err))
         }, [])
     console.log('www', wallet)
+
+    const joinRoom = () => {
+        socket.emit("join_room", 1);
+        setShowChat(true);
+        //navigate(`/chat/${socket}/${props.username}/1`);
+    };
   
   return (
     <nav className="navbar shadow-sm mb-4">
@@ -63,6 +78,18 @@ function NavBarPatient(props) {
       >
         Order History
       </button>
+    </div> 
+    <div className="d-flex flex-row">
+    {!showChat ? (
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={joinRoom}
+      >
+        Chat with Pharmacist
+      </button>
+      ) : (
+        <Chat socket={socket} username={props.username} room={1} />
+      )}
     </div> 
     <div className="d-flex flex-row">
       <button

@@ -68,6 +68,9 @@ function Login() {
       } else if (response.data.userAdmin) {
         sessionStorage.setItem("token", response.data.userAdmin.accessToken);
         navigate(`/administratorView/${username}`);
+      } else if (response.data.userDoctor) {
+        sessionStorage.setItem("token", response.data.userDoctor.accessToken);
+        navigate(`/doctorView/${username}`);
       } else {
         console.error("User role not recognized");
         alert("User role not recognized");
