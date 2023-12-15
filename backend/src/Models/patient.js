@@ -1,22 +1,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const validator = require('validator');
-const Cart = require('./Cart.js');
-function arrayLimit(val) {
-  return val.length > 0;
-}
 
+const medicalHistoryDocument = new Schema({
+  document: Buffer,
+  contentType: String
+})
 
 const patientSchema = new Schema({
   Username: {
     type: String,
     required: true,
     unique: true
-  },  
+  },
   Name: {
-      type: String,
-      required: true
-    },
+    type: String,
+    required: true
+  },
+  NationalID: {
+    type: String,
+    required: true,
+    unique: true
+  },
   Email: {
     type: String,
     required: true,
@@ -24,7 +28,7 @@ const patientSchema = new Schema({
   },
   Password: {
     type: String,
-    required: true,
+    required: true
   },
   DateOfBirth: {
     type: Date,
@@ -33,7 +37,7 @@ const patientSchema = new Schema({
   Gender: {
     type: String,
     required: true,
-    enum: ['female', 'male', 'Male', 'Female']
+    enum: ["Male", "Female", "female", "male"]
   },
   MobileNumber: {
     type: String,
@@ -51,15 +55,19 @@ const patientSchema = new Schema({
     type: String,
     required: true
   },
-  Prescriptions: [{
-    medicines: [{ type: String }],
-    status: { type: String, default: 'unfilled' }
+  FamilyMembers: [{
+    type: String,
+    ref: 'FamilyMember', // This should match the model name you defined for FamilyMember
   }],
-  addresses: 
- [{
-      type:String,
+  PatientPrescriptions: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Prescription', // This should match the model name you defined for Prescription
+  }],
+  addresses:
+    [{
+      type: String,
       required: false,
- }],
+    }],
   cart: {
     type: Schema.Types.ObjectId,
     ref: 'Cart',
@@ -68,12 +76,65 @@ const patientSchema = new Schema({
     type: String,
     required: false
   },
+  SubscribedHP: [{
+    Type: {
+      type: String,
+      required: false,
+      ref: 'HealthPackage'
+    },
+    PaymentMethod: {
+      type: String,
+      default: "card",
+      enum: ["wallet", "card"]
+    },
+    Status: {
+      type: String,
+      enum: ['Subscribed', 'Unsubscribed', 'Cancelled'],
+      default: 'Unsubscribed',
+    },
+    SubscriptionStartDate: {
+      type: Date,
+      default: null,
+    },
+    SubscriptionEndDate: {
+      type: Date,
+      default: null,
+    },
+    CancellationDate: {
+      type: Date,
+      default: null,
+    },
+    RenewalDate: {
+      type: Date,
+      required: false
+    },
+  }],
   WalletAmount: {
     type: Number,
     default: 0
   },
-  }, { timestamps: true });
+  HealthRecords: [
+    {
+      // Define the structure of a health record
+      Date: {
+        type: Date
+      },
+      Description: {
+        type: String
+      },
+      Diagnosis: {
+        type: String
+      },
+      Medication: {
+        type: String
+      }
+    }
+  ],
+  MedicalHistoryDocuments: [
+    medicalHistoryDocument
+  ],
 
-  
-  const Patient = mongoose.model('Patient', patientSchema);
-  module.exports = Patient;
+}, { timestamps: true });
+
+const Patient = mongoose.model('Patient', patientSchema);
+module.exports = Patient;

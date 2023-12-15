@@ -27,9 +27,13 @@ async function createStripeCustomer({ Email, Name, Phone }) {
 
 // Task 1 : register as a patient
 const registerPatient = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
   const {
     Username,
     Name,
+    NationalID,
     Email,
     Password,
     DateOfBirth,
@@ -38,11 +42,8 @@ const registerPatient = async (req, res) => {
     EmergencyContactName,
     EmergencyContactMobile,
     EmergencyContactRelation,
-    address
+    address,
   } = req.body;
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
 
   try {
     if (!(await isUsernameUnique(Username))) {
@@ -57,16 +58,23 @@ const registerPatient = async (req, res) => {
       return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
-    // Create a new cart for the patient
+    const patientExists = await Patient.findOne({ Email: Email });
+
+    if (patientExists) {
+      return res.status(404).send("You already registered.");
+    }
+
     const newCart = await Cart.create({
       items: [],
       totalAmount: 0,
     });
 
-    // Create a new instance of the Patient model
+    const customer = await createStripeCustomer({ Email, Name, MobileNumber });
+
     const patient = new Patient({
       Username,
       Name,
+      NationalID,
       Email,
       Password,
       DateOfBirth,
@@ -75,15 +83,12 @@ const registerPatient = async (req, res) => {
       EmergencyContactName,
       EmergencyContactMobile,
       EmergencyContactRelation,
-      address,
-      cart: newCart,
+      addresses: [address],  // Add the address to the addresses array
+      StripeCustomerId: customer.id,
+      cart: newCart
     });
 
-    // Save the patient instance
     await patient.save();
-
-    // Create a Stripe customer
-    const customer = await createStripeCustomer({ Email, Name, MobileNumber });
 
     res.status(200).json({ patient });
   } catch (error) {
