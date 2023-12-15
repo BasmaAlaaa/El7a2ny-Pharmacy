@@ -33,7 +33,7 @@ function PrescriptionsList() {
   console.log(filterText)
   let navigate = useNavigate()
 
-  let tHead = ['Doctor Username', 'Prescription Date', 'Description', 'Status', 'View'];
+  let tHead = ['Doctor Username', 'Prescription Date', 'Description', 'Medicines'];
 
   return (
     <div>

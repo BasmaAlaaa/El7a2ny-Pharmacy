@@ -8,12 +8,9 @@ function CaseTableBody({ data, username }) {
   return (
     <>
 
-      {data.DoctorUsername && <th>{data.DoctorUsername}</th>}
-      {data.Date && <td>{data.Date.substring(0, 10)}</td>}
-      {data.Description && <td>{data.Description}</td>}
-      {data.Filled && <td>Filled </td>}
-      {!data.Filled && <td>Unfilled </td>}
-
+      {!data.Filled && data.DoctorUsername && <th>{data.DoctorUsername}</th>}
+      {!data.Filled && data.Date && <td>{data.Date.substring(0, 10)}</td>}
+      {!data.Filled && data.Description && <td>{data.Description}</td>}
 
 
       <td className="py-3 text-align-center">
@@ -22,7 +19,7 @@ function CaseTableBody({ data, username }) {
             className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
             onClick={() => navigate(`/prescriptionInfo/${data.prescriptionID}`)}
           >
-            View
+            Medicines
           </button>
         </div>
       </td>
