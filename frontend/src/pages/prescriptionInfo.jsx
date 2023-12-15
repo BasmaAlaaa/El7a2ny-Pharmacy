@@ -9,7 +9,7 @@ import TableMedicines from "../components/TableMedicines";
 
 
 function PrescriptionInfo() {
-  const { id } = useParams();
+  const {username, id } = useParams();
   const [result, setResult] = useState([]);
   const [cardNumber, setCardNumber] = useState('');
   const [cardDate, setCardDate] = useState('');
@@ -25,7 +25,7 @@ function PrescriptionInfo() {
   }, [])
 
 
-console.log('el result aho', result)
+console.log('el result ahooo', result)
   //   result.map((e) => {
   //     console.log(e)
   //   })

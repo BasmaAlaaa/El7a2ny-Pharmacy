@@ -28,6 +28,7 @@ import NotificationsPharmacist from './pages/notificationsPharmacist';
 import Pharmacists from './pages/pharmacists';
 import Patients from './pages/patients';
 import PrescriptionsList from './components/PrescriptionsList'
+import PrescriptionInfo from './pages/prescriptionInfo';
 
 
 
@@ -63,6 +64,8 @@ function App() {
           <Route exact path="/Pharmacists/:username" element={<Pharmacists />} />
           <Route exact path="/patients/:username" element={<Patients />} />
           <Route exact path="/prescriptionsList/:username" element={<PrescriptionsList />} />
+          <Route exact path="/prescriptionInfo/:username/:id" element={<PrescriptionInfo />} />
+
 
 
 

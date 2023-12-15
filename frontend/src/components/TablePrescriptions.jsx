@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function CaseTableBody({ data, username }) {
   let navigate = useNavigate()
-  console.log("pres id", data.prescriptionID)
+  console.log("pres id", data.PatientUsername)
 
   return (
     <>
@@ -17,7 +17,7 @@ function CaseTableBody({ data, username }) {
         <div className="d-flex flex-row">
           <button
             className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
-            onClick={() => navigate(`/prescriptionInfo/${data.prescriptionID}`)}
+            onClick={() => navigate(`/prescriptionInfo/${username}/${data.prescriptionID}`)}
           >
             Medicines
           </button>
