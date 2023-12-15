@@ -33,7 +33,7 @@ const patientSchema = new Schema({
   Gender: {
     type: String,
     required: true,
-    enum: ['female', 'male']
+    enum: ['female', 'male', 'Male', 'Female']
   },
   MobileNumber: {
     type: String,
@@ -74,73 +74,6 @@ const patientSchema = new Schema({
   },
   }, { timestamps: true });
 
-
-
-  patientSchema.statics.register = async function (
-    Username,
-    Name,
-    Email,
-    Password,
-    DateOfBirth,
-    Gender,
-    MobileNumber,
-    EmergencyContactName,
-    EmergencyContactMobile,
-    EmergencyContactRelation,
-    address
-  ) {
-    
-    if (
-      !Username ||
-      !Name ||
-      !Email ||
-      !Password ||
-      !DateOfBirth ||
-      !Gender ||
-      !MobileNumber ||
-      !EmergencyContactName ||
-      !EmergencyContactMobile ||
-      !EmergencyContactRelation
-    ) {
-      throw Error('All fields must be filled.');
-    }
-    
-    if (!validator.isEmail(Email)) {
-      throw Error('Invalid email format.');
-    }
-  
-    const existsUsername = await this.findOne({ Username });
-    const existsEmail = await this.findOne({ Email });
-  
-    if (existsUsername) {
-      throw new Error('Username is already taken.');
-    }
-  
-    if (existsEmail) {
-      throw new Error('Email is already in use.');
-    }
-  
-    const newCart = await Cart.create({
-      items: [],
-      totalAmount: 0,
-    });
-    const patient = await this.create({
-      Username,
-      Name,
-      Email,
-      Password,
-      DateOfBirth,
-      Gender,
-      MobileNumber,
-      EmergencyContactName,
-      EmergencyContactMobile,
-      EmergencyContactRelation,
-      cart: newCart
-    });
-    patient.addresses.push(address);
-  
-    return patient;
-  };
   
   const Patient = mongoose.model('Patient', patientSchema);
   module.exports = Patient;

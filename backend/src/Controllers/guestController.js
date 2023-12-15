@@ -43,11 +43,8 @@ const registerPatient = async (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Credentials', true);
-  // res.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
-  // req.setHeader('Access-Control-Allow-Methods', POST, DELETE, GET, PUT );
 
   try {
-
     if (!(await isUsernameUnique(Username))) {
       throw new Error('Username is already taken.');
     }
@@ -56,19 +53,18 @@ const registerPatient = async (req, res) => {
       throw new Error('Email is already in use.');
     }
 
-    if(!(await validatePassword(Password))){
+    if (!(await validatePassword(Password))) {
       return res.status(400).json("Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long");
     }
 
-    //create a new cart for the patient
+    // Create a new cart for the patient
     const newCart = await Cart.create({
       items: [],
       totalAmount: 0,
     });
 
-    const customer = await createStripeCustomer({ Email, Name, MobileNumber });
-
-    const patient = await Patient.register(
+    // Create a new instance of the Patient model
+    const patient = new Patient({
       Username,
       Name,
       Email,
@@ -80,14 +76,20 @@ const registerPatient = async (req, res) => {
       EmergencyContactMobile,
       EmergencyContactRelation,
       address,
-      newCart
-    );
+      cart: newCart,
+    });
+
+    // Save the patient instance
     await patient.save();
-    res.status(200).json({ patient })
+
+    // Create a Stripe customer
+    const customer = await createStripeCustomer({ Email, Name, MobileNumber });
+
+    res.status(200).json({ patient });
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
 // Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req, res) => {
