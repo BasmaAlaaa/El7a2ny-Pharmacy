@@ -88,16 +88,13 @@ function NavBarPatient(props) {
       </button>
     </div> 
     <div className="d-flex flex-row">
-    {!showChat ? (
       <button
         className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
-        onClick={joinRoom}
+        onClick={() => navigate(`/chatWithPharmacist/${props.username}`)}
       >
         Chat with Pharmacist
       </button>
-      ) : (
-        <Chat socket={socket} username={props.username} room={1} />
-      )}
+
     </div> 
     <div className="d-flex flex-row">
       <button

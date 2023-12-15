@@ -33,6 +33,7 @@ import Pharmacists from './pages/pharmacists';
 import Patients from './pages/patients';
 import PrescriptionsList from './components/PrescriptionsList'
 import PrescriptionInfo from './pages/prescriptionInfo';
+import ChatWithPharmacist from './pages/chatWithPharmacist';
 
 // const socket = io.connect("http://localhost:8000");
 
@@ -72,6 +73,7 @@ function App() {
 
           <Route exact path="/chat/:username" element={<Chat />} />
           <Route exact path="/chatPharmacistOptions/:username" element={<ChatPharmacistOptions />} />
+          <Route exact path="/chatWithPharmacist/:username" element={<ChatWithPharmacist />} />
           <Route exact path="/doctorView/:username" element={<DoctorView />} />
 
           
