@@ -47,9 +47,9 @@ function RegisterPharmacist() {
   const [WorkingLicenseDocument, setWorkingLicenseDocument] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+    try {
       const data = new FormData();
 
       // Append other form fields
@@ -61,27 +61,54 @@ function RegisterPharmacist() {
       data.append('HourlyRate', hourlyRate);
       data.append('Affiliation', affiliation);
       data.append('EducationalBackground', educationalBackground);
-  
+
       // Append file uploads
       data.append('IDDocument', IDDocument);
       data.append('PharmacyDegreeDocument', PharmacyDegreeDocument);
       data.append('WorkingLicenseDocument', WorkingLicenseDocument);
-      console.log(data)
-  
-      const response = axios.post('http://localhost:8000/Guest/SubmitRequestToBePharmacist', data)
-            if (response.status === 200) {
-              alert(`Registered successfully`);
-              console.log(response.data.message);
-              navigate(`/login`);
-            } else {
-              alert(`Failed to register. Status: ${response.status}`);
-            }
-          } catch (error) {
-            alert(`Failed to register. Error: ${error.message}`);
-            console.error('Error accepting request:', error);
-          }
-    }
 
+      console.log(data);
+
+      const response = await axios.post(
+        'http://localhost:8000/Guest/SubmitRequestToBePharmacist',
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response && response.data) {
+        // Check if there is a 'message' property in the response data
+        if (response.data.message) {
+          alert(`Registered successfully: ${response.data.message}`);
+          navigate(`/login`);
+        } else {
+          alert(`Failed to register. Response: ${JSON.stringify(response.data)}`);
+        }
+      } else {
+        alert(`Failed to register. Unexpected response format.`);
+      }
+    } catch (error) {
+      alert(`Failed to register. Error: ${error.message}`);
+      console.error('Error accepting request:', error);
+
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Server response:', error.response.data);
+        console.error('Status:', error.response.status);
+        console.error('Headers:', error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error:', error.message);
+      }
+    }
+  }
 
   return (
     <div>
@@ -139,93 +166,93 @@ function RegisterPharmacist() {
         className="d-flex justify-content-center"
         onSubmit={handleSubmit}
       >
-      <div style={{ width: '35%' }} className="form-width">
+        <div style={{ width: '35%' }} className="form-width">
           <p className="text-capitalize fs-4">Register As Pharmacist</p>
           <Input
             title='Name'
             required={true}
-            placeholder='Enter name'
+            placeholder='Enter Name'
             type='text'
             onChange={(e) => setName(e.target.value)}
           />
           <Input
             title='Username'
             required={true}
-            placeholder='Enter username'
+            placeholder='Enter Username'
             type='text'
             onChange={(e) => setUsername(e.target.value)}
           />
           <Input
             title='Email'
             required={true}
-            placeholder='Enter email'
+            placeholder='Enter Email'
             type='email'
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             title='Password'
             required={true}
-            placeholder='Enter password'
+            placeholder='Enter Password'
             type='password'
             onChange={(e) => setPassword(e.target.value)}
           />
           <Input
             title='Date Of Birth'
             required={true}
-            placeholder='Enter date'
+            placeholder='Enter Date'
             type='date'
             onChange={(e) => setDateOfBirth(e.target.value)}
           />
           <Input
             title='Hourly Rate'
             required={true}
-            placeholder='Enter hourly rate'
+            placeholder='Enter Hourly Rate'
             type='number'
             onChange={(e) => setHourlyRate(e.target.value)}
           />
           <Input
             title='Affiliation'
             required={true}
-            placeholder='Enter affiliation'
+            placeholder='Enter Affiliation'
             type='text'
             onChange={(e) => setAffiliation(e.target.value)}
           />
           <Input
-            title='EducationalBackgroung'
+            title='Educational Background'
             required={true}
-            placeholder='Enter educational background'
+            placeholder='Enter Educational Background'
             type='text'
             onChange={(e) => setEducationalBackground(e.target.value)}
           />
           <Input
             title='ID'
             required={true}
-            placeholder='Enter ID'
+            placeholder='Enter ID Document'
             type='file'
-            onChange={(e) => setIDDocument(e.target.value)}
+            onChange={(e) => setIDDocument(e.target.files[0])}
           />
           <Input
             title='Pharmacy Degree'
             required={true}
-            placeholder='Enter pharmacy degree document'
+            placeholder='Enter Pharmacy Degree Document'
             type='file'
-            onChange={(e) => setPharmacyDegreeDocument(e.target.value)}
+            onChange={(e) => setPharmacyDegreeDocument(e.target.files[0])}
           />
           <Input
             title='Working License'
             required={true}
-            placeholder='Enter working license'
+            placeholder='Enter Working License Document'
             type='file'
-            onChange={(e) => setWorkingLicenseDocument(e.target.value)}
+            onChange={(e) => setWorkingLicenseDocument(e.target.files[0])}
           />
 
-         
+
           <div className="mt-3">
             <MainBtn
               txt='Submit'
               type="submit"
               style='green-btn'
-              //action={handleSubmit}
+            //action={handleSubmit}
 
             />
           </div>
