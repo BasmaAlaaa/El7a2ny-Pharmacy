@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 function CaseTableBody({ data, username }) {
   let navigate = useNavigate();
 
-  const handleAdd = async() => {
+  const handleAdd = async(e) => {
+    e.preventDefault();
     try{
     const response = await axios.post(`http://localhost:8000/Patient/AddMedicineToCart/${username}/${data.Name}`, "", {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token")},
@@ -23,7 +24,7 @@ function CaseTableBody({ data, username }) {
 
   return (
     <>
-    <th>{data.name}</th>
+    <th>{data.Name}</th>
     <td>{data.dosage}</td>
     <td className="py-3 text-align-center">
       <div className="d-flex flex-row">

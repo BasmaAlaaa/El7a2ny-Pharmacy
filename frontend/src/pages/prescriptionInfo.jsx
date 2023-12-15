@@ -18,7 +18,7 @@ function PrescriptionInfo() {
 
 
   useEffect(() => {
-    const response = axios.get(`http://localhost:4000/Patient/viewMyPres/${id}`, {
+    const response = axios.get(`http://localhost:4000/Patient/viewPresDetails/${username}/${id}`, {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token") },
     })
       .then(res => setResult(res.data)).catch(err => console.log(err))
