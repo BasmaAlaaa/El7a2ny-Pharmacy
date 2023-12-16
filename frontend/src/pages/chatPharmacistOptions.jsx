@@ -8,6 +8,7 @@ import io from "socket.io-client";
 
  
 import Chat from "../components/chat";
+import NavBarPharmacist from "../components/NavBarPharmacist";
 
 const socket = io.connect("http://localhost:8000");
 
@@ -31,15 +32,19 @@ const joinRoom2 = () => {
 };
 
   return (
-    <div className="App">
+    <div>
+    <NavBarPharmacist username={username} />
+
+    {/* <div className="App">
       <div className="joinChatContainer">
 
     {!showChat1 ? (
       <button
-        onClick={joinRoom1}
-      >
-        Chat with a patient
-      </button>
+      className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+      onClick={joinRoom1}
+    >
+      Start Chat With a patient
+    </button>
       ) : (
         <Chat socket={socket} username={username} room={1} />
       )}
@@ -55,6 +60,31 @@ const joinRoom2 = () => {
       )}
           </div>
 
+    </div> */}
+    <div className="d-flex flex-row justify-content-center">
+    {!showChat1 ? (
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={joinRoom1}
+      >
+        Start Chat with patient
+      </button>
+      ) : (
+        <Chat socket={socket} username={username} room={1} />
+      )}
+    </div>
+    <div className="d-flex flex-row justify-content-center">
+    {!showChat2 ? (
+      <button
+        className={`green-txt mx-2 text-capitalize border-0 bg-transparent`}
+        onClick={joinRoom2}
+      >
+        Start Chat with doctor
+      </button>
+      ) : (
+        <Chat socket={socket} username={username} room={2} />
+      )}
+    </div>
     </div>
   );
 }
