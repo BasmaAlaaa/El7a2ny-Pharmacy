@@ -23,10 +23,9 @@ const io = new Server(server, {
 })
 
 app.use(cors({
-  origin: '*',
+  origin: "*",
   credentials: true,
 }));
-
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
