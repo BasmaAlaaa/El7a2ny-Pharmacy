@@ -23,9 +23,10 @@ const io = new Server(server, {
 })
 
 app.use(cors({
-  origin: "*",
+  origin: 'http://localhost:3000',
   credentials: true,
 }));
+
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
