@@ -108,7 +108,6 @@ The frontend code, written in React, also follows a structured and readable styl
 ![Screenshot (3129)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/c6205926-aef9-4cf2-993b-140c9cc1f102)
 ![Screenshot (3130)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/4f51f2a0-b73e-4496-905f-f06cc7bcda52)
 ![Screenshot (3131)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/f4c3953a-7609-4622-b433-98ddeefd01ba)
-![Screenshot (3132)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/ddd7000d-c7a5-4504-a4bf-afd9cb34b62c)
 
 ## Tech Stack
 El7a2ny utilizes the MERN stack, comprising MongoDB, Express.js, React, and Node.js, to create a robust and full-stack web application. This technology stack seamlessly integrates a NoSQL database, a server-side framework, a front-end framework, and a runtime environment, providing a comprehensive solution for building scalable and dynamic web applications.
