@@ -7,7 +7,7 @@ const SReport = require("../Models/SReport") ;
 // Task 12: view a list of all available medicines
 const availableMedicinesDetailsByPharmacist = async (req, res) => {
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   const { Username} = req.params;
@@ -29,7 +29,7 @@ const availableMedicinesDetailsByPharmacist = async (req, res) => {
 // View all medicines'Quantities and Sales
 const availableMedicinesQuantity = async (req, res) => {
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   const { Username} = req.params;
@@ -54,7 +54,7 @@ const availableMedicinesQuantity = async (req, res) => {
 // Task 13: view available quantity and sales of each medicine
 const medQuantityAndSales = async (req, res) => {
   const { Name, Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -74,7 +74,7 @@ const medQuantityAndSales = async (req, res) => {
 
 // add a new medicine to the database
 const addMedicine = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   const {Username} = req.params;
@@ -118,7 +118,7 @@ const addMedicine = async (req, res) => {
 const updateMed = async (req, res) => {
 
   const { Name, Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -157,7 +157,7 @@ const updateMed = async (req, res) => {
 // Search for medicine by name
 const getMedicineByName = async (req, res) => {
   const { Name , Username} = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -179,7 +179,7 @@ const getMedicineByName = async (req, res) => {
 // Filter medicine by medical use
 const getMedicineByMedicalUse = async (req, res) => {
   const { MedicalUse, Username} = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -247,7 +247,7 @@ const deleteNotificationIfQuantityNotZero = async () => {
 
 const archiveMedicine = async (req, res) => {
   const { medicineName, Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -271,7 +271,7 @@ const archiveMedicine = async (req, res) => {
 
 const unarchiveMedicine = async (req, res) => {
   const { medicineName, Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -296,7 +296,7 @@ const unarchiveMedicine = async (req, res) => {
 
 const viewSalesReportOnChosenMonth = async (req, res) => {
   const { Username, chosenMonth } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -338,7 +338,7 @@ const viewSalesReportOnChosenMonth = async (req, res) => {
 
 const viewSalesReportOnMedicine = async (req, res) => {
   const { Username ,medicineName } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -382,7 +382,7 @@ const viewSalesReportOnMedicine = async (req, res) => {
 const viewSalesReportOnDate = async (req, res) => {
   const { Username ,date } = req.params;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -424,7 +424,7 @@ const viewSalesReportOnDate = async (req, res) => {
 const displayNotifications = async (req, res) => {
   const { Username } = req.params;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");
@@ -440,7 +440,7 @@ const displayNotifications = async (req, res) => {
 };
 const getPharmacistWalletAmount = async (req, res) => {
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (!(req.user.Username === Username)) {
     res.status(403).json("You are not logged in!");

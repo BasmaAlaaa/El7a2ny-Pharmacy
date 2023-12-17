@@ -40,6 +40,7 @@ function RegisterPatient() {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [nationalId, setNationalId] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [gender, setGender] = useState('')
   const [mobileNumber, setMobileNumber] = useState('')
@@ -53,7 +54,7 @@ function RegisterPatient() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      const data = {Username:username, Name:name, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation, address: address}
+      const data = {Username:username, Name:name, NationalID: nationalId, Email:email, Password:password, DateOfBirth:dateOfBirth, Gender:gender, MobileNumber:mobileNumber, EmergencyContactName:emergencyName, EmergencyContactMobile:emergencyMobile, EmergencyContactRelation:emergencyRelation, address: address}
       console.log(data)
       const response = await axios.post('http://localhost:8000/Guest/RegisterPatient', data)
       
@@ -165,6 +166,13 @@ function RegisterPatient() {
             placeholder='Enter password'
             type='password'
             onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            title='Natioanl ID'
+            required={true}
+            placeholder='Enter natioanl Id'
+            type='text'
+            onChange={(e) => setNationalId(e.target.value)}
           />
           <Input
             title='Date Of Birth'

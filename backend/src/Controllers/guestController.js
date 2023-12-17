@@ -27,7 +27,7 @@ async function createStripeCustomer({ Email, Name, Phone }) {
 
 // Task 1 : register as a patient
 const registerPatient = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   const {
@@ -98,7 +98,7 @@ const registerPatient = async (req, res) => {
 
 // Tasks 1 and 9 : register as a pharmacist
 const submitRequestToBePharmacist = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   const {

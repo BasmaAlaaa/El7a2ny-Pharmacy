@@ -6,7 +6,7 @@ const Medicine = require("../Models/medicine");
 // Temporarily allow unauthenticated access (for testing purposes)
 const GetMedicineByDoctor = async (req, res) => {
   const { username, Name } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   try {
@@ -22,7 +22,7 @@ const GetMedicineByDoctor = async (req, res) => {
 
 
 const GetAllMedicines = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
   const { DoctorUsername } = req.params;
 

@@ -16,7 +16,7 @@ const addAdmin = async (req, res) => {
 
     const { username } = req.params;
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -57,7 +57,7 @@ const addAdmin = async (req, res) => {
 // Task 6 : Remove a patient or a pharmacist from database
 const removePatientOrPharmacist = async (req, res) => {
         const {username, Username} = req.params;
-        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
     if (!(req.user.Username === username)) {
@@ -86,7 +86,7 @@ const removePatientOrPharmacist = async (req, res) => {
 // Task 7 : view all infos of pharmacists' requests that want to apply to the platform
 const infosOfAPharmacistRequest = async (req, res) => {
     const {username, Username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
     if (!(req.user.Username === username)) {
@@ -106,7 +106,7 @@ const infosOfAPharmacistRequest = async (req, res) => {
 
 const infosOfRequestsByPharmacist = async (req, res) => {
     const {username, Username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -126,7 +126,7 @@ const infosOfRequestsByPharmacist = async (req, res) => {
 // Task 12: view a list of all available medicines' details
 const availableMedicinesDetailsByAdmin = async (req, res) => {
     const {username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -148,7 +148,7 @@ const availableMedicinesDetailsByAdmin = async (req, res) => {
 // Task 22: view pharmacist's info
 const pharmacistInfo = async (req, res) => {
     const {username, Username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -168,7 +168,7 @@ const pharmacistInfo = async (req, res) => {
 
 const allPharmacists = async (req, res) => {
     const {username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -191,7 +191,7 @@ const allPharmacists = async (req, res) => {
 
 const allPatients = async (req,res) => {
     const {username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -214,7 +214,7 @@ const allPatients = async (req,res) => {
 // Task 23: view patient's info
 const patientInfo = async (req, res) => {
     const {username, Username} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -234,7 +234,7 @@ const patientInfo = async (req, res) => {
  // Search for medicine by name
  const getMedicineByName = async (req, res) => {
     const {username, Name} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -254,7 +254,7 @@ const patientInfo = async (req, res) => {
  // Filter medicine by medical use
  const getMedicineByMedicalUse = async (req, res) => {
     const {username, MedicalUse} = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === username)) {
         res.status(403).json("You are not logged in!");
@@ -274,7 +274,7 @@ const patientInfo = async (req, res) => {
 const addPharmacist = async (req, res) => {
     const {username} = req.params;
     const {Username, Name, Email, Password, DateOfBirth, HourlyRate, Affiliation, EducationalBackground} = req.body;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
 
     if (!(req.user.Username === username)) {
@@ -319,7 +319,7 @@ const acceptOrRejectPharmacistRequest = async (req, res) => {
     const { Username, username } = req.params;
     const { action } = req.body; 
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
 
     if (!(req.user.Username === username)) {
@@ -353,7 +353,7 @@ const acceptOrRejectPharmacistRequest = async (req, res) => {
 
 const viewSalesReportOnChosenMonth = async (req, res) => {
     const { Username, chosenMonth } = req.params;
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     if (!(req.user.Username === Username)) {
       res.status(403).json("You are not logged in!");

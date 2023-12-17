@@ -15,7 +15,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 const availableMedicinesDetailsByPatient = async (req, res) => {
 
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -46,7 +46,7 @@ const availableMedicinesDetailsByPatient = async (req, res) => {
 // Search for medicine by name
 const getMedicineByName = async (req, res) => {
   const { Name, Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -67,7 +67,7 @@ const getMedicineByName = async (req, res) => {
 // Filter medicine by medical use
 const getMedicineByMedicalUse = async (req, res) => {
   const { MedicalUse, Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -88,7 +88,7 @@ const getMedicineByMedicalUse = async (req, res) => {
 //Req 29 + 32 : checkhout + payment method + pay
 const checkoutOrder = async (req, res) => {
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   const { Username, paymentMethod, ShippingAddress } = req.params;
@@ -237,7 +237,10 @@ async function checkMedicineQuantityEmailNotification(medicine) {
         auth: {
           user: 'SuicideSquadGUC@gmail.com',
           pass: 'wryq ofjx rybi hpom'
-        }
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
       });
 
       for (const pharmacist of pharmacists) {
@@ -270,7 +273,7 @@ const addAddressToPatient = async (req, res) => {
   const { Username } = req.params;
   const { newAddress } = req.body;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -297,7 +300,7 @@ const addAddressToPatient = async (req, res) => {
 
 const getPatientAddresses = async (req, res) => {
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -320,7 +323,7 @@ const getPatientAddresses = async (req, res) => {
 
 const getOrderDetails = async (req, res) => {
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -364,7 +367,7 @@ const getOrderDetails = async (req, res) => {
 const cancelOrder = async (req, res) => {
   const { orderId } = req.params;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   try {
@@ -407,7 +410,7 @@ const cancelOrder = async (req, res) => {
 
 const viewCartItems = async (req, res) => {
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -445,7 +448,7 @@ const viewCartItems = async (req, res) => {
 const removeAnItemFromCart = async (req, res) => {
   const { Username, MedicineName } = req.params;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -503,7 +506,7 @@ const removeAnItemFromCart = async (req, res) => {
 
 const addMedicineToCart = async (req, res) => {
   const { Username, MedicineName } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -571,7 +574,7 @@ const updateMedicineQuantityInCart = async (req, res) => {
   const { Username, MedicineName, quantity } = req.params;
   //const { quantity } = req.body;
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -632,7 +635,7 @@ const updateMedicineQuantityInCart = async (req, res) => {
 
 const viewAlternatives = async (req, res) => {
   const { Username, medicineName } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user && req.user.Username === Username)) {
@@ -674,7 +677,7 @@ module.exports = viewAlternatives;
 
 const getAllOrders = async (req, res) => {
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {
@@ -700,7 +703,7 @@ const getAllOrders = async (req, res) => {
 };
 const getPatientWalletAmount = async (req, res) => {
   const { Username } = req.params;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if (!(req.user.Username === Username)) {

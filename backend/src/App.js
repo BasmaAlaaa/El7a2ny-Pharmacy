@@ -17,13 +17,13 @@ const {Server} = require("socket.io");
 
 const io = new Server(server, {
   cors:{
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "DELETE", "PUT"],
   }
 })
 
 app.use(cors({
-  origin: "*",
+  origin: "http://localhost:3000",
   credentials: true,
 }));
 
