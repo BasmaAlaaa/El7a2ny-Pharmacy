@@ -81,6 +81,34 @@ The frontend code, written in React, also follows a structured and readable styl
 
 **Consistent Styling:** Consistent styling practices are followed, and class names are indicative of their purpose.
 ## Screenshots
+![Screenshot (3104)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/0652c524-df8c-4863-913e-1cb65850b0cc)
+![Screenshot (3105)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/e02ed49f-bcdf-4c41-8dc0-d7b7192ae59a)
+![Screenshot (3106)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/e1d695ca-3646-44d4-9149-d05468f379c5)
+![Screenshot (3107)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/b0e7a2e6-a02e-40ae-8939-94c8d1cb5412)
+![Screenshot (3108)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/25a5335a-fe9c-4898-9a2f-832d0a615d74)
+![Screenshot (3110)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/c9a21021-aa10-405d-a3d3-9b5a6f61c44d)
+![Screenshot (3111)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/adfb217a-6de1-454a-804e-21e566a4f31e)
+![Screenshot (3112)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/8dda8899-470f-4f7f-b3c0-831aa4889875)
+![Screenshot (3113)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/b7bd902c-ab20-4266-bc4f-86dc9a9377d5)
+![Screenshot (3114)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/4f45bdd6-3f1b-4807-ae8c-5f14429010d9)
+![Screenshot (3115)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/ada702d8-ad46-4bb9-9e59-7fec9e91aa08)
+![Screenshot (3116)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/5c88b250-11d2-470c-90de-9b419b93a24d)
+![Screenshot (3117)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/b4a48128-260a-4e57-aae5-25b386aba850)
+![Screenshot (3118)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/29ce8758-b666-47ff-9917-63ee6f7b3685)
+![Screenshot (3119)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/ffb4f653-7d31-4b7d-94f7-7146352cf8ef)
+![Screenshot (3120)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/e4af9b2a-be0f-4934-b551-01c0277ad9c2)
+![Screenshot (3121)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/3b50a47c-f311-4d94-bafb-76f607025cc3)
+![Screenshot (3122)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/5425b46d-10d5-42da-805a-e2b864e8df0f)
+![Screenshot (3123)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/baf14da8-c307-4bd1-a86a-cbb254550587)
+![Screenshot (3124)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/5ae5568b-a296-4632-b3b8-1f0b2422da38)
+![Screenshot (3125)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/24a52b4b-b5b7-4c27-a2df-3851cab1550d)
+![Screenshot (3126)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/49eb492a-e04d-49fc-af66-3c2c0b8abff6)
+![Screenshot (3127)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/4c5c83f7-8d4f-49fe-8177-4a8b504d0d00)
+![Screenshot (3128)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/1727c908-cec1-40d6-beac-9130da4b39a0)
+![Screenshot (3129)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/c6205926-aef9-4cf2-993b-140c9cc1f102)
+![Screenshot (3130)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/4f51f2a0-b73e-4496-905f-f06cc7bcda52)
+![Screenshot (3131)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/f4c3953a-7609-4622-b433-98ddeefd01ba)
+![Screenshot (3132)](https://github.com/advanced-computer-lab-2023/Suicide-squad-Pharmacy/assets/121583270/ddd7000d-c7a5-4504-a4bf-afd9cb34b62c)
 
 ## Tech Stack
 El7a2ny utilizes the MERN stack, comprising MongoDB, Express.js, React, and Node.js, to create a robust and full-stack web application. This technology stack seamlessly integrates a NoSQL database, a server-side framework, a front-end framework, and a runtime environment, providing a comprehensive solution for building scalable and dynamic web applications.
